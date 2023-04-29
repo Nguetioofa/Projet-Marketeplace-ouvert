@@ -63,10 +63,17 @@ namespace ApiWeb.Services
                     // set clockskew to zero so tokens expire exactly at token expiration time(instead of 5 minutes later)
                 ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == ClaimTypes.Name).Value);
-                // return user id from JWT token if validation successful
-                return userId;
+                if (validatedToken is JwtSecurityToken jwtToken)
+                {
+                    var idValue = jwtToken.Claims.First(x => x.Type == ClaimTypes.Name).Value;
+                    if (int.TryParse(idValue, out var userId))
+                    {
+                        // return user id from JWT token if validation successful
+                        return userId;
+                    }
+                }
+                // return null if validation fails
+                return null;
             }
             catch
             {

@@ -1,7 +1,7 @@
-﻿using SiteWeb.Data;
-using SiteWeb.Services.Implementations;
-using SiteWeb.Services.Interfaces;
+﻿using ChangeToyServices.Interfaces;
+using ChangeToyServices.Implementations;
 using System.Configuration;
+using ChangeToyServices.Data;
 
 namespace SiteWeb.Services
 {
@@ -9,9 +9,10 @@ namespace SiteWeb.Services
     {
         public static IServiceCollection AddMyServices(this WebApplicationBuilder builder)
         {
-            builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
-            builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
-            builder.Services.AddHttpClient();
+            //builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
+            //builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
+            //builder.Services.AddHttpClient();
+            builder.AddChangeToyServiceS();
             builder.Services.AddScoped<IAbonnementService, AbonnementService>();
             builder.Services.AddScoped<IAchatService, AchatService>();
             builder.Services.AddScoped<IAnnonceService, AnnonceService>();
