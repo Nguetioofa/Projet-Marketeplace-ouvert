@@ -1,0 +1,20 @@
+{
+  "erreurs": [
+    {
+      "code": 400,
+      "message": "Requête invalide"
+    },
+    {
+      "code": 401,
+      "message": "Accès non autorisé"
+    },
+    {
+      "code": 404,
+      "message": "Ressource introuvable"
+    },
+    {
+      "code": 500,
+      "message": "Erreur interne du serveur"
+    }
+  ]
+}

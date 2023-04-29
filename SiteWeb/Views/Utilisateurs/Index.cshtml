@@ -1,0 +1,207 @@
+﻿@model IEnumerable<SiteWeb.Models.Utilisateur>
+
+@{
+    //   Layout = null;
+    ViewData["Title"] = "Index";
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="~/CustonRuangAdmin/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+
+    <title>Index</title>
+</head>
+<body>
+
+
+    <div class="container-fluid" id="container-wrapper">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">@Html.ValueForModel().Split(".Models.")[1].Replace("]", "s")</h1>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="./">DashBoad</a></li>
+                <li class="breadcrumb-item">
+
+                    @Html.ValueForModel().Split(".Models.")[1].Replace("]", "s")
+                    </li>
+                <li class="breadcrumb-item active" aria-current="page">Tout les utilisateurs</li>
+            </ol>
+        </div>
+    <div class="row">
+            <p>
+                <a asp-action="Create">Create New</a>
+            </p>
+        <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">DataTables with Hover</h6>
+                </div>
+                <div class="table-responsive p-3">
+                    <table class="table align-items-center table-flush table-hover" id="dataTableHover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Id)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Nom)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Prenom)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Email)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.MotDePasse)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Sel)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Telephone)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Adresse)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VilleUser)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.QuatierUser)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Points)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateCreation)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateDerniereConnexion)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.StatutId)
+                                </th>
+                                    <th class="datatable-nosort"></th>
+
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Id)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Nom)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Prenom)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Email)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.MotDePasse)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Sel)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Telephone)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Adresse)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VilleUser)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.QuatierUser)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Points)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateCreation)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateDerniereConnexion)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.StatutId)
+                                </th>
+                                <th></th>
+
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Id)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Nom)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Prenom)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.MotDePasse)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Sel)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Telephone)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Adresse)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.VilleUser)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.QuatierUser)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Points)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DateCreation)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DateDerniereConnexion)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StatutId)
+                                    </td>
+                                        <td style="text-align: justify-all">
+                                            @Html.ActionLink("Edit", "Edit", new { id=item.Id }, new { @class="btn btn-primary"})
+                                            @Html.ActionLink("Details", "Details", new {  id=item.Id}, new { @class="btn btn-info" })
+                                            @Html.ActionLink("Delete", "Delete", new { id=item.Id }, new { @class="btn btn-danger"})
+
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+</html>
