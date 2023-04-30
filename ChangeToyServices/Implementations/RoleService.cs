@@ -17,13 +17,13 @@ namespace ChangeToyServices.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<Role>>> GetRoles()
+        public async Task<ActionResult<List<Rolel>>> GetRoles()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var Roles = JsonSerializer.Deserialize<List<Role>>(content);
+                var Roles = JsonSerializer.Deserialize<List<Rolel>>(content);
 
                 return Roles;
 
@@ -35,14 +35,14 @@ namespace ChangeToyServices.Implementations
 
         }
 
-        public async Task<ActionResult<Role>> GetRole(int id)
+        public async Task<ActionResult<Rolel>> GetRole(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var Role = JsonSerializer.Deserialize<Role>(content);
+                var Role = JsonSerializer.Deserialize<Rolel>(content);
 
                 return Role;
 
@@ -53,7 +53,7 @@ namespace ChangeToyServices.Implementations
             }
         }
 
-        public async Task<bool> UpdateRole(Role Role)
+        public async Task<bool> UpdateRole(Rolel Role)
         {
             var data = JsonSerializer.Serialize(Role);
             var content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -61,7 +61,7 @@ namespace ChangeToyServices.Implementations
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddRole(Role Role)
+        public async Task<bool> AddRole(Rolel Role)
         {
             var data = JsonSerializer.Serialize(Role);
             var content = new StringContent(data, Encoding.UTF8, "application/json");

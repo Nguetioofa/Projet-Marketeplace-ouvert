@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ChangeToyServices.Interfaces;
-using ModelsLibrary.Models;
-
+using ModelsLibrary.Models.Users;
 
 namespace SiteWeb.Controllers
 {
@@ -33,7 +32,7 @@ namespace SiteWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Utilisateur utilisateur)
+        public async Task<IActionResult> Create(UtilisateurL utilisateur)
         {
             if (ModelState.IsValid)
             {
@@ -51,7 +50,7 @@ namespace SiteWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Utilisateur utilisateur)
+        public async Task<IActionResult> Edit(int id, UtilisateurL utilisateur)
         {
             if (id != utilisateur.Id)
             {

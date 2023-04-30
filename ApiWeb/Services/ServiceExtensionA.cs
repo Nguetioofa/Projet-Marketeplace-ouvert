@@ -20,8 +20,11 @@ namespace ApiWeb.Services
             // configure DI for application services
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
+
             var appSettingsSection = builder.Configuration.GetSection("JsonWebTokenKeys");
             builder.Services.Configure<JwtSettings>(appSettingsSection);
+
             builder.Services.AddSwaggerGen(options =>
             {
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -66,6 +69,7 @@ namespace ApiWeb.Services
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
+                    
                     ValidateAudience = false
                 };
             });

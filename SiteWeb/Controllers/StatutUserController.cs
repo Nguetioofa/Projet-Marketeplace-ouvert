@@ -32,7 +32,7 @@ namespace SiteWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(StatutUser statutUser)
+        public async Task<IActionResult> Create(StatutUserL statutUser)
         {
             if (ModelState.IsValid)
             {
@@ -50,7 +50,7 @@ namespace SiteWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, StatutUser statutUser)
+        public async Task<IActionResult> Edit(int id, StatutUserL statutUser)
         {
             if (id != statutUser.Id)
             {

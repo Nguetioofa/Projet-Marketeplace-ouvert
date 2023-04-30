@@ -87,7 +87,7 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.UtilisateurNavigation).WithMany(p => p.Abonnements)
                 .HasForeignKey(d => d.Utilisateur)
-                .HasConstraintName("FK__abonnemen__utili__31B762FC");
+                .HasConstraintName("FK__abonnemen__utili__46B27FE2");
         });
 
         modelBuilder.Entity<Achat>(entity =>
@@ -130,7 +130,7 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.AcheteurNavigation).WithMany(p => p.AchatAcheteurNavigations)
                 .HasForeignKey(d => d.Acheteur)
-                .HasConstraintName("FK__achat__acheteur__160F4887");
+                .HasConstraintName("FK__achat__acheteur__4B7734FF");
 
             entity.HasOne(d => d.JouetNavigation).WithMany(p => p.Achats)
                 .HasForeignKey(d => d.Jouet)
@@ -153,7 +153,7 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.VendeurNavigation).WithMany(p => p.AchatVendeurNavigations)
                 .HasForeignKey(d => d.Vendeur)
-                .HasConstraintName("FK__achat__vendeur__17036CC0");
+                .HasConstraintName("FK__achat__vendeur__43D61337");
         });
 
         modelBuilder.Entity<Annonce>(entity =>
@@ -187,7 +187,7 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.IdUtilisateurNavigation).WithMany(p => p.Annonces)
                 .HasForeignKey(d => d.IdUtilisateur)
-                .HasConstraintName("FK__annonce__id_Util__68487DD7");
+                .HasConstraintName("FK__annonce__id_Util__44CA3770");
         });
 
         modelBuilder.Entity<CategorieJouet>(entity =>
@@ -229,7 +229,7 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.IdAuteurNavigation).WithMany(p => p.Commentaires)
                 .HasForeignKey(d => d.IdAuteur)
-                .HasConstraintName("FK__commentai__id_au__0F624AF8");
+                .HasConstraintName("FK__commentai__id_au__4A8310C6");
         });
 
         modelBuilder.Entity<Echange>(entity =>
@@ -286,11 +286,11 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.IdUtilisateur1Navigation).WithMany(p => p.EchangeIdUtilisateur1Navigations)
                 .HasForeignKey(d => d.IdUtilisateur1)
-                .HasConstraintName("FK__echange__id_Util__236943A5");
+                .HasConstraintName("FK__echange__id_Util__4D5F7D71");
 
             entity.HasOne(d => d.IdUtilisateur2Navigation).WithMany(p => p.EchangeIdUtilisateur2Navigations)
                 .HasForeignKey(d => d.IdUtilisateur2)
-                .HasConstraintName("FK__echange__id_Util__245D67DE");
+                .HasConstraintName("FK__echange__id_Util__42E1EEFE");
 
             entity.HasOne(d => d.Jouet1Navigation).WithMany(p => p.EchangeJouet1Navigations)
                 .HasForeignKey(d => d.Jouet1)
@@ -362,11 +362,11 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.IdEvaluateurNavigation).WithMany(p => p.EvaluationIdEvaluateurNavigations)
                 .HasForeignKey(d => d.IdEvaluateur)
-                .HasConstraintName("FK__evaluatio__id_ev__09A971A2");
+                .HasConstraintName("FK__evaluatio__id_ev__489AC854");
 
             entity.HasOne(d => d.IdEvalueNavigation).WithMany(p => p.EvaluationIdEvalueNavigations)
                 .HasForeignKey(d => d.IdEvalue)
-                .HasConstraintName("FK__evaluatio__id_ev__0A9D95DB");
+                .HasConstraintName("FK__evaluatio__id_ev__41EDCAC5");
         });
 
         modelBuilder.Entity<FonctionUser>(entity =>
@@ -384,7 +384,7 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.FonctionUsers)
                 .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("FK__fonction___id_us__5DCAEF64");
+                .HasConstraintName("FK__fonction___id_us__45BE5BA9");
 
             entity.HasOne(d => d.Roles).WithMany(p => p.FonctionUsers)
                 .HasForeignKey(d => d.RolesId)
@@ -422,7 +422,7 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.ProprietaireNavigation).WithMany(p => p.Jouets)
                 .HasForeignKey(d => d.Proprietaire)
-                .HasConstraintName("FK__jouets__propriet__6383C8BA");
+                .HasConstraintName("FK__jouets__propriet__4E53A1AA");
         });
 
         modelBuilder.Entity<JouetsPhoto>(entity =>
@@ -469,11 +469,11 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.IdDestinataireNavigation).WithMany(p => p.MessageIdDestinataireNavigations)
                 .HasForeignKey(d => d.IdDestinataire)
-                .HasConstraintName("FK__messages__id_des__70DDC3D8");
+                .HasConstraintName("FK__messages__id_des__4C6B5938");
 
             entity.HasOne(d => d.IdExpediteurNavigation).WithMany(p => p.MessageIdExpediteurNavigations)
                 .HasForeignKey(d => d.IdExpediteur)
-                .HasConstraintName("FK__messages__id_exp__6FE99F9F");
+                .HasConstraintName("FK__messages__id_exp__47A6A41B");
         });
 
         modelBuilder.Entity<MessagesPhoto>(entity =>
@@ -627,11 +627,11 @@ public partial class EchangeJouetsContext : DbContext
 
         modelBuilder.Entity<Utilisateur>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__utilisat__3213E83F6BE0E08B");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3213E83FEA030BF3");
 
             entity.ToTable("utilisateurs");
 
-            entity.HasIndex(e => e.Email, "UQ__utilisat__AB6E616442123FE2").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__tmp_ms_x__AB6E616486BCCAB8").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Adresse)
@@ -648,9 +648,7 @@ public partial class EchangeJouetsContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("email");
             entity.Property(e => e.EstSupprimer).HasColumnName("est_supprimer");
-            entity.Property(e => e.MotDePasse)
-                .HasMaxLength(500)
-                .HasColumnName("mot_de_passe");
+            entity.Property(e => e.MotDePasse).HasColumnName("mot_de_passe");
             entity.Property(e => e.Nom)
                 .HasMaxLength(50)
                 .HasColumnName("nom");
@@ -663,9 +661,7 @@ public partial class EchangeJouetsContext : DbContext
             entity.Property(e => e.QuatierUser)
                 .HasMaxLength(50)
                 .HasColumnName("quatier_user");
-            entity.Property(e => e.Sel)
-                .HasMaxLength(500)
-                .HasColumnName("sel");
+            entity.Property(e => e.Sel).HasColumnName("sel");
             entity.Property(e => e.StatutId)
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("statut_id");
@@ -678,7 +674,7 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.Statut).WithMany(p => p.Utilisateurs)
                 .HasForeignKey(d => d.StatutId)
-                .HasConstraintName("FK__utilisate__statu__5812160E");
+                .HasConstraintName("FK__utilisate__statu__498EEC8D");
         });
 
         modelBuilder.Entity<UtilisateursProfil>(entity =>

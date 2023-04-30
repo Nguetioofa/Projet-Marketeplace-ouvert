@@ -13,9 +13,9 @@ public partial class Utilisateur
 
     public string Email { get; set; } = null!;
 
-    public string MotDePasse { get; set; } = null!;
+    public byte[] MotDePasse { get; set; } = null!;
 
-    public string Sel { get; set; } = null!;
+    public byte[] Sel { get; set; } = null!;
 
     public string Telephone { get; set; } = null!;
 

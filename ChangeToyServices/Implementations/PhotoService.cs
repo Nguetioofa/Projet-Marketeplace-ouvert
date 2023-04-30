@@ -17,13 +17,13 @@ namespace ChangeToyServices.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<Photo>>> GetPhotos()
+        public async Task<ActionResult<List<PhotoL>>> GetPhotos()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var Photos = JsonSerializer.Deserialize<List<Photo>>(content);
+                var Photos = JsonSerializer.Deserialize<List<PhotoL>>(content);
 
                 return Photos;
 
@@ -35,14 +35,14 @@ namespace ChangeToyServices.Implementations
 
         }
 
-        public async Task<ActionResult<Photo>> GetPhoto(int id)
+        public async Task<ActionResult<PhotoL>> GetPhoto(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var Photo = JsonSerializer.Deserialize<Photo>(content);
+                var Photo = JsonSerializer.Deserialize<PhotoL>(content);
 
                 return Photo;
 
@@ -53,7 +53,7 @@ namespace ChangeToyServices.Implementations
             }
         }
 
-        public async Task<bool> UpdatePhoto(Photo Photo)
+        public async Task<bool> UpdatePhoto(PhotoL Photo)
         {
             var data = JsonSerializer.Serialize(Photo);
             var content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -61,7 +61,7 @@ namespace ChangeToyServices.Implementations
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddPhoto(Photo Photo)
+        public async Task<bool> AddPhoto(PhotoL Photo)
         {
             var data = JsonSerializer.Serialize(Photo);
             var content = new StringContent(data, Encoding.UTF8, "application/json");

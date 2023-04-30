@@ -1,6 +1,7 @@
 ﻿using ApiWeb.ModelDto;
 using ApiWeb.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace ApiWeb.Services
 {
@@ -16,19 +17,26 @@ namespace ApiWeb.Services
 
         public UserDto Authenticate(string email, string password)
         {
-            var user = _context.Utilisateurs.Where(u => !u.EstSupprimer)
-                                                       .Where(u => u.Email == email)
-                                                       .Where(u => u.MotDePasse == password).FirstOrDefault();
-            if (user == null) 
+            byte[] passwordHash;
+            byte[] passwordSalt;
+
+            SelectPassWordAndSalt(email, out passwordHash, out passwordSalt);
+
+ 
+            if (!VerifyPasswordHash(password,passwordHash,passwordSalt)) 
             {
                 return new UserDto();
             }
+
+            var user = _context.Utilisateurs.Where(u => !u.EstSupprimer)
+                                                     .Where(u => u.Email == email).FirstOrDefault();
+
             var userDto = new UserDto
             {
                 Id = user.Id,
                 Email = user.Email,
                 UserName = user.Nom,
-                Password = user.MotDePasse
+                Password = password
             };
 
             return userDto;
@@ -44,5 +52,35 @@ namespace ApiWeb.Services
                                                              .Where(ca => ca.Id == id).FirstOrDefault();
             return utilisateur;
         }
+
+        public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(passwordHash);
+            }
+        }
+
+        public void SelectPassWordAndSalt(string email, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            var user = _context.Utilisateurs.Where(u => !u.EstSupprimer)
+                                 .Where(u => u.Email == email)
+                                 .Select(u => u).FirstOrDefault();
+
+            passwordSalt = user.Sel;
+            passwordHash = user.MotDePasse;
+        }
+
+
     }
 }

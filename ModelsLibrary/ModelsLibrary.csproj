@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="ModelsDTO\User\" />
     <Folder Include="ModelsMapping\" />
-    <Folder Include="ModelsDTO\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace ApiWeb.ModelDto
+﻿namespace ModelsLibrary.Models.Users
 {
     public class UserAuthen
     {

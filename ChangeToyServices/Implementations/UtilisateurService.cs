@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text;
 using ChangeToyServices.Interfaces;
 using System.Net.Http.Json;
+using ModelsLibrary.Models.Users;
 
 namespace ChangeToyServices.Implementations
 {
@@ -18,12 +19,12 @@ namespace ChangeToyServices.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<Utilisateur>>> GetUtilisateurs()
+        public async Task<ActionResult<List<UtilisateurL>>> GetUtilisateurs()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var Utilisateurs = await response.Content.ReadFromJsonAsync<List<Utilisateur>>();
+                var Utilisateurs = await response.Content.ReadFromJsonAsync<List<UtilisateurL>>();
 
                 return Utilisateurs;
 
@@ -35,13 +36,13 @@ namespace ChangeToyServices.Implementations
 
         }
 
-        public async Task<ActionResult<Utilisateur>> GetUtilisateur(int id)
+        public async Task<ActionResult<UtilisateurL>> GetUtilisateur(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
-                var Utilisateur = await response.Content.ReadFromJsonAsync<Utilisateur>();
+                var Utilisateur = await response.Content.ReadFromJsonAsync<UtilisateurL>();
 
                 return Utilisateur;
 
@@ -52,14 +53,14 @@ namespace ChangeToyServices.Implementations
             }
         }
 
-        public async Task<bool> UpdateUtilisateur(Utilisateur Utilisateur)
+        public async Task<bool> UpdateUtilisateur(UtilisateurL Utilisateur)
         {
          
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), Utilisateur);
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddUtilisateur(Utilisateur Utilisateur)
+        public async Task<bool> AddUtilisateur(UtilisateurL Utilisateur)
         {
 
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), Utilisateur);
@@ -72,6 +73,39 @@ namespace ChangeToyServices.Implementations
             var response = await _client.DeleteAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
             return response.IsSuccessStatusCode;
 
+        }
+
+        public async Task<object> Login(UserAuthen model)
+        {
+            var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), model);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var useraut = response.Content.ReadFromJsonAsync<UserTokensDto>();
+                return useraut.Result;
+            }
+            else
+            {
+                
+                return response.Content.ReadFromJsonAsync<MessageErrorG>();
+            }
+
+        }
+
+        public async Task<object> Register(UserResisterDto userResisterDto)
+        {
+            var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), userResisterDto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var useraut = response.Content.ReadFromJsonAsync<UserTokensDto>();
+                return useraut.Result;
+            }
+            else
+            {
+
+                return response.Content.ReadFromJsonAsync<MessageErrorG>();
+            }
         }
     }
 }

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 namespace ModelsLibrary.Models;
 
-public partial class StatutsTransaction
+public partial class StatutUserL
 {
     public int Id { get; set; }
 
     public string Nom { get; set; } = null!;
-
-
 
 }

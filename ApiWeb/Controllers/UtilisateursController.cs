@@ -9,6 +9,12 @@ using ApiWeb.Models;
 using ApiWeb.Services;
 using Microsoft.AspNetCore.Authorization;
 using ApiWeb.ModelDto;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using NuGet.Protocol;
+using Microsoft.AspNetCore.Http.HttpResults;
+using ModelsLibrary.Models.Users;
+using ModelsLibrary.Models;
 
 namespace ApiWeb.Controllers
 {
@@ -19,29 +25,35 @@ namespace ApiWeb.Controllers
         private readonly EchangeJouetsContext _context;
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
+        private readonly IEmailSender _emailSender;
 
-        public UtilisateursController(EchangeJouetsContext context, IUserService userService, ITokenService tokenService)
+        public UtilisateursController(EchangeJouetsContext context, IUserService userService, ITokenService tokenService, IEmailSender emailSender)
         {
             _context = context;
             _userService = userService;
             _tokenService = tokenService;
-
+            _emailSender = emailSender;
         }
 
         // GET: api/Utilisateurs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Utilisateur>>> GetUtilisateurs()
+        public async Task<ActionResult<IEnumerable<UtilisateurDto>>> GetUtilisateurs()
         {
           if (_context.Utilisateurs == null)
           {
               return NotFound();
           }
-            return await _context.Utilisateurs.Where(ab => !ab.EstSupprimer).ToListAsync();
+            var users = await _context.Utilisateurs.Where(ab => !ab.EstSupprimer).ToListAsync();
+            var utilisateurs = new List<UtilisateurDto>() { };
+
+            users.ForEach(user => utilisateurs.Add(new UtilisateurDto(user)));
+                
+            return Ok( utilisateurs );
         }
 
         // GET: api/Utilisateurs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Utilisateur>> GetUtilisateur(int id)
+        public async Task<ActionResult<UtilisateurDto>> GetUtilisateur(int id)
         {
           if (_context.Utilisateurs == null)
           {
@@ -55,7 +67,7 @@ namespace ApiWeb.Controllers
                 return NotFound();
             }
 
-            return utilisateur;
+            return Ok(new UtilisateurDto(utilisateur));
         }
 
         // PUT: api/Utilisateurs/5
@@ -123,7 +135,7 @@ namespace ApiWeb.Controllers
         }
 
         [HttpGet("GetUserByIdJouet{id}")]
-        public async Task<ActionResult<Utilisateur>> GetUserByIdJouet(int id)
+        public async Task<ActionResult<UtilisateurDto>> GetUserByIdJouet(int id)
         {
             if (_context.Utilisateurs == null || _context.Jouets == null)
             {
@@ -142,11 +154,11 @@ namespace ApiWeb.Controllers
                 return NotFound();
             
 
-            return Ok(User);
+            return Ok( new UtilisateurDto(User));
         }
 
         [HttpGet("GetUserByIdRole{id}")]
-        public async Task<ActionResult<IEnumerable<Utilisateur>>> GetUserByIdRole(int id)
+        public async Task<ActionResult<IEnumerable<UtilisateurDto>>> GetUserByIdRole(int id)
         {
             if (_context.Utilisateurs == null || _context.FonctionUsers == null || _context.Roles == null)
             {
@@ -154,30 +166,97 @@ namespace ApiWeb.Controllers
             }
 
 
-            var User = await _context.Utilisateurs.Where(u => !u.EstSupprimer)
+            var users = await _context.Utilisateurs.Where(u => !u.EstSupprimer)
                                             .Join(_context.FonctionUsers.Where(f => f.RolesId == id && !f.EstSupprimer),
                                                 user => user.Id,
                                                 fonc => fonc.IdUser,
                                                 (user, fonc) => user)
                                                  .ToListAsync(); 
 
-            if (User == null)
+            if (users == null)
                 return NotFound();
+            var utilisateurs = new List<UtilisateurDto>() { };
 
-            return Ok(User);
+            users.ForEach(user => utilisateurs.Add(new UtilisateurDto(user)));
+
+            return Ok(utilisateurs);
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] UserAuthen model)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(UserAuthen model)
         {
-            var user = _userService.Authenticate(model.Email, model.Password);
-            if (user == null || string.IsNullOrEmpty(user.Email) || string.IsNullOrWhiteSpace(user.Email))
-                return BadRequest(new
+            UserDto? user = _userService.Authenticate(model.Email, model.Password);
+            if (user is null || string.IsNullOrEmpty(user.Email) || string.IsNullOrWhiteSpace(user.Email))
+                return BadRequest(new MessageErrorG
                 {
-                    message = "Email or password is incorrect"
+                    message = "Email or password is incorrect",
+                    Codestatut = 400
+
                 });
-            var roles =  _context.Utilisateurs.Where(u => !u.EstSupprimer && u.Email.Equals(model.Email)).Join(
+
+            var roles = RolesByEmail(user.Email).Result;
+
+            if (roles is null)
+                return BadRequest(new MessageErrorG { message = "Un probleme est survenu", Codestatut = 400 });
+
+            var token = _tokenService.GenerateToken(user, roles);
+            //await _emailSender.SendEmailAsync("nguetioof@gmail.com", "Test mail", $"Voici ton token {token.Token}");
+
+            return Ok(token);
+        }
+
+
+        [HttpPost("register")]
+        public async Task<ActionResult<UserTokensDto>> Register(UserResisterDto userResisterDto)
+        {
+
+            if (_context.Utilisateurs == null)
+            {
+                return BadRequest(new { message = "Entity set 'EchangeJouetsContext.Utilisateurs'  is null." });
+            }
+
+            
+            if (UtilisateurExists(userResisterDto.Email))
+            {
+                return BadRequest(new {message = "C'est email existe deja"});
+            }
+            _userService.CreatePasswordHash(userResisterDto.MotDePasse, out byte[] passwordHash, out byte[] passwordSalt);
+
+            var userregister = new Utilisateur()
+            {
+                Nom = userResisterDto.MotDePasse,
+                Prenom = userResisterDto.Prenom,
+                Email = userResisterDto.Email,
+                MotDePasse = passwordHash,
+                Sel = passwordSalt,
+                Telephone = userResisterDto.Telephone,
+                Adresse = userResisterDto.Adresse,
+                VilleUser = userResisterDto.VilleUser,
+                QuatierUser = userResisterDto.QuatierUser
+            }; 
+
+            _context.Utilisateurs.Add(userregister);
+            await _context.SaveChangesAsync();
+
+            UserDto? user = _userService.Authenticate(userResisterDto.Email, userResisterDto.MotDePasse);
+
+            var roles = RolesByEmail(userResisterDto.Email).Result;
+
+            if (roles is null)
+                return BadRequest(new { message = "Un probleme est survenu" });
+
+            var token = _tokenService.GenerateToken(user, roles);
+
+            return Ok(token);
+
+        }
+        private async Task<List<Role>> RolesByEmail(string email)
+        {
+            if (_context.Utilisateurs is null || _context.FonctionUsers is null || _context.Roles is null)
+                return null;
+
+            var role = await _context.Utilisateurs.Where(u => !u.EstSupprimer && u.Email.Equals(email)).Join(
                                             _context.FonctionUsers.Where(f => !f.EstSupprimer),
                                             user => user.Id,
                                             fonction => fonction.RolesId,
@@ -185,17 +264,19 @@ namespace ApiWeb.Controllers
                                                 _context.Roles.Where(r => !r.EstSupprimer),
                                                 fonction => fonction.RolesId,
                                                 role => role.Id,
-                                                (fonction, role) => role).ToList();
+                                                (fonction, role) => role).ToListAsync();
 
-            var token = _tokenService.GenerateToken(user, roles);
-            // return basic user info (without password) and token to store client side
-            return Ok(token);
+            return role;
+
         }
-
-
         private bool UtilisateurExists(int id)
         {
             return (_context.Utilisateurs.Where(e => !e.EstSupprimer)?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private bool UtilisateurExists(string email)
+        {
+            return (_context.Utilisateurs.Any(e => e.Email == email));
         }
     }
 }

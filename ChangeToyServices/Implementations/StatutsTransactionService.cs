@@ -17,13 +17,13 @@ namespace ChangeToyServices.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<StatutsTransaction>>> GetStatutsTransactions()
+        public async Task<ActionResult<List<StatutsTransactionL>>> GetStatutsTransactions()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var StatutsTransactions = JsonSerializer.Deserialize<List<StatutsTransaction>>(content);
+                var StatutsTransactions = JsonSerializer.Deserialize<List<StatutsTransactionL>>(content);
 
                 return StatutsTransactions;
 
@@ -35,14 +35,14 @@ namespace ChangeToyServices.Implementations
 
         }
 
-        public async Task<ActionResult<StatutsTransaction>> GetStatutsTransaction(int id)
+        public async Task<ActionResult<StatutsTransactionL>> GetStatutsTransaction(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var StatutsTransaction = JsonSerializer.Deserialize<StatutsTransaction>(content);
+                var StatutsTransaction = JsonSerializer.Deserialize<StatutsTransactionL>(content);
 
                 return StatutsTransaction;
 
@@ -53,7 +53,7 @@ namespace ChangeToyServices.Implementations
             }
         }
 
-        public async Task<bool> UpdateStatutsTransaction(StatutsTransaction StatutsTransaction)
+        public async Task<bool> UpdateStatutsTransaction(StatutsTransactionL StatutsTransaction)
         {
             var data = JsonSerializer.Serialize(StatutsTransaction);
             var content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -61,7 +61,7 @@ namespace ChangeToyServices.Implementations
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddStatutsTransaction(StatutsTransaction StatutsTransaction)
+        public async Task<bool> AddStatutsTransaction(StatutsTransactionL StatutsTransaction)
         {
             var data = JsonSerializer.Serialize(StatutsTransaction);
             var content = new StringContent(data, Encoding.UTF8, "application/json");

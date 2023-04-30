@@ -1,5 +1,7 @@
 ﻿using ApiWeb.ModelDto;
 using ApiWeb.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -28,7 +30,9 @@ namespace ApiWeb.Services
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email)
             };
+
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role.Nom)));
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
@@ -36,6 +40,16 @@ namespace ApiWeb.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
+
+           
+            //var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //var principal = new ClaimsPrincipal(identity);
+            // DefaultHttpContext.(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
+            //{
+            //    IsPersistent = true,
+            //    ExpiresUtc = DateTime.UtcNow.AddDays(7)
+            //});
+
             return new UserTokens
             {
                 Id = user.Id,

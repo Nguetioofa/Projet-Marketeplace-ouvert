@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Utilisateur>
+﻿@model IEnumerable<UtilisateurL>
 
 @{
     //   Layout = null;
@@ -57,12 +57,12 @@
                                 <th>
                                     @Html.DisplayNameFor(model => model.Email)
                                 </th>
-                                <th>
+                               @* <th>
                                     @Html.DisplayNameFor(model => model.MotDePasse)
                                 </th>
                                 <th>
                                     @Html.DisplayNameFor(model => model.Sel)
-                                </th>
+                                </th>*@
                                 <th>
                                     @Html.DisplayNameFor(model => model.Telephone)
                                 </th>
@@ -105,12 +105,12 @@
                                 <th>
                                     @Html.DisplayNameFor(model => model.Email)
                                 </th>
-                                <th>
+                                @*<th>
                                     @Html.DisplayNameFor(model => model.MotDePasse)
                                 </th>
                                 <th>
                                     @Html.DisplayNameFor(model => model.Sel)
-                                </th>
+                                </th>*@
                                 <th>
                                     @Html.DisplayNameFor(model => model.Telephone)
                                 </th>
@@ -155,12 +155,12 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Email)
                                     </td>
-                                    <td>
+                                   @* <td>
                                         @Html.DisplayFor(modelItem => item.MotDePasse)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Sel)
-                                    </td>
+                                    </td>*@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Telephone)
                                     </td>

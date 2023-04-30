@@ -4,10 +4,10 @@ namespace ChangeToyServices.Interfaces
 {
     public interface IStatutUserService
     {
-        public Task<ActionResult<IEnumerable<StatutUser>>> GetStatutUsers();
-        public Task<ActionResult<StatutUser>> GetStatutUser(int id);
-        public Task<bool> UpdateStatutUser(StatutUser StatutUser);
-        public Task<bool> AddStatutUser(StatutUser StatutUser);
+        public Task<ActionResult<IEnumerable<StatutUserL>>> GetStatutUsers();
+        public Task<ActionResult<StatutUserL>> GetStatutUser(int id);
+        public Task<bool> UpdateStatutUser(StatutUserL StatutUser);
+        public Task<bool> AddStatutUser(StatutUserL StatutUser);
         public Task<bool> DeleteStatutUser(int id);
     }
 }

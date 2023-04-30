@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ModelsLibrary.Models;
 
-public partial class Photo
+public partial class PhotoL
 {
     public int Id { get; set; }
 

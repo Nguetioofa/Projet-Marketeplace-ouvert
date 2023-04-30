@@ -4,10 +4,10 @@ namespace ChangeToyServices.Interfaces
 {
     public interface IStatutsTransactionService
     {
-        public Task<ActionResult<List<StatutsTransaction>>> GetStatutsTransactions();
-        public Task<ActionResult<StatutsTransaction>> GetStatutsTransaction(int id);
-        public Task<bool> UpdateStatutsTransaction(StatutsTransaction StatutsTransaction);
-        public Task<bool> AddStatutsTransaction(StatutsTransaction StatutsTransaction);
+        public Task<ActionResult<List<StatutsTransactionL>>> GetStatutsTransactions();
+        public Task<ActionResult<StatutsTransactionL>> GetStatutsTransaction(int id);
+        public Task<bool> UpdateStatutsTransaction(StatutsTransactionL StatutsTransaction);
+        public Task<bool> AddStatutsTransaction(StatutsTransactionL StatutsTransaction);
         public Task<bool> DeleteStatutsTransaction(int id);
     }
 }
