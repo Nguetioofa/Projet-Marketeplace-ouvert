@@ -75,19 +75,20 @@ namespace ChangeToyServices.Implementations
 
         }
 
-        public async Task<object> Login(UserAuthen model)
+        public async Task<ActionResult<object>> Login(UserAuthen model)
         {
-            var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), model);
+            var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), model);
 
             if (response.IsSuccessStatusCode)
             {
-                var useraut = response.Content.ReadFromJsonAsync<UserTokensDto>();
-                return useraut.Result;
+                var useraut = await response.Content.ReadFromJsonAsync<UserTokensDto>();
+                return useraut;
             }
             else
             {
-                
-                return response.Content.ReadFromJsonAsync<MessageErrorG>();
+
+                var error = await response.Content.ReadFromJsonAsync<MessageErrorG>();
+                return error;
             }
 
         }
@@ -98,13 +99,13 @@ namespace ChangeToyServices.Implementations
 
             if (response.IsSuccessStatusCode)
             {
-                var useraut = response.Content.ReadFromJsonAsync<UserTokensDto>();
-                return useraut.Result;
+                var useraut = await response.Content.ReadFromJsonAsync<UserTokensDto>();
+                return useraut;
             }
             else
             {
-
-                return response.Content.ReadFromJsonAsync<MessageErrorG>();
+                var error = await response.Content.ReadFromJsonAsync<MessageErrorG>();
+                return error;
             }
         }
     }

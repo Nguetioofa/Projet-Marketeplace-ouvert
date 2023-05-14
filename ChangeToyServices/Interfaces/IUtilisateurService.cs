@@ -10,7 +10,7 @@ namespace ChangeToyServices.Interfaces
          Task<bool> UpdateUtilisateur(UtilisateurL Utilisateur);
          Task<bool> AddUtilisateur(UtilisateurL Utilisateur);
          Task<bool> DeleteUtilisateur(int id);
-         Task<object> Login(UserAuthen model);
+         Task<ActionResult<object>> Login(UserAuthen model);
          Task<object> Register(UserResisterDto userResisterDto);
 
     }

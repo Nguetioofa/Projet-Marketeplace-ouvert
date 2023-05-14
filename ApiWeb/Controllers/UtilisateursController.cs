@@ -184,10 +184,10 @@ namespace ApiWeb.Controllers
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(UserAuthen model)
+        public async Task<ActionResult<object>> Login(UserAuthen model)
         {
-            UserDto? user = _userService.Authenticate(model.Email, model.Password);
-            if (user is null || string.IsNullOrEmpty(user.Email) || string.IsNullOrWhiteSpace(user.Email))
+            var user = _userService.Authenticate(model.Email, model.Password);
+            if (user is null || string.IsNullOrWhiteSpace(user.Email))
                 return BadRequest(new MessageErrorG
                 {
                     message = "Email or password is incorrect",

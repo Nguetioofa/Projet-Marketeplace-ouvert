@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ChangeToyServices.Interfaces;
 using ModelsLibrary.Models.Users;
+using ModelsLibrary.Models;
 
 namespace SiteWeb.Controllers
 {
@@ -77,6 +78,40 @@ namespace SiteWeb.Controllers
         {
             await _utilisateurService.DeleteUtilisateur(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(UserAuthen userAuthen)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var result = (await _utilisateurService.Login(userAuthen)).Value;
+                
+                if (result is UserTokensDto)
+                {
+                    return RedirectToAction("Index", "Home");
+
+                }
+                else if(result is MessageErrorG)
+                {
+                    var error = result as MessageErrorG;
+                    ViewBag.ErrorMessage = error.message;
+                }
+            }
+
+            return View(userAuthen);
+        }
+
+        public IActionResult Register()
+        {
+            return View();
         }
     }
 }

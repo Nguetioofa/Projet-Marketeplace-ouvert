@@ -1,8 +1,14 @@
-﻿namespace ModelsLibrary.Models.Users
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ModelsLibrary.Models.Users
 {
     public class UserAuthen
     {
+        [Required]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = string.Empty;
+        [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
     }
 }

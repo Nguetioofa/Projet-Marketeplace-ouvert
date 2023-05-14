@@ -1,10 +1,13 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="fr-fr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Site d'achange de jouets</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+   @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link href="~/CustonRuangAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="~/CustonRuangAdmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="~/CustonRuangAdmin/css/ruang-admin.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SiteWeb.styles.css" asp-append-version="true" />
 </head>
@@ -28,6 +31,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="StatutUser" asp-action="Index">StatutUser</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" style="align-items:flex-end" asp-area="" asp-controller="Utilisateurs" asp-action="Login">Connexion</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -44,8 +50,13 @@
             &copy; 2023 - SiteWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+@*    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+
+    <script src="~/CustonRuangAdmin/vendor/jquery/jquery.min.js"></script>
+    <script src="~/CustonRuangAdmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/CustonRuangAdmin/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/CustonRuangAdmin/js/ruang-admin.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
