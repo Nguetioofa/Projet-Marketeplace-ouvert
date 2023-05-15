@@ -184,21 +184,20 @@ namespace ApiWeb.Controllers
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<ActionResult<object>> Login(UserAuthen model)
+        public async Task<ActionResult<UserTokens>> Login(UserAuthen model)
         {
+            if (!UtilisateurExists(model.Email))
+                return BadRequest(new { message = "Cette email n'existe pas" });
+           
             var user = _userService.Authenticate(model.Email, model.Password);
-            if (user is null || string.IsNullOrWhiteSpace(user.Email))
-                return BadRequest(new MessageErrorG
-                {
-                    message = "Email or password is incorrect",
-                    Codestatut = 400
 
-                });
+            if (user is null || string.IsNullOrWhiteSpace(user.Email))
+                return BadRequest(new  { message = "Email or password is incorrect" });
 
             var roles = RolesByEmail(user.Email).Result;
 
             if (roles is null)
-                return BadRequest(new MessageErrorG { message = "Un probleme est survenu", Codestatut = 400 });
+                return BadRequest(new {message = "Un probleme est survenu" });
 
             var token = _tokenService.GenerateToken(user, roles);
             //await _emailSender.SendEmailAsync("nguetioof@gmail.com", "Test mail", $"Voici ton token {token.Token}");
@@ -219,7 +218,7 @@ namespace ApiWeb.Controllers
             
             if (UtilisateurExists(userResisterDto.Email))
             {
-                return BadRequest(new {message = "C'est email existe deja"});
+                return BadRequest(new {message = "Cette email existe deja"});
             }
             _userService.CreatePasswordHash(userResisterDto.MotDePasse, out byte[] passwordHash, out byte[] passwordSalt);
 

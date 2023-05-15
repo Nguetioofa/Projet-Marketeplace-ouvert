@@ -77,8 +77,11 @@ namespace ApiWeb.Services
                                  .Where(u => u.Email == email)
                                  .Select(u => u).FirstOrDefault();
 
-            passwordSalt = user.Sel;
-            passwordHash = user.MotDePasse;
+
+                passwordSalt = user?.Sel;
+                passwordHash = user?.MotDePasse;
+
+
         }
 
 
