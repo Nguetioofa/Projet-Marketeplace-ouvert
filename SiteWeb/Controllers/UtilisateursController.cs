@@ -4,6 +4,11 @@ using ModelsLibrary.Models.Users;
 using ModelsLibrary.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Principal;
+using NuGet.Packaging;
+using SiteWeb.Services.Interfaces;
 
 namespace SiteWeb.Controllers
 {
@@ -88,7 +93,7 @@ namespace SiteWeb.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(UserAuthen userAuthen)
         {
             if (ModelState.IsValid)
@@ -96,12 +101,42 @@ namespace SiteWeb.Controllers
 
                 var result = (await _utilisateurService.Login(userAuthen));
                 
-                if (result.principal != null)
+                if (result.useraut != null)
                 {
-                    
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, result.principal);
-                    ViewBag.ErrorMessage = result.principal.Claims.FirstOrDefault().Value;
-                    //return RedirectToAction("Index", "Home");
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var jwtToken = tokenHandler.ReadJwtToken(result.useraut.Token);
+                    var claimsToken = jwtToken.Claims.ToList();
+                    var claimssString = claimsToken
+                                                    .Where(c => c.Type == "role")
+                                                    .Select(c => c.Value).ToList();
+
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, result.useraut.Id.ToString()),
+                        new Claim(ClaimTypes.Email, result.useraut.EmailId),
+                        new Claim("Token", result.useraut.Token)
+
+                    };
+
+                    claims.AddRange(claimssString.Select(str => new Claim(ClaimTypes.Role, str)));
+                   // claimss.Add(new Claim("token", result.useraut.Token));
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
+                    var authentificationPropertie = new AuthenticationProperties
+                    {
+                        IsPersistent = true,                       
+                        ExpiresUtc = result.useraut.ExpiredTime
+                    };
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authentificationPropertie);
+                    var claimsPrincipal = HttpContext.User;
+
+                    //var roles = claimsPrincipal.Claims
+                    //    .Where(c => c.Type == "role")
+                    //    .Select(c => c.Value)
+                    //    .ToList();
+                  
+                    return RedirectToAction("Index", "Home");
 
                 }
                 else
@@ -114,6 +149,11 @@ namespace SiteWeb.Controllers
             return View(userAuthen);
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Utilisateurs");
+        }
         public IActionResult Register()
         {
             return View();

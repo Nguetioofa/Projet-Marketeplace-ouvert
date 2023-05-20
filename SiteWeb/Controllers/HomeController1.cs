@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace SiteWeb.Controllers
 {
@@ -8,6 +9,8 @@ namespace SiteWeb.Controllers
         // GET: HomeController1
         public ActionResult Index()
         {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User;
+
             return View();
         }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace ChangeToyServices.Data
             builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
             builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
             builder.Services.AddHttpClient();
+           // builder.Services.AddSingleton<HttpContext, HttpContext>();
 
             return builder.Services;
 

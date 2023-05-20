@@ -9,9 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiWeb", "ApiWeb\ApiWeb.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{2BEB3585-DACC-4D50-8050-B64248E50822}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChangeToyServices", "ChangeToyServices\ChangeToyServices.csproj", "{8DD6395D-6E6B-4C5E-9932-EA2610FA87D7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsLibrary", "ModelsLibrary\ModelsLibrary.csproj", "{2F91A7FA-1BDC-4B71-AC10-165350CBC7F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelsLibrary", "ModelsLibrary\ModelsLibrary.csproj", "{2F91A7FA-1BDC-4B71-AC10-165350CBC7F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +25,6 @@ Global
 		{3FE09E4E-8DE0-48F6-85FE-6F787641B873}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FE09E4E-8DE0-48F6-85FE-6F787641B873}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FE09E4E-8DE0-48F6-85FE-6F787641B873}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8DD6395D-6E6B-4C5E-9932-EA2610FA87D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8DD6395D-6E6B-4C5E-9932-EA2610FA87D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8DD6395D-6E6B-4C5E-9932-EA2610FA87D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8DD6395D-6E6B-4C5E-9932-EA2610FA87D7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2F91A7FA-1BDC-4B71-AC10-165350CBC7F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2F91A7FA-1BDC-4B71-AC10-165350CBC7F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F91A7FA-1BDC-4B71-AC10-165350CBC7F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,7 +34,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8DD6395D-6E6B-4C5E-9932-EA2610FA87D7} = {2BEB3585-DACC-4D50-8050-B64248E50822}
 		{2F91A7FA-1BDC-4B71-AC10-165350CBC7F3} = {2BEB3585-DACC-4D50-8050-B64248E50822}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

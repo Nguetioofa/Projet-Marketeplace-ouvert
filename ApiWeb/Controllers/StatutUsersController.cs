@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiWeb.Controllers
 {
@@ -51,7 +52,7 @@ namespace ApiWeb.Controllers
         }
 
         // PUT: api/StatutUsers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> PutStatutUser(StatutUser statutUser)
         {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text;
-using ChangeToyServices.Interfaces;
 using System.Net.Http.Json;
 using ModelsLibrary.Models.Users;
 using System.Security.Claims;
@@ -11,9 +10,10 @@ using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
-using System.Net.Http.Headers;
+using SiteWeb.Services.Interfaces;
+using SiteWeb.Data;
 
-namespace ChangeToyServices.Implementations
+namespace SiteWeb.Services.Implementations
 {
     public class UtilisateurService : IUtilisateurService
     {
@@ -23,8 +23,7 @@ namespace ChangeToyServices.Implementations
 
         public UtilisateurService(IConfigurationService configuration, HttpClient client)
         {
-            //_client = client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            //_client = client;//.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "dsdsd");
+            _client = client;
             _configuration = configuration;
         }
 
@@ -64,7 +63,7 @@ namespace ChangeToyServices.Implementations
 
         public async Task<bool> UpdateUtilisateur(UtilisateurL Utilisateur)
         {
-         
+
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), Utilisateur);
             return response.IsSuccessStatusCode;
 
@@ -86,15 +85,15 @@ namespace ChangeToyServices.Implementations
 
         public async Task<(UserTokensDto useraut, string errorMessage)> Login(UserAuthen model)
         {
-            var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName,"Login"), model);
+            var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, "Login"), model);
 
             if (response.IsSuccessStatusCode)
             {
 
                 var useraut = await response.Content.ReadFromJsonAsync<UserTokensDto>();
 
-               
-    
+
+
                 return (useraut, null);
             }
             else

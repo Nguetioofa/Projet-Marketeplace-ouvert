@@ -11,7 +11,7 @@ namespace ChangeToyServices.Interfaces
          Task<bool> UpdateUtilisateur(UtilisateurL Utilisateur);
          Task<bool> AddUtilisateur(UtilisateurL Utilisateur);
          Task<bool> DeleteUtilisateur(int id);
-        Task<(ClaimsPrincipal principal, string errorMessage)> Login(UserAuthen model);
+        Task<(UserTokensDto useraut, string errorMessage)> Login(UserAuthen model);
          Task<object> Register(UserResisterDto userResisterDto);
 
     }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ChangeToyServices.Interfaces;
 using ModelsLibrary.Models;
+using Microsoft.AspNetCore.Authorization;
+using SiteWeb.Services.Interfaces;
 
 namespace SiteWeb.Controllers
 {
@@ -13,10 +15,17 @@ namespace SiteWeb.Controllers
             _statutUserService = statutUserService;
         }
 
+        [Authorize(Policy = "AdministrateurSeulement")]
+      //  [Authorize]
         public async Task<IActionResult> Index()
         {
-            var result = await _statutUserService.GetStatutUsers();
-            return View(result.Value);
+            if (User.Identity.IsAuthenticated)
+            {
+                var result = await _statutUserService.GetStatutUsers();
+                return View(result.Value);
+            }
+            return RedirectToAction("Index", "Home");
+
         }
 
         public async Task<IActionResult> Details(int id)
@@ -41,6 +50,7 @@ namespace SiteWeb.Controllers
             }
             return View(statutUser);
         }
+        //[Authorize(Policy = "AdministrateurSeulement")]
 
         public async Task<IActionResult> Edit(int id)
         {
