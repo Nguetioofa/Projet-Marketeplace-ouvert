@@ -32,7 +32,6 @@ namespace ApiWeb.Services
             };
 
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role.Nom)));
-
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
@@ -41,15 +40,8 @@ namespace ApiWeb.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-           
-            //var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            //var principal = new ClaimsPrincipal(identity);
-            // DefaultHttpContext.(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
-            //{
-            //    IsPersistent = true,
-            //    ExpiresUtc = DateTime.UtcNow.AddDays(7)
-            //});
-
+            //var rolesuser = new List<string>();
+            //rolesuser.Add(roles.ForEach(r =>))
             return new UserTokens
             {
                 Id = user.Id,
@@ -58,6 +50,7 @@ namespace ApiWeb.Services
                 Token = tokenHandler.WriteToken(token),
                 Validaty = TimeSpan.FromDays(7),
                 ExpiredTime = DateTime.UtcNow.AddDays(7),
+                //Roles = roles,
                 GuidId = Guid.NewGuid()
             };
         }

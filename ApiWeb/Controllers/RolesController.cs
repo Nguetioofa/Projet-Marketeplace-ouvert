@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiWeb.Models;
+using ApiWeb.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ApiWeb.Controllers
 {
@@ -14,10 +16,11 @@ namespace ApiWeb.Controllers
     public class RolesController : ControllerBase
     {
         private readonly EchangeJouetsContext _context;
-
-        public RolesController(EchangeJouetsContext context)
+        private readonly IUserService _userService;
+        public RolesController(EchangeJouetsContext context, IUserService user)
         {
             _context = context;
+            _userService = user;
         }
 
         // GET: api/Roles
@@ -113,30 +116,39 @@ namespace ApiWeb.Controllers
             return NoContent();
         }
 
-        [HttpGet("GetRolesByEmailUser{Email}")]
+        [HttpGet("GetRolesByEmailUser{email}")]
         public async Task<ActionResult<IEnumerable<Role>>> GetRolesByEmailUser(string email)
         {
-            if (_context.Jouets == null)
+
+            if (_context.Utilisateurs is null || _context.FonctionUsers is null || _context.Roles is null)
+                return NotFound();
+
+            //var roles =  _userService.RolesByEmail(email);
+            //var roles = await _context.Utilisateurs.Where(u => !u.EstSupprimer && u.Email.Equals(email))
+            //                        .Join(_context.FonctionUsers.Where(f => !f.EstSupprimer),
+            //                            user => user.Id,
+            //                            fonction => fonction.IdUser,
+            //                            (user, fonction) => fonction)
+            //                            .Join(_context.Roles.Where(r => !r.EstSupprimer),
+            //                             fonction => fonction.RolesId,
+            //                             role => role.Id,
+            //                             (fonction, role) => role).ToListAsync();
+
+            var rolesQuery = from user in _context.Utilisateurs
+                             join fonction in _context.FonctionUsers on user.Id equals fonction.IdUser
+                             join role in _context.Roles on fonction.RolesId equals role.Id
+                             where !user.EstSupprimer && !fonction.EstSupprimer && !role.EstSupprimer && user.Email.Equals(email)
+                             select role;
+
+            var roles = await rolesQuery.ToListAsync();
+
+
+            if (roles is null)
             {
                 return NotFound();
             }
 
-            var roles = await _context.Utilisateurs.Where(u => !u.EstSupprimer && u.Email.Equals(email))
-                                        .Join( _context.FonctionUsers.Where(f => !f.EstSupprimer),
-                                            user => user.Id,
-                                            fonction => fonction.RolesId,
-                                            (user, fonction) => fonction)
-                                            .Join( _context.Roles.Where(r => !r.EstSupprimer),
-                                             fonction => fonction.RolesId,
-                                             role => role.Id,
-                                             (fonction, role) => role).ToListAsync();
-
-            if (roles == null)
-            {
-                return NotFound();
-            }
-
-            return roles;
+            return Ok(roles);
         }
 
  /*       [HttpGet("GetRoleByIdUser{id}")]

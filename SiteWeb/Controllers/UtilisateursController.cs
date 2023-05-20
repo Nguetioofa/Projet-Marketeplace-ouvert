@@ -2,6 +2,8 @@
 using ChangeToyServices.Interfaces;
 using ModelsLibrary.Models.Users;
 using ModelsLibrary.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace SiteWeb.Controllers
 {
@@ -86,23 +88,26 @@ namespace SiteWeb.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(UserAuthen userAuthen)
         {
             if (ModelState.IsValid)
             {
 
-                var result = (await _utilisateurService.Login(userAuthen)).Value;
+                var result = (await _utilisateurService.Login(userAuthen));
                 
-                if (result is UserTokensDto)
+                if (result.principal != null)
                 {
-                    return RedirectToAction("Index", "Home");
+                    
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, result.principal);
+                    ViewBag.ErrorMessage = result.principal.Claims.FirstOrDefault().Value;
+                    //return RedirectToAction("Index", "Home");
 
                 }
-                else if(result is MessageErrorG)
+                else
                 {
-                    var error = result as MessageErrorG;
-                    ViewBag.ErrorMessage = error.message;
+                    //var error = result as MessageErrorG;
+                    ViewBag.ErrorMessage = result.errorMessage;
                 }
             }
 

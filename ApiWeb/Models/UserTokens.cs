@@ -10,6 +10,7 @@
         public string EmailId { get; set; }
         public Guid GuidId { get; set; }
         public DateTime ExpiredTime { get; set; }
+        public List<string> Roles { get; set; }
 
     }
 }

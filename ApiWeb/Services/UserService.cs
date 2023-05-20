@@ -53,6 +53,7 @@ namespace ApiWeb.Services
             return utilisateur;
         }
 
+
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
@@ -84,6 +85,23 @@ namespace ApiWeb.Services
 
         }
 
+        public List<Role> RolesByEmail(string email)
+        {
+            if (_context.Utilisateurs is null || _context.FonctionUsers is null || _context.Roles is null)
+                return null;
 
+            var role =  _context.Utilisateurs.Where(u => !u.EstSupprimer && u.Email.Equals(email)).Join(
+                                            _context.FonctionUsers.Where(f => !f.EstSupprimer),
+                                            user => user.Id,
+                                            fonction => fonction.IdUser,
+                                            (user, fonction) => fonction).Join(
+                                                _context.Roles.Where(r => !r.EstSupprimer),
+                                                fonction => fonction.RolesId,
+                                                role => role.Id,
+                                                (fonction, role) => role).ToList();
+
+            return role;
+
+        }
     }
 }

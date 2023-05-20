@@ -2,6 +2,7 @@
 using ChangeToyServices.Implementations;
 using System.Configuration;
 using ChangeToyServices.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace SiteWeb.Services
 {
@@ -35,7 +36,8 @@ namespace SiteWeb.Services
             builder.Services.AddSingleton<IStatutUserService, StatutUserService>();
             builder.Services.AddScoped<IUtilisateurService, UtilisateurService>();
             builder.Services.AddScoped<IUtilisateursProfilService, UtilisateursProfilService>();
-
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
             return builder.Services;
 
             /*Pour changer la durer de de vie de HttpMessageHandler (on le fait pour des raisons de securite

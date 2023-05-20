@@ -187,17 +187,17 @@ namespace ApiWeb.Controllers
         public async Task<ActionResult<UserTokens>> Login(UserAuthen model)
         {
             if (!UtilisateurExists(model.Email))
-                return BadRequest(new { message = "Cette email n'existe pas" });
+                return BadRequest("Cette email n'existe pas");
            
             var user = _userService.Authenticate(model.Email, model.Password);
 
             if (user is null || string.IsNullOrWhiteSpace(user.Email))
-                return BadRequest(new  { message = "Email or password is incorrect" });
+                return BadRequest("Email or password is incorrect" );
 
-            var roles = RolesByEmail(user.Email).Result;
+            var roles = _userService.RolesByEmail(model.Email);// RolesByEmail(user.Email).Result;
 
             if (roles is null)
-                return BadRequest(new {message = "Un probleme est survenu" });
+                return BadRequest("Un probleme est survenu");
 
             var token = _tokenService.GenerateToken(user, roles);
             //await _emailSender.SendEmailAsync("nguetioof@gmail.com", "Test mail", $"Voici ton token {token.Token}");
@@ -240,9 +240,10 @@ namespace ApiWeb.Controllers
 
             UserDto? user = _userService.Authenticate(userResisterDto.Email, userResisterDto.MotDePasse);
 
-            var roles = RolesByEmail(userResisterDto.Email).Result;
+            var roles =  _userService.RolesByEmail(userResisterDto.Email);
+               // RolesByEmail(userResisterDto.Email).Result;
 
-            if (roles is null)
+            if (roles == null)
                 return BadRequest(new { message = "Un probleme est survenu" });
 
             var token = _tokenService.GenerateToken(user, roles);
@@ -250,24 +251,24 @@ namespace ApiWeb.Controllers
             return Ok(token);
 
         }
-        private async Task<List<Role>> RolesByEmail(string email)
-        {
-            if (_context.Utilisateurs is null || _context.FonctionUsers is null || _context.Roles is null)
-                return null;
+        //private async Task<List<Role>> RolesByEmail(string email)
+        //{
+        //    if (_context.Utilisateurs is null || _context.FonctionUsers is null || _context.Roles is null)
+        //        return null;
 
-            var role = await _context.Utilisateurs.Where(u => !u.EstSupprimer && u.Email.Equals(email)).Join(
-                                            _context.FonctionUsers.Where(f => !f.EstSupprimer),
-                                            user => user.Id,
-                                            fonction => fonction.RolesId,
-                                            (user, fonction) => fonction).Join(
-                                                _context.Roles.Where(r => !r.EstSupprimer),
-                                                fonction => fonction.RolesId,
-                                                role => role.Id,
-                                                (fonction, role) => role).ToListAsync();
+        //    var role = await _context.Utilisateurs.Where(u => !u.EstSupprimer && u.Email.Equals(email)).Join(
+        //                                    _context.FonctionUsers.Where(f => !f.EstSupprimer),
+        //                                    user => user.Id,
+        //                                    fonction => fonction.RolesId,
+        //                                    (user, fonction) => fonction).Join(
+        //                                        _context.Roles.Where(r => !r.EstSupprimer),
+        //                                        fonction => fonction.RolesId,
+        //                                        role => role.Id,
+        //                                        (fonction, role) => role).ToListAsync();
 
-            return role;
+        //    return role;
 
-        }
+        //}
         private bool UtilisateurExists(int id)
         {
             return (_context.Utilisateurs.Where(e => !e.EstSupprimer)?.Any(e => e.Id == id)).GetValueOrDefault();

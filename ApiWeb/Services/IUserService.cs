@@ -12,6 +12,6 @@ namespace ApiWeb.Services
         bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
 
         void SelectPassWordAndSalt(string email, out byte[] passwordHash, out byte[] passwordSalt);
-
+        List<Role> RolesByEmail(string email);
     }
 }
