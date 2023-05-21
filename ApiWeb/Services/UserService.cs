@@ -103,5 +103,16 @@ namespace ApiWeb.Services
             return role;
 
         }
+
+        public string NameLastNameByEmail(string email)
+        {
+            if (_context.Utilisateurs is null)
+                return null;
+
+            var user = _context.Utilisateurs.Where(u => !u.EstSupprimer && u.Email.Equals(email))
+                                            .FirstOrDefault();
+
+            return user.Nom + " " + user.Prenom;
+        }
     }
 }

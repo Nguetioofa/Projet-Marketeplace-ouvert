@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ChangeToyServices.Interfaces;
 using ModelsLibrary.Models.Users;
 using ModelsLibrary.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Principal;
 using NuGet.Packaging;
 using SiteWeb.Services.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SiteWeb.Controllers
 {
@@ -110,16 +110,17 @@ namespace SiteWeb.Controllers
                                                     .Where(c => c.Type == "role")
                                                     .Select(c => c.Value).ToList();
 
+                    var NameUser = claimsToken.Where(r => r.Type == "NameLastName")
+                                                      .Select(r=> r.Value).First();
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, result.useraut.Id.ToString()),
                         new Claim(ClaimTypes.Email, result.useraut.EmailId),
-                        new Claim("Token", result.useraut.Token)
-
+                        new Claim("Token", result.useraut.Token),
+                        new Claim("NameLastName", NameUser),
                     };
 
                     claims.AddRange(claimssString.Select(str => new Claim(ClaimTypes.Role, str)));
-                   // claimss.Add(new Claim("token", result.useraut.Token));
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
                     var authentificationPropertie = new AuthenticationProperties
@@ -131,10 +132,7 @@ namespace SiteWeb.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authentificationPropertie);
                     var claimsPrincipal = HttpContext.User;
 
-                    //var roles = claimsPrincipal.Claims
-                    //    .Where(c => c.Type == "role")
-                    //    .Select(c => c.Value)
-                    //    .ToList();
+
                   
                     return RedirectToAction("Index", "Home");
 
@@ -149,14 +147,42 @@ namespace SiteWeb.Controllers
             return View(userAuthen);
         }
 
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Utilisateurs");
         }
+
         public IActionResult Register()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(UserResisterDto userResisterDto)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var result = (await _utilisateurService.Register(userResisterDto));
+
+                if (result.iSucess)
+                {
+                   
+                    return RedirectToAction( "Login");
+
+                }
+                else
+                {
+                    //var error = result as MessageErrorG;
+                    ViewBag.ErrorMessage = result.message;
+                }
+            }
+
+            return View(userResisterDto);
+
         }
     }
 }

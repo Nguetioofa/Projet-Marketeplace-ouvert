@@ -13,5 +13,6 @@ namespace ApiWeb.Services
 
         void SelectPassWordAndSalt(string email, out byte[] passwordHash, out byte[] passwordSalt);
         List<Role> RolesByEmail(string email);
+        string NameLastNameByEmail(string email);
     }
 }

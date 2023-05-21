@@ -23,6 +23,7 @@ namespace ModelsLibrary.Models.Users
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = null!;
 
+        [Display(Name = "Mot de passe")]
         [Required(ErrorMessage = "Le mot de passe est requis.")]
         [PasswordPropertyText]
         public string MotDePasse { get; set; } = null!;

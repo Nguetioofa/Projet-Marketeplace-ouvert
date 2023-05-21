@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+using Microsoft.CodeAnalysis.Differencing;
+using System.Net.Http.Headers;
+using System.Net;
 
 namespace SiteWeb.Data
 {
@@ -19,7 +23,10 @@ namespace SiteWeb.Data
 
             builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
             builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddTransient<AuthorizationHeaderHandler>();
             builder.Services.AddHttpClient();
+            //builder.Services.AddHttpClient().AddHttpContextAccessor();// (() => new AuthorizationHeaderHandler());/*.AddHttpMessageHandler<AuthorizationHeaderHandler>();*/
             builder.Services.AddScoped<IAbonnementService, AbonnementService>();
             builder.Services.AddScoped<IAchatService, AchatService>();
             builder.Services.AddScoped<IAnnonceService, AnnonceService>();

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ApiWeb.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StatutUsersController : ControllerBase
@@ -22,6 +23,8 @@ namespace ApiWeb.Controllers
         }
 
         // GET: api/StatutUsers
+        // [Authorize]
+        //[AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StatutUser>>> GetStatutUsers()
         {
@@ -32,7 +35,9 @@ namespace ApiWeb.Controllers
             return await _context.StatutUsers.Where(e => !e.EstSupprimer).ToListAsync();
         }
 
+        //[Authorize]
         // GET: api/StatutUsers/5
+        //[AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<StatutUser>> GetStatutUser(int id)
         {
@@ -48,11 +53,10 @@ namespace ApiWeb.Controllers
                 return NotFound();
             }
 
-            return statutUser;
+            return Ok(statutUser);
         }
 
         // PUT: api/StatutUsers/5
-        [Authorize]
         [HttpPut]
         public async Task<IActionResult> PutStatutUser(StatutUser statutUser)
         {
@@ -76,7 +80,7 @@ namespace ApiWeb.Controllers
                     throw;
             }
 
-            return NoContent();
+            return Ok("modifiacation reussit");
         }
 
         // POST: api/StatutUsers
@@ -112,7 +116,7 @@ namespace ApiWeb.Controllers
             _context.Entry(statutUser).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("suppression reussit");
         }
 
         private bool StatutUserExists(int id)

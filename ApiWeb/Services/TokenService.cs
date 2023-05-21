@@ -14,9 +14,11 @@ namespace ApiWeb.Services
     public class TokenService : ITokenService
     {
         private readonly JwtSettings _appSettings;
-        public TokenService(IOptions<JwtSettings> appSettings)
+        private readonly IUserService _userService;
+        public TokenService(IOptions<JwtSettings> appSettings,IUserService userService)
         {
             _appSettings = appSettings.Value;
+            _userService = userService;
         }
         public UserTokens GenerateToken(UserDto user, List<Role> roles)
         {
@@ -28,6 +30,7 @@ namespace ApiWeb.Services
             var claims = new List<Claim>
             {
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim("NameLastName", _userService.NameLastNameByEmail(user.Email)),
                     new Claim(ClaimTypes.Email, user.Email)
             };
 

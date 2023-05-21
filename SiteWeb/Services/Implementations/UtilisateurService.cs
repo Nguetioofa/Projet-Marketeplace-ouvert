@@ -105,19 +105,19 @@ namespace SiteWeb.Services.Implementations
 
         }
 
-        public async Task<object> Register(UserResisterDto userResisterDto)
+        public async Task<(bool iSucess, string message)> Register(UserResisterDto userResisterDto)
         {
-            var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), userResisterDto);
+            var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, "Register"), userResisterDto);
 
             if (response.IsSuccessStatusCode)
             {
-                var useraut = await response.Content.ReadFromJsonAsync<UserTokensDto>();
-                return useraut;
+                var useregist = await response.Content.ReadAsStringAsync();
+                return (true,useregist);
             }
             else
             {
-                var error = await response.Content.ReadFromJsonAsync<MessageErrorG>();
-                return error;
+                var error = await response.Content.ReadAsStringAsync();
+                return (false, error);
             }
         }
     }

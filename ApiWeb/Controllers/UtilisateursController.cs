@@ -204,27 +204,29 @@ namespace ApiWeb.Controllers
 
             return Ok(token);
         }
-
-
-        [HttpPost("register")]
-        public async Task<ActionResult<UserTokensDto>> Register(UserResisterDto userResisterDto)
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register(UserResisterDto userResisterDto)
         {
 
             if (_context.Utilisateurs == null)
             {
-                return BadRequest(new { message = "Entity set 'EchangeJouetsContext.Utilisateurs'  is null." });
+                return BadRequest("Entity set 'EchangeJouetsContext.Utilisateurs'  is null." );
             }
 
             
             if (UtilisateurExists(userResisterDto.Email))
             {
-                return BadRequest(new {message = "Cette email existe deja"});
+                return BadRequest("Cet email existe deja");
+            }
+            if (NumberExists(userResisterDto.Telephone))
+            {
+                return BadRequest("Ce numero de telephone existe deja");
             }
             _userService.CreatePasswordHash(userResisterDto.MotDePasse, out byte[] passwordHash, out byte[] passwordSalt);
 
             var userregister = new Utilisateur()
             {
-                Nom = userResisterDto.MotDePasse,
+                Nom = userResisterDto.Nom,
                 Prenom = userResisterDto.Prenom,
                 Email = userResisterDto.Email,
                 MotDePasse = passwordHash,
@@ -238,37 +240,10 @@ namespace ApiWeb.Controllers
             _context.Utilisateurs.Add(userregister);
             await _context.SaveChangesAsync();
 
-            UserDto? user = _userService.Authenticate(userResisterDto.Email, userResisterDto.MotDePasse);
-
-            var roles =  _userService.RolesByEmail(userResisterDto.Email);
-               // RolesByEmail(userResisterDto.Email).Result;
-
-            if (roles == null)
-                return BadRequest(new { message = "Un probleme est survenu" });
-
-            var token = _tokenService.GenerateToken(user, roles);
-
-            return Ok(token);
+            return Ok("enregistrement terminer");
 
         }
-        //private async Task<List<Role>> RolesByEmail(string email)
-        //{
-        //    if (_context.Utilisateurs is null || _context.FonctionUsers is null || _context.Roles is null)
-        //        return null;
 
-        //    var role = await _context.Utilisateurs.Where(u => !u.EstSupprimer && u.Email.Equals(email)).Join(
-        //                                    _context.FonctionUsers.Where(f => !f.EstSupprimer),
-        //                                    user => user.Id,
-        //                                    fonction => fonction.RolesId,
-        //                                    (user, fonction) => fonction).Join(
-        //                                        _context.Roles.Where(r => !r.EstSupprimer),
-        //                                        fonction => fonction.RolesId,
-        //                                        role => role.Id,
-        //                                        (fonction, role) => role).ToListAsync();
-
-        //    return role;
-
-        //}
         private bool UtilisateurExists(int id)
         {
             return (_context.Utilisateurs.Where(e => !e.EstSupprimer)?.Any(e => e.Id == id)).GetValueOrDefault();
@@ -277,6 +252,11 @@ namespace ApiWeb.Controllers
         private bool UtilisateurExists(string email)
         {
             return (_context.Utilisateurs.Any(e => e.Email == email));
+        }
+
+        private bool NumberExists(string numero)
+        {
+            return (_context.Utilisateurs.Any(e => e.Telephone == numero));
         }
     }
 }

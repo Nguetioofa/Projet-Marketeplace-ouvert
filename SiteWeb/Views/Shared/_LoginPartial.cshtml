@@ -10,12 +10,13 @@
 <ul class="navbar-nav">
     @{
         ClaimsPrincipal claimsPrincipal = Context.User;
-        
+        var NameUser = User.FindFirst("NameLastName")?.Value;
+
     }
     @if (User.Identity.IsAuthenticated)
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Utilisateurs" asp-action="">Hello @User.Identity.Name</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Utilisateurs" asp-action="">Bonjour @NameUser</a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="" asp-controller="Utilisateurs" asp-action="Logout">
@@ -26,10 +27,10 @@
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Utilisateurs" asp-action="Login">Register</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Utilisateurs" asp-action="Register">Register</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Utilisateurs" asp-action="Register">Login</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Utilisateurs" asp-action="Login">Login</a>
         </li>
     }
 </ul>

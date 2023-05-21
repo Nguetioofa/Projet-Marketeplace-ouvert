@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
 
 namespace ApiWeb.Models;
 
@@ -64,6 +65,7 @@ public partial class EchangeJouetsContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
         modelBuilder.Entity<Abonnement>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__abonneme__3213E83F99DEB9F6");
@@ -629,7 +631,7 @@ public partial class EchangeJouetsContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3213E83FEA030BF3");
 
-            entity.ToTable("utilisateurs");
+            entity.ToTable(utilisateurs => utilisateurs.HasTrigger("InsertDefaultRole"));
 
             entity.HasIndex(e => e.Email, "UQ__tmp_ms_x__AB6E616486BCCAB8").IsUnique();
 
@@ -696,7 +698,7 @@ public partial class EchangeJouetsContext : DbContext
                 .HasForeignKey(d => d.Photo)
                 .HasConstraintName("FK__utilisate__photo__03F0984C");
         });
-
+       
         OnModelCreatingPartial(modelBuilder);
     }
 

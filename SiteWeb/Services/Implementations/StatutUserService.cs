@@ -4,6 +4,9 @@ using System.Text;
 using System.Net.Http.Json;
 using SiteWeb.Services.Interfaces;
 using SiteWeb.Data;
+using NuGet.Common;
+using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
 
 namespace SiteWeb.Services.Implementations
 {
@@ -17,6 +20,9 @@ namespace SiteWeb.Services.Implementations
         {
             _client = client;
             _configuration = configuration;
+            //var token = User.FindFirst("Token")?.Value;
+
+           // _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjUiLCJOYW1lTGFzdE5hbWUiOiJzdHJpbmcgc3RyaW5nIiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6WyJ1dGlsaXNhdGV1ciIsIm1vZMOpcmF0ZXVyIiwiYWRtaW5pc3RyYXRldXIiLCJzdXBlci1hZG1pbmlzdHJhdGV1ciJdLCJuYmYiOjE2ODQ2NTMyNjEsImV4cCI6MTY4NTI1ODA2MSwiaWF0IjoxNjg0NjUzMjYxfQ.I-ZgR4-qYPwKM5OdZXRhYpfN3rp8zPSGwn7uL1h__7Q");
         }
 
         public async Task<ActionResult<IEnumerable<StatutUserL>>> GetStatutUsers()
@@ -24,6 +30,7 @@ namespace SiteWeb.Services.Implementations
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
+
                 var userStatus = await response.Content.ReadFromJsonAsync<List<StatutUserL>>();
 
                 // var content = await response.Content.ReadAsStringAsync();
@@ -41,10 +48,12 @@ namespace SiteWeb.Services.Implementations
 
         public async Task<ActionResult<StatutUserL>> GetStatutUser(int id)
         {
+            //_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjUiLCJOYW1lTGFzdE5hbWUiOiJzdHJpbmcgc3RyaW5nIiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6WyJ1dGlsaXNhdGV1ciIsIm1vZMOpcmF0ZXVyIiwiYWRtaW5pc3RyYXRldXIiLCJzdXBlci1hZG1pbmlzdHJhdGV1ciJdLCJuYmYiOjE2ODQ2NTMyNjEsImV4cCI6MTY4NTI1ODA2MSwiaWF0IjoxNjg0NjUzMjYxfQ.I-ZgR4-qYPwKM5OdZXRhYpfN3rp8zPSGwn7uL1h__7Q");
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
+
                 var StatutUser = await response.Content.ReadFromJsonAsync<StatutUserL>();
                 //var StatutUser = JsonSerializer.Deserialize<StatutUser>(content);
 

@@ -12,7 +12,7 @@ namespace SiteWeb.Services.Interfaces
         Task<bool> AddUtilisateur(UtilisateurL Utilisateur);
         Task<bool> DeleteUtilisateur(int id);
         Task<(UserTokensDto useraut, string errorMessage)> Login(UserAuthen model);
-        Task<object> Register(UserResisterDto userResisterDto);
+        Task<(bool iSucess, string message)> Register(UserResisterDto userResisterDto);
 
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ChangeToyServices.Interfaces;
 using ModelsLibrary.Models;
 using Microsoft.AspNetCore.Authorization;
 using SiteWeb.Services.Interfaces;
@@ -28,6 +27,7 @@ namespace SiteWeb.Controllers
 
         }
 
+        [Authorize(Policy = "AdministrateurSeulement")]
         public async Task<IActionResult> Details(int id)
         {
             var result = await _statutUserService.GetStatutUser(id);
