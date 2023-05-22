@@ -50,7 +50,7 @@ namespace SiteWeb.Controllers
             }
             return View(statutUser);
         }
-        //[Authorize(Policy = "AdministrateurSeulement")]
+        [Authorize(Policy = "AdministrateurSeulement")]
 
         public async Task<IActionResult> Edit(int id)
         {

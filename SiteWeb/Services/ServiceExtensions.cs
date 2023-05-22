@@ -48,12 +48,17 @@ namespace SiteWeb.Services
             builder.Services.AddScoped<IUtilisateursProfilService, UtilisateursProfilService>();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie();
-            //.AddCookie(options =>
-            //{
-            //    options.LoginPath = "/Utilisateurs/Login";
-            //    //options.LogoutPath = "/";
-            //});
+                .AddCookie(options =>
+                {
+                    options.AccessDeniedPath = "/Home/Error403";
+                    options.LoginPath = "/Utilisateurs/Login";
+                    //options.LogoutPath = "/Utilisateurs/Logout";
+                });
+            ////.AddCookie(options =>
+            ////{
+            ////    options.LoginPath = "/Utilisateurs/Login";
+            ////    //options.LogoutPath = "/";
+            ////});
            // builder.Services.AddAuthorizationBuilder();
             builder.Services.AddAuthorization(options =>
             {
