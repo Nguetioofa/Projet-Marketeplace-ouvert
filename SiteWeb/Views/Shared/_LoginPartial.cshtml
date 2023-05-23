@@ -11,12 +11,13 @@
     @{
         ClaimsPrincipal claimsPrincipal = Context.User;
         var NameUser = User.FindFirst("NameLastName")?.Value;
+        int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
 
     }
     @if (User.Identity.IsAuthenticated)
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Utilisateurs" asp-action="">Bonjour @NameUser</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Utilisateurs" asp-action="Profil" asp-route-id="@idUser">Bonjour @NameUser</a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="" asp-controller="Utilisateurs" asp-action="Logout">

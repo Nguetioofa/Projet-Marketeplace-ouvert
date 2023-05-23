@@ -21,7 +21,8 @@ namespace SiteWeb.Controllers
             _utilisateurService = utilisateurService;
         }
 
-        public async Task<IActionResult> Index()
+		[Authorize]
+		public async Task<IActionResult> Index()
         {
             var result = await _utilisateurService.GetUtilisateurs();
             return View(result.Value);
@@ -37,6 +38,7 @@ namespace SiteWeb.Controllers
         {
             return View();
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -73,7 +75,8 @@ namespace SiteWeb.Controllers
             return View(utilisateur);
         }
 
-        public async Task<IActionResult> Delete(int id)
+		[Authorize]
+		public async Task<IActionResult> Delete(int id)
         {
             var result = await _utilisateurService.GetUtilisateur(id);
             return View(result.Value);
@@ -184,5 +187,16 @@ namespace SiteWeb.Controllers
             return View(userResisterDto);
 
         }
-    }
+
+		[Authorize]
+		public async Task<IActionResult> Profil(int id)
+		{
+            UserProfil userProfil = new UserProfil();
+            userProfil.utilisateur = (await _utilisateurService.GetUtilisateur(id)).Value;
+
+
+            return View(userProfil);
+		}
+
+	}
 }

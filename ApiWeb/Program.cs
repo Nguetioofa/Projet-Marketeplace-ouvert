@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 //{
 //    options.JsonSerializerOptions.MaxDepth = 128;
 //});
-
+       
 builder.AddServicesApi();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
