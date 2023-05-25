@@ -1,6 +1,7 @@
 using SiteWeb.Services;
 using SiteWeb.Routes;
 using System.Configuration;
+using SiteWeb.Services.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,13 +23,19 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthentication();
+
+app.UseMiddleware<RedirectToLoginMiddleware>();
+
 app.UseAuthorization();
+
 app.ConfigureRoutes();
+
 //app.UseTokenMiddleware();
 
 app.Run();

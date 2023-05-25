@@ -4,6 +4,9 @@ using System.Security.Claims;
 using SiteWeb.Services.Implementations;
 using SiteWeb.Services.Interfaces;
 using SiteWeb.Data;
+using Microsoft.AspNetCore.Authorization;
+using SiteWeb.Services.CustomAuthorization;
+using SiteWeb.Models;
 
 namespace SiteWeb.Services
 {
@@ -20,9 +23,11 @@ namespace SiteWeb.Services
 
             builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
             builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
-            //builder.Services.AddHttpContextAccessor();
-            //builder.Services.AddTransient<AuthorizationHeaderHandler>();
-            builder.Services.AddHttpClient();
+			//builder.Services.AddHttpContextAccessor();
+			//builder.Services.AddTransient<AuthorizationHeaderHandler>();
+			builder.Services.AddHttpContextAccessor();
+			builder.Services.AddHttpClient();
+            builder.Services.AddSingleton<IAuthorizationHandler, UserConnectedAuthorizationHandler>();
             //builder.Services.AddHttpClient().AddHttpContextAccessor();// (() => new AuthorizationHeaderHandler());/*.AddHttpMessageHandler<AuthorizationHeaderHandler>();*/
             builder.Services.AddScoped<IAbonnementService, AbonnementService>();
             builder.Services.AddScoped<IAchatService, AchatService>();
@@ -47,13 +52,20 @@ namespace SiteWeb.Services
             builder.Services.AddScoped<IUtilisateurService, UtilisateurService>();
             builder.Services.AddScoped<IUtilisateursProfilService, UtilisateursProfilService>();
 
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
                     options.AccessDeniedPath = "/Home/Error403";
                     options.LoginPath = "/Utilisateurs/Login";
-                    //options.LogoutPath = "/Utilisateurs/Logout";
-                });
+					//options.LogoutPath = "/Utilisateurs/Logout";
+					//options.Events.OnRedirectToLogin = context =>
+					//{
+     //                   var redirectUrl = "/Utilisateurs/Login?showMessage=true&ReturnUrl=" + Uri.EscapeDataString(context.Request.Path + context.Request.QueryString);
+     //                   context.Response.Redirect(redirectUrl);
+     //                   //context.Response.Redirect("/Utilisateurs/Login?showMessage=true");
+     //                   return Task.CompletedTask;
+					//};
+				});
             ////.AddCookie(options =>
             ////{
             ////    options.LoginPath = "/Utilisateurs/Login";
@@ -64,7 +76,9 @@ namespace SiteWeb.Services
             {
                 options.AddPolicy("AdministrateurSeulement", policy =>
                     policy.RequireClaim(ClaimTypes.Role, "administrateur"));
-            });
+				options.AddPolicy("ProfileAccessPolicy", policy =>
+			        policy.Requirements.Add(new UserConnectedRequirement()));
+			});
 
             return builder.Services;
 

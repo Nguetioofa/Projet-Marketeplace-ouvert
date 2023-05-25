@@ -1,4 +1,4 @@
-﻿@model List<Echange>
+﻿@model List<Achat>
 
 @if ((await AuthorizationService.AuthorizeAsync(User, "ProfileAccessPolicy")).Succeeded)
 {
@@ -41,5 +41,6 @@
 			</div>
 		</div>
 	</div>
-}
 
+
+}

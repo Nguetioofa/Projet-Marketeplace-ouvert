@@ -58,22 +58,26 @@ namespace SiteWeb.Controllers
             return View(result.Value);
         }
 
-        [HttpPost]
+		[Authorize(Policy = "ProfileAccessPolicy")]
+		[HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UtilisateurL utilisateur)
+        public async Task<string> Edit(int id, UtilisateurL utilisateur)
         {
             if (id != utilisateur.Id)
             {
-                return NotFound();
+                return ViewBag.ErrorMessage = "Utilisateur Introuvable";
             }
 
             if (ModelState.IsValid)
             {
                 await _utilisateurService.UpdateUtilisateur(utilisateur);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(utilisateur);
-        }
+                return ViewBag.SuccessMessage = "Modification reussit";
+				
+
+			}
+			return "Verifiez vos Informations";
+			
+		}
 
 		[Authorize]
 		public async Task<IActionResult> Delete(int id)
@@ -92,6 +96,12 @@ namespace SiteWeb.Controllers
 
         public IActionResult Login()
         {
+            var returnUrl = HttpContext.Request.Cookies["ReturnUrl"];
+
+            if (!string.IsNullOrWhiteSpace(returnUrl))
+            {
+                ViewBag.Message = "Vous devez être connecté pour accéder à cette page.";
+            }
             return View();
         }
 
@@ -99,6 +109,10 @@ namespace SiteWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(UserAuthen userAuthen)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             if (ModelState.IsValid)
             {
 
@@ -135,11 +149,25 @@ namespace SiteWeb.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authentificationPropertie);
                     var claimsPrincipal = HttpContext.User;
 
+                    var returnUrl = Request.Cookies["ReturnUrl"];
 
-                  
-                    return RedirectToAction("Index", "Home");
 
-                }
+                    //if (Request.Cookies.TryGetValue("ReturnUrl", out string? returnUrl))
+                    //{
+                    //    Response.Cookies.Delete("ReturnUrl");
+                    //    return Redirect(returnUrl);
+
+                    //}
+                    if (!string.IsNullOrEmpty(returnUrl)/* && Url.IsLocalUrl(returnUrl)*/)
+                    {
+                        Response.Cookies.Delete("ReturnUrl");
+                        return Redirect(returnUrl);
+                    }
+                   // else
+                        //{
+                        return RedirectToAction("Index", "Home");
+					//}
+				}
                 else
                 {
                     //var error = result as MessageErrorG;
@@ -188,7 +216,6 @@ namespace SiteWeb.Controllers
 
         }
 
-		[Authorize]
 		public async Task<IActionResult> Profil(int id)
 		{
             UserProfil userProfil = new UserProfil();

@@ -18,6 +18,10 @@
                                         <h1 class="h4 text-gray-900 mb-4">Login</h1>
                                     </div>
                                     <form asp-action="Login" class="user">
+                                        @if (ViewBag.Message != null)
+                                        {
+                                            <div class="alert alert-danger">@ViewBag.Message</div>
+                                        }
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                                         <div class="form-group">
