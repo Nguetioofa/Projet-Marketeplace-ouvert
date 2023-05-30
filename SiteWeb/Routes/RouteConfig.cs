@@ -15,7 +15,7 @@
             //defaults: new { controller = "StatutUser", action = "Index/{id}" });
 
             app.MapControllerRoute(
-            name: "StatutUser",
+            name: "Statu",
             pattern: "{controller=StatutUser}/{action=Index}/{id?}");
 
         }

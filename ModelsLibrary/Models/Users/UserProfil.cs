@@ -14,6 +14,7 @@ namespace ModelsLibrary.Models.Users
 		public virtual List<Annonce> annonceList { get; set; }
 		public virtual List<Echange> echangeList { get; set; }
 		public virtual List<Achat> achatList { get; set; }
+		///public virtual List<>
 
 	}
 }

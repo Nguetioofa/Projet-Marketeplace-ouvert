@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.Http;
+@using System.Security.Claims;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Authentication.Cookies;
+
+@{
+  //  ClaimsPrincipal claimsPrincipal = Context.User;
+   // var NameUser = User.FindFirst("NameLastName")?.Value;
+    int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
+
+
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="col-md-3 d-flex dropdown text-end">
+        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="~/assets/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+        </a>
+
+        <ul class="dropdown-menu text-small">
+            <li><a class="dropdown-item" href="#">New project...</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" asp-area="" asp-controller="Utilisateurs" asp-action="Profil" asp-route-id="@idUser">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" asp-area="" asp-controller="Utilisateurs" asp-action="Logout">Deconnexion</a></li>
+        </ul>
+    </div>
+}
+else
+{
+    <div class="col-md-3 d-flex text-end mx-2">
+
+        <a class="btn btn-outline-primary  mx-2" asp-area="" asp-controller="Utilisateurs" asp-action="Register">Register</a>
+        <a class="btn btn-outline-success" asp-area="" asp-controller="Utilisateurs" asp-action="Login">Login</a>
+   </div>
+}

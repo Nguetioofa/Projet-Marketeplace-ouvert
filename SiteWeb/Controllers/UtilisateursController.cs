@@ -70,6 +70,7 @@ namespace SiteWeb.Controllers
 
             if (ModelState.IsValid)
             {
+                utilisateur.Id = id;
                 await _utilisateurService.UpdateUtilisateur(utilisateur);
                 return ViewBag.SuccessMessage = "Modification reussit";
 				
@@ -96,6 +97,9 @@ namespace SiteWeb.Controllers
 
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             var returnUrl = HttpContext.Request.Cookies["ReturnUrl"];
 
             if (!string.IsNullOrWhiteSpace(returnUrl))
@@ -152,25 +156,17 @@ namespace SiteWeb.Controllers
                     var returnUrl = Request.Cookies["ReturnUrl"];
 
 
-                    //if (Request.Cookies.TryGetValue("ReturnUrl", out string? returnUrl))
-                    //{
-                    //    Response.Cookies.Delete("ReturnUrl");
-                    //    return Redirect(returnUrl);
-
-                    //}
-                    if (!string.IsNullOrEmpty(returnUrl)/* && Url.IsLocalUrl(returnUrl)*/)
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         Response.Cookies.Delete("ReturnUrl");
                         return Redirect(returnUrl);
                     }
-                   // else
-                        //{
+
                         return RedirectToAction("Index", "Home");
-					//}
+
 				}
                 else
                 {
-                    //var error = result as MessageErrorG;
                     ViewBag.ErrorMessage = result.errorMessage;
                 }
             }
@@ -220,8 +216,6 @@ namespace SiteWeb.Controllers
 		{
             UserProfil userProfil = new UserProfil();
             userProfil.utilisateur = (await _utilisateurService.GetUtilisateur(id)).Value;
-
-
             return View(userProfil);
 		}
 
