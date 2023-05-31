@@ -134,7 +134,7 @@ namespace ApiWeb.Controllers
             return NoContent();
         }
 
-        [HttpGet("GetUserByIdJouet{id}")]
+        [HttpGet("GetUserByIdJouet/{id}")]
         public async Task<ActionResult<UtilisateurDto>> GetUserByIdJouet(int id)
         {
             if (_context.Utilisateurs == null || _context.Jouets == null)

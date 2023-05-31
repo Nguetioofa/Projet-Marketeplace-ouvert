@@ -57,28 +57,22 @@ namespace SiteWeb.Services
                 {
                     options.AccessDeniedPath = "/Home/Error403";
                     options.LoginPath = "/Utilisateurs/Login";
-					//options.LogoutPath = "/Utilisateurs/Logout";
-					//options.Events.OnRedirectToLogin = context =>
-					//{
-     //                   var redirectUrl = "/Utilisateurs/Login?showMessage=true&ReturnUrl=" + Uri.EscapeDataString(context.Request.Path + context.Request.QueryString);
-     //                   context.Response.Redirect(redirectUrl);
-     //                   //context.Response.Redirect("/Utilisateurs/Login?showMessage=true");
-     //                   return Task.CompletedTask;
-					//};
 				});
-            ////.AddCookie(options =>
-            ////{
-            ////    options.LoginPath = "/Utilisateurs/Login";
-            ////    //options.LogoutPath = "/";
-            ////});
-           // builder.Services.AddAuthorizationBuilder();
+
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdministrateurSeulement", policy =>
                     policy.RequireClaim(ClaimTypes.Role, "administrateur"));
 				options.AddPolicy("ProfileAccessPolicy", policy =>
 			        policy.Requirements.Add(new UserConnectedRequirement()));
-			});
+
+                    options.AddPolicy("PropiertaireJouetOuAdminPolicy", policy =>
+                    {
+                        policy.Requirements.Add(new OwnerRequirement());
+                    });
+               
+
+            });
 
             return builder.Services;
 

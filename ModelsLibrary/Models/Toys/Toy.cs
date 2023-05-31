@@ -26,6 +26,8 @@ namespace ModelsLibrary.Models.Toys
 
         public decimal Prix { get; set; }
 
-        public List<PhotoL> listPhotos { get; set; }
+        public List<PhotoL>? listPhotos { get; set; }
+        public List<EtatJouet>? etatJouet { get; set; }
+        public List<CategorieJouet>? categorieJouet { get; set; }
     }
 }

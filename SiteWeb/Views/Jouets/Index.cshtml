@@ -1,0 +1,84 @@
+﻿@model IEnumerable<ModelsLibrary.Models.Toys.Toy>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_HomePageLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categorie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AgeMin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AgeMax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EtatId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descriptions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Proprietaire)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prix)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categorie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AgeMin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AgeMax)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EtatId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descriptions)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Proprietaire)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prix)
+            </td>
+            <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }, new { @class="btn btn-primary"}) |
+                    @Html.ActionLink("Details", "Details", new {  id=item.Id}, new { @class="btn btn-info" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.Id }, new { @class="btn btn-danger"})
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

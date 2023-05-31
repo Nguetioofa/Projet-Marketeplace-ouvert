@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiWeb.Models;
+using ModelsLibrary.Models;
 
 namespace ApiWeb.Controllers
 {
@@ -14,6 +15,7 @@ namespace ApiWeb.Controllers
     public class PhotosController : ControllerBase
     {
         private readonly EchangeJouetsContext _context;
+       
 
         public PhotosController(EchangeJouetsContext context)
         {
@@ -41,6 +43,29 @@ namespace ApiWeb.Controllers
             }
             var photo = await _context.Photos.Where(c => !c.EstSupprimer)
                                                    .Where(ca => ca.Id == id).FirstOrDefaultAsync();
+
+            if (photo == null)
+            {
+                return NotFound();
+            }
+
+            return photo;
+        }
+
+        // GET: api/GetPhotoByIdJouet/5
+        [HttpGet("GetPhotoByIdJouet/{id}")]
+        public async Task<ActionResult<IEnumerable<Photo>>> GetPhotoByIdJouet(int id)
+        {
+            if (_context.Photos == null)
+            {
+                return NotFound();
+            }
+            var photo = await _context.JouetsPhotos.Where(c => !c.EstSupprimer && c.Jouet == id)
+                                                    .Join(_context.Photos.Where(p => !p.EstSupprimer),
+                                                    jouetPhoto => jouetPhoto.Photo,
+                                                         photo => photo.Id,
+                                                    (jouetPhoto, photo) => photo).ToListAsync();
+
 
             if (photo == null)
             {

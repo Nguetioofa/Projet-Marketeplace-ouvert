@@ -9,5 +9,7 @@ namespace SiteWeb.Services.Interfaces
         public Task<bool> UpdatePhoto(PhotoL Photo);
         public Task<bool> AddPhoto(PhotoL Photo);
         public Task<bool> DeletePhoto(int id);
+        public Task<List<PhotoL>> GetPhotoByIdJouet(int id);
+
     }
 }

@@ -77,5 +77,22 @@ namespace SiteWeb.Services.Implementations
             return response.IsSuccessStatusCode;
 
         }
+
+        public async Task<List<PhotoL>> GetPhotoByIdJouet(int id)
+        {
+            var response = await _client.GetAsync(string.Format("{0}/{1}/GetPhotoByIdJouet/{2}", _configuration.ApiUrl, ControllerName,id));
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var Photos = JsonSerializer.Deserialize<List<PhotoL>>(content);
+
+                return Photos;
+
+            }
+            else
+            {
+                return new List<PhotoL>();
+            }
+        }
     }
 }

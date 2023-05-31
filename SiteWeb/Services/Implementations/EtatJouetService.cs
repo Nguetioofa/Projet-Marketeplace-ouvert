@@ -17,7 +17,7 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<EtatJouet>>> GetEtatJouets()
+        public async Task<List<EtatJouet>> GetEtatJouets()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
@@ -29,12 +29,12 @@ namespace SiteWeb.Services.Implementations
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return new List<EtatJouet>();
             }
 
         }
 
-        public async Task<ActionResult<EtatJouet>> GetEtatJouet(int id)
+        public async Task<EtatJouet> GetEtatJouet(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
@@ -47,7 +47,7 @@ namespace SiteWeb.Services.Implementations
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return new EtatJouet();
             }
         }
 
