@@ -54,7 +54,6 @@ namespace ApiWeb.ModelDto
             Adresse = user.Adresse;
             VilleUser = user.VilleUser;
             QuatierUser = user.QuatierUser;
-            Points = user.Points;
             DateCreation = user.DateCreation;
             DateDerniereConnexion = user.DateDerniereConnexion;
             StatutId = user.StatutId;

@@ -39,9 +39,7 @@ namespace SiteWeb.Services
             builder.Services.AddScoped<IEvaluationService, EvaluationService>();
             builder.Services.AddScoped<IFonctionUserService, FonctionUserService>();
             builder.Services.AddScoped<IJouetService, JouetService>();
-            builder.Services.AddScoped<IJouetsPhotoService, JouetsPhotoService>();
             builder.Services.AddScoped<IMessageService, MessageService>();
-            builder.Services.AddScoped<IMessagesPhotoService, MessagesPhotoService>();
             builder.Services.AddScoped<IModeLivraisonService, ModeLivraisonService>();
             builder.Services.AddScoped<IModePayementService, ModePayementService>();
             builder.Services.AddScoped<INewsletterService, NewsletterService>();
@@ -50,7 +48,6 @@ namespace SiteWeb.Services
             builder.Services.AddSingleton<IStatutsTransactionService, StatutsTransactionService>();
             builder.Services.AddSingleton<IStatutUserService, StatutUserService>();
             builder.Services.AddScoped<IUtilisateurService, UtilisateurService>();
-            builder.Services.AddScoped<IUtilisateursProfilService, UtilisateursProfilService>();
 
 			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

@@ -15,17 +15,9 @@ public partial class Annonce
 
     public int? IdUtilisateur { get; set; }
 
-    public bool AcceptTroc { get; set; }
-
-    public bool AcceptAchat { get; set; }
-
-    public int? IdJouet { get; set; }
-
     public bool EstSupprimer { get; set; }
 
     public virtual ICollection<Commentaire> Commentaires { get; } = new List<Commentaire>();
-
-    public virtual Jouet? IdJouetNavigation { get; set; }
 
     public virtual Utilisateur? IdUtilisateurNavigation { get; set; }
 }

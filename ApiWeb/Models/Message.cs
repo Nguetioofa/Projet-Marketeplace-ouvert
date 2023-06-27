@@ -25,5 +25,5 @@ public partial class Message
 
     public virtual Utilisateur? IdExpediteurNavigation { get; set; }
 
-    public virtual ICollection<MessagesPhoto> MessagesPhotos { get; } = new List<MessagesPhoto>();
+    public virtual ICollection<Photo> Photos { get; } = new List<Photo>();
 }

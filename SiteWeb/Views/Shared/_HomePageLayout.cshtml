@@ -104,13 +104,9 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
+@*                         @Html.Partial("LesEtats/_CategorieJouet")
+ *@                        <partial name="LesEtats/_CategorieJouet" />
                     </li>
-
                 </ul>
 
 
@@ -132,7 +128,7 @@
                 Messages
                 <span class="badge text-bg-light rounded-pill align-text-bottom">27</span>
             </a>
-            <a class="nav-link" href="#">Jouets</a>
+            <a class="nav-link" asp-area="" asp-controller="Jouets" asp-action="Index">Jouets</a>
             <a class="nav-link" href="#">Annonces </a>
             <a class="nav-link" href="#">Annonces</a>
 
@@ -166,6 +162,7 @@
     <script src="~/assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/assets/offcanvas-navbar.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>

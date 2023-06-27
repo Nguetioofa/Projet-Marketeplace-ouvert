@@ -4,10 +4,11 @@ namespace SiteWeb.Services.Interfaces
 {
     public interface IPhotoService
     {
-        public Task<ActionResult<List<PhotoL>>> GetPhotos();
-        public Task<ActionResult<PhotoL>> GetPhoto(int id);
+        public Task<List<PhotoL>> GetPhotos();
+        public Task<PhotoL> GetPhoto(int id);
         public Task<bool> UpdatePhoto(PhotoL Photo);
         public Task<bool> AddPhoto(PhotoL Photo);
+        public Task<bool> AddPhotos(List<PhotoL> photos, List<IFormFile> images,int idjouet);
         public Task<bool> DeletePhoto(int id);
         public Task<List<PhotoL>> GetPhotoByIdJouet(int id);
 

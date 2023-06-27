@@ -14,14 +14,14 @@ namespace SiteWeb.Controllers
             _statutUserService = statutUserService;
         }
 
-        [Authorize(Policy = "AdministrateurSeulement")]
+        [Authorize/*(Policy = "AdministrateurSeulement")*/]
       //  [Authorize]
         public async Task<IActionResult> Index()
         {
             if (User.Identity.IsAuthenticated)
             {
                 var result = await _statutUserService.GetStatutUsers();
-                return View(result.Value);
+                return View(result);
             }
             return RedirectToAction("Index", "Home");
 
@@ -31,7 +31,7 @@ namespace SiteWeb.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var result = await _statutUserService.GetStatutUser(id);
-            return View(result.Value);
+            return View(result);
         }
 
         public IActionResult Create()
@@ -55,7 +55,7 @@ namespace SiteWeb.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var result = await _statutUserService.GetStatutUser(id);
-            return View(result.Value);
+            return View(result);
         }
 
         [HttpPost]
@@ -78,7 +78,7 @@ namespace SiteWeb.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _statutUserService.GetStatutUser(id);
-            return View(result.Value);
+            return View(result);
         }
 
         [HttpPost, ActionName("Delete")]

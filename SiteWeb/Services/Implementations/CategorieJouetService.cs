@@ -19,24 +19,22 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<CategorieJouet>>> GetCategorieJouets()
+        public async Task<List<CategorieJouet>> GetCategorieJouets()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
                 var categorieJouets = await response.Content.ReadFromJsonAsync<List<CategorieJouet>>();
-
                 return categorieJouets;
-
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return new List<CategorieJouet>();
             }
 
         }
 
-        public async Task<ActionResult<CategorieJouet>> GetCategorieJouet(int id)
+        public async Task<CategorieJouet> GetCategorieJouet(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
@@ -49,7 +47,7 @@ namespace SiteWeb.Services.Implementations
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return new CategorieJouet();
             }
         }
 
@@ -70,7 +68,6 @@ namespace SiteWeb.Services.Implementations
         {
             var response = await _client.DeleteAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
             return response.IsSuccessStatusCode;
-
         }
     }
 }

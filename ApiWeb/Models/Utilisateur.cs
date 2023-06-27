@@ -13,9 +13,9 @@ public partial class Utilisateur
 
     public string Email { get; set; } = null!;
 
-    public byte[] MotDePasse { get; set; } = null!;
+    public byte[]? MotDePasse { get; set; }
 
-    public byte[] Sel { get; set; } = null!;
+    public byte[]? Sel { get; set; }
 
     public string Telephone { get; set; } = null!;
 
@@ -24,8 +24,6 @@ public partial class Utilisateur
     public string? VilleUser { get; set; }
 
     public string? QuatierUser { get; set; }
-
-    public int? Points { get; set; }
 
     public DateTime DateCreation { get; set; }
 
@@ -60,6 +58,8 @@ public partial class Utilisateur
     public virtual ICollection<Message> MessageIdDestinataireNavigations { get; } = new List<Message>();
 
     public virtual ICollection<Message> MessageIdExpediteurNavigations { get; } = new List<Message>();
+
+    public virtual ICollection<Photo> Photos { get; } = new List<Photo>();
 
     public virtual StatutUser? Statut { get; set; }
 }

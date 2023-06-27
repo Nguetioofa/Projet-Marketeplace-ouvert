@@ -19,5 +19,11 @@ public partial class PhotoL
 
     public DateTime DatePublication { get; set; }
 
+    public int? Messages { get; set; }
+
+    public int? Jouet { get; set; }
+
+    public int? Profil { get; set; }
+
 
 }

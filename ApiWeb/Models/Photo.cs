@@ -19,11 +19,17 @@ public partial class Photo
 
     public DateTime DatePublication { get; set; }
 
+    public int? Messages { get; set; }
+
+    public int? Jouet { get; set; }
+
+    public int? Profil { get; set; }
+
     public bool EstSupprimer { get; set; }
 
-    public virtual ICollection<JouetsPhoto> JouetsPhotos { get; } = new List<JouetsPhoto>();
+    public virtual Jouet? JouetNavigation { get; set; }
 
-    public virtual ICollection<MessagesPhoto> MessagesPhotos { get; } = new List<MessagesPhoto>();
+    public virtual Message? MessagesNavigation { get; set; }
 
-    public virtual ICollection<UtilisateursProfil> UtilisateursProfils { get; } = new List<UtilisateursProfil>();
+    public virtual Utilisateur? ProfilNavigation { get; set; }
 }

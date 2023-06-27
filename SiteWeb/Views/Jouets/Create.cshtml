@@ -2,73 +2,245 @@
 
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_HomePageLayout.cshtml";
+   // Layout = "~/Views/Shared/_HomePageLayout.cshtml";
 }
 
 <h1>Create</h1>
 
 <h4>Toy</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+
+
+@* 
+        <form method="post" asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Nom" class="control-label"></label>
-                <input asp-for="Nom" class="form-control" />
+            <div class="mb-3">
+                <label asp-for="Nom" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom" name="Nom" asp-for="Nom" value="@Model.Nom">
                 <span asp-validation-for="Nom" class="text-danger"></span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Categorie" class="control-label"></label>
-                <input asp-for="Categorie" class="form-control" />
+            <div class="mb-3">
+                <label asp-for="Categorie" class="form-label">Catégorie</label>
+                <select class="form-select" id="categorie" name="Categorie">
+                    @foreach (var categorie in Model.categorieJouet)
+                    {
+                        <option value="@categorie.Id">@categorie.Nom</option>
+                    }
+                </select>
                 <span asp-validation-for="Categorie" class="text-danger"></span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="AgeMin" class="control-label"></label>
-                <input asp-for="AgeMin" class="form-control" />
+            <div class="mb-3">
+                <label asp-for="Descriptions" class="form-label">Descriptions</label>
+                <textarea class="form-control" id="descriptions" name="Descriptions">@Model.Descriptions</textarea>
+                <span asp-validation-for="Descriptions" class="text-danger"></span>
+
+            </div>
+            <div class="mb-3">
+                <label asp-for="AgeMin" class="form-label">Âge minimum</label>
+                <input type="number" class="form-control" id="ageMin" name="AgeMin" value="@Model.AgeMin">
                 <span asp-validation-for="AgeMin" class="text-danger"></span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="AgeMax" class="control-label"></label>
-                <input asp-for="AgeMax" class="form-control" />
+            <div class="mb-3">
+                <label asp-for="AgeMax" class="form-label">Âge maximum</label>
+                <input type="number" class="form-control" id="ageMax" name="AgeMax" value="@Model.AgeMax">
                 <span asp-validation-for="AgeMax" class="text-danger"></span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="EtatId" class="control-label"></label>
-                <input asp-for="EtatId" class="form-control" />
+            <div class="mb-3">
+                <label asp-for="EtatId" class="form-label">État</label>
+                <select class="form-select" id="etatId" name="EtatId">
+                    @foreach (var etat in Model.etatJouet)
+                    {
+                        <option value="@etat.Id">@etat.Nom</option>
+                    }
+                </select>
                 <span asp-validation-for="EtatId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Descriptions" class="control-label"></label>
-                <input asp-for="Descriptions" class="form-control" />
-                <span asp-validation-for="Descriptions" class="text-danger"></span>
+            <div class="mb-3">
+                <label asp-for="AcceptTroc" class="form-label">Accepte le troc</label>
+                <input type="checkbox" class="form-check-input" id="acceptTroc" name="AcceptTroc" checked="@Model.AcceptTroc">
             </div>
-            <div class="form-group">
-                <label asp-for="Proprietaire" class="control-label"></label>
-                <input asp-for="Proprietaire" class="form-control" />
-                <span asp-validation-for="Proprietaire" class="text-danger"></span>
+            <div class="mb-3">
+                <label asp-for="AcceptAchat" class="form-label">Accepte l'achat</label>
+                <input type="checkbox" class="form-check-input" id="acceptAchat" name="AcceptAchat" checked="@Model.AcceptAchat">
             </div>
-            <div class="form-group">
-                <label asp-for="Prix" class="control-label"></label>
-                <input asp-for="Prix" class="form-control" />
-                <span asp-validation-for="Prix" class="text-danger"></span>
+            <div class="mb-3">
+                <label asp-for="Prix" class="form-label">Prix</label>
+                <input type="number" step=".01" class="form-control" id="prix" name="Prix" value="@Model.Prix">
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
+            <h2>Photos</h2>
+            <div id="photos-container"></div>
+            <button type="button" class="btn btn-secondary mb-3" onclick="addPhoto()">Ajouter une photo</button>
+
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+ *@
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="Nom" class="form-label">Nom</label>
+        <input type="text" class="form-control" id="Nom" name="Nom" />
+    </div>
+    <div class="mb-3">
+        <label for="Categorie" class="form-label">Catégorie</label>
+        <select class="form-select" id="Categorie" name="Categorie">
+            <option value="">Sélectionnez une catégorie</option>
+            @foreach (var categorie in Model.categorieJouet)
+            {
+                <option value="@categorie.Id">@categorie.Nom</option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="Descriptions" class="form-label">Descriptions</label>
+        <textarea class="form-control" id="Descriptions" name="Descriptions"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="AgeMin" class="form-label">Âge minimum</label>
+        <input type="number" class="form-control" id="AgeMin" name="AgeMin" />
+    </div>
+    <div class="mb-3">
+        <label for="AgeMax" class="form-label">Âge maximum</label>
+        <input type="number" class="form-control" id="AgeMax" name="AgeMax" />
+    </div>
+    <div class="mb-3">
+        <label for="EtatId" class="form-label">État</label>
+        <select class="form-select" id="EtatId" name="EtatId">
+            <option value="">Sélectionnez un état</option>
+            @foreach (var etat in Model.etatJouet)
+            {
+                <option value="@etat.Id">@etat.Nom</option>
+            }
+        </select>
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="AcceptTroc" name="AcceptTroc" />
+        <label class="form-check-label" for="AcceptTroc">Accepte le troc</label>
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="AcceptAchat" name="AcceptAchat" />
+        <label class="form-check-label" for="AcceptAchat">Accepte l'achat</label>
+    </div>
+    <div class="mb-3">
+        <label for="Prix" class="form-label">Prix</label>
+        <input type="number" step="0.01" class="form-control" id="Prix" name="Prix" />
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="EstPublier" name="EstPublier" />
+        <label class="form-check-label" for="EstPublier">Publier</label>
+    </div>
+
+    <h2>Photos</h2>
+    <div id="photos">
+        <div class="mb-3">
+            <label for="Image1" class="form-label">Image 1</label>
+            <input type="file" class="form-control-file" id="Image1" name="Image1" onchange="loadFile(event, 'preview1')" />
+            <img id="preview1" src="#" alt="" style="max-width: 100px; max-height: 100px;" />
+            <input type="text" class="form-control mt-2 mb-2" id="ImageTitle1" name="ImageTitle1" placeholder="Titre de l'image 1" />
+            <textarea class="form-control mb-2" id="ImageDescription1" name="ImageDescription1" placeholder="Description de l'image 1"></textarea>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-secondary mb-3" onclick="addPhoto()">Ajouter une photo</button>
+
+    <button type="submit" class="btn btn-primary">Ajouter</button>
+</form>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
+@*     <script>
+        let photoIndex = 0;
+
+        function addPhoto() {
+            const container = document.createElement('div');
+            container.className = 'mb-3';
+
+            const photoLabel = document.createElement('label');
+            photoLabel.className = 'form-label';
+            photoLabel.textContent = 'Photo';
+            container.appendChild(photoLabel);
+
+            const photoInput = document.createElement('input');
+            photoInput.type = 'file';
+            photoInput.className = 'form-control';
+            photoInput.name = `Photos[${photoIndex}]`;
+            photoInput.onchange = function () {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        thumbnail.src = e.target.result;
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            };
+            container.appendChild(photoInput);
+
+            const thumbnailContainer = document.createElement('div');
+            thumbnailContainer.className = 'mb-3';
+            container.appendChild(thumbnailContainer);
+
+            const thumbnail = document.createElement('img');
+            thumbnail.width = 100;
+            thumbnail.height = 100;
+            thumbnailContainer.appendChild(thumbnail);
+
+            const nameLabel = document.createElement('label');
+            nameLabel.className = 'form-label';
+            nameLabel.textContent = 'Nom';
+            container.appendChild(nameLabel);
+
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.className = 'form-control';
+            nameInput.name = `PhotoNames[${photoIndex}]`;
+            container.appendChild(nameInput);
+
+            const descriptionLabel = document.createElement('label');
+            descriptionLabel.className = 'form-label';
+            descriptionLabel.textContent = 'Description';
+            container.appendChild(descriptionLabel);
+
+            const descriptionInput = document.createElement('input');
+            descriptionInput.type = 'text';
+            descriptionInput.className = 'form-control';
+            descriptionInput.name = `PhotoDescriptions[${photoIndex}]`;
+            container.appendChild(descriptionInput);
+
+            document.querySelector('#photos-container').appendChild(container);
+
+            photoIndex++;
+        }
+    </script> *@
+
+    <script>
+        let photoIndex = 2;
+        function addPhoto() {
+            const photosDiv = document.getElementById("photos");
+            const newPhotoDiv = document.createElement("div");
+            newPhotoDiv.classList.add("mb-3");
+            newPhotoDiv.innerHTML = `
+                        <label for="Image${photoIndex}" class="form-label">Image ${photoIndex}</label>
+                        <input type="file" class="form-control-file" id="Image${photoIndex}" name="Image${photoIndex}" onchange="loadFile(event, 'preview${photoIndex}')" />
+                        <img id="preview${photoIndex}" src="#" alt="" style="max-width: 100px; max-height: 100px;" />
+                        <input type="text" class="form-control mt-2 mb-2" id="ImageTitle${photoIndex}" name="ImageTitle${photoIndex}" placeholder="Titre de l'image ${photoIndex}"/>
+                        <textarea class="form-control mb-2" id="ImageDescription${photoIndex}" name="ImageDescription${photoIndex}" placeholder="Description de l'image ${photoIndex}"></textarea>
+                    `;
+            photosDiv.appendChild(newPhotoDiv);
+            photoIndex++;
+        }
+
+        function loadFile(event, previewId) {
+            const preview = document.getElementById(previewId);
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.onload = function () {
+                URL.revokeObjectURL(preview.src)
+            }
+        }
+    </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

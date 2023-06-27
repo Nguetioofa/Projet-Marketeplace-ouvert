@@ -1,0 +1,16 @@
+﻿@using SiteWeb.Services.Interfaces
+
+@inject ICategorieJouetService _categorieService
+
+@{
+    var categorie = await _categorieService.GetCategorieJouets();
+}
+
+<ul class="dropdown-menu">
+@foreach (var item in categorie)
+{
+        <li><a class="dropdown-item" href="#">@item.Nom</a></li>
+}
+@*     <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li> *@
+</ul>

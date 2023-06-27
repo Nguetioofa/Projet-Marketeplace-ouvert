@@ -60,35 +60,30 @@ namespace ApiWeb.Controllers
             {
                 return NotFound();
             }
-            var photo = await _context.JouetsPhotos.Where(c => !c.EstSupprimer && c.Jouet == id)
-                                                    .Join(_context.Photos.Where(p => !p.EstSupprimer),
-                                                    jouetPhoto => jouetPhoto.Photo,
-                                                         photo => photo.Id,
-                                                    (jouetPhoto, photo) => photo).ToListAsync();
 
 
-            if (photo == null)
+            var photos = await _context.Jouets.Where(u => !u.EstSupprimer && u.Id == id)
+                                                                  .Select(u => u.Photos).FirstOrDefaultAsync();
+                        
+
+            if (photos == null)
             {
                 return NotFound();
             }
 
-            return photo;
+            return Ok(photos);
         }
 
         // PUT: api/Photos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
         public async Task<IActionResult> PutPhoto(Photo photo)
         {
-            //if (id != photo.Id)
-            //{
-            //    return BadRequest();
-            //}
 
             if (!PhotoExists(photo.Id))
             {
                 return NotFound();
             }
+
             _context.Entry(photo).State = EntityState.Modified;
 
             try
@@ -99,7 +94,7 @@ namespace ApiWeb.Controllers
             {
 
                     throw;
-
+                 
             }
 
             return NoContent();
@@ -119,6 +114,8 @@ namespace ApiWeb.Controllers
 
             return CreatedAtAction("GetPhoto", new { id = photo.Id }, photo);
         }
+
+ 
 
         // DELETE: api/Photos/5
         [HttpDelete("{id}")]

@@ -18,58 +18,57 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<Jouet>>> GetJouets()
+        public async Task<List<Jouet>> GetJouets()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var Jouets = JsonSerializer.Deserialize<List<Jouet>>(content);
+                var Jouets = await response.Content.ReadFromJsonAsync<List<Jouet>>();
 
                 return Jouets;
 
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return null;
             }
 
         }
 
-        public async Task<ActionResult<Jouet>> GetJouet(int id)
+        public async Task<Jouet> GetJouet(int id)
         {
-            var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
+            var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/{id}");
 
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var Jouet = JsonSerializer.Deserialize<Jouet>(content);
-
-                return Jouet;
-
+                var jouet = await response.Content.ReadFromJsonAsync<Jouet>();
+                
+                return jouet;
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return null;
             }
         }
 
         public async Task<bool> UpdateJouet(Jouet Jouet)
         {
-            var data = JsonSerializer.Serialize(Jouet);
-            var content = new StringContent(data, Encoding.UTF8, "application/json");
-            var response = await _client.PutAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), content);
+            var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), Jouet);
+
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddJouet(Jouet Jouet)
+        public async Task<Jouet> AddJouet(Jouet Jouet)
         {
-            var data = JsonSerializer.Serialize(Jouet);
-            var content = new StringContent(data, Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), content);
+            var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), Jouet);
 
-            return response.IsSuccessStatusCode;
-
+            if (response.IsSuccessStatusCode)
+            {
+               Jouet? jouet = await response.Content.ReadFromJsonAsync<Jouet>(); 
+                return jouet;
+            }
+            return null;
+            
         }
         public async Task<bool> DeleteJouet(int id)
         {

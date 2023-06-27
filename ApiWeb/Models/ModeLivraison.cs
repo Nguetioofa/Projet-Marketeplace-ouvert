@@ -9,8 +9,6 @@ public partial class ModeLivraison
 
     public string Nom { get; set; } = null!;
 
-    public decimal? Tarif { get; set; }
-
     public bool EstSupprimer { get; set; }
 
     public virtual ICollection<Achat> Achats { get; } = new List<Achat>();

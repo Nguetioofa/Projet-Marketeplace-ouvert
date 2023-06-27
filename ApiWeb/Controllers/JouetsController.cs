@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ApiWeb.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class JouetsController : ControllerBase
