@@ -7,7 +7,7 @@
 
 
 }
-<ul class="navbar-nav">
+<div class="dropdown dropdown-access">
     @{
         ClaimsPrincipal claimsPrincipal = Context.User;
         var NameUser = User.FindFirst("NameLastName")?.Value;
@@ -16,22 +16,38 @@
     }
     @if (User.Identity.IsAuthenticated)
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Utilisateurs" asp-action="Profil" asp-route-id="@idUser">Bonjour @NameUser</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="" asp-controller="Utilisateurs" asp-action="Logout">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-            </form>
-        </li>
+        <a asp-area="" asp-controller="Utilisateurs" asp-action="Profil" asp-route-id="@idUser" class="access_link"><span>Account</span></a>
+        <div class="dropdown-menu">
+            <a asp-area="" asp-controller="Utilisateurs" asp-action="Logout" class="btn_1">Logout</a>
+            <ul>
+                <li>
+                    <a href="track-order.html"><i class="ti-truck"></i>Track your Order</a>
+                </li>
+                <li>
+                    <a href="account.html"><i class="ti-package"></i>My Orders</a>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Utilisateurs" asp-action="Profil" asp-route-id="@idUser"><i class="ti-user"></i>My Profile</a>
+                </li>
+                <li>
+                    <a href="help.html"><i class="ti-help-alt"></i>Help and Faq</a>
+                </li>
+            </ul>
+        </div>
+
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Utilisateurs" asp-action="Register">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Utilisateurs" asp-action="Login">Login</a>
-        </li>
+        <a asp-area="" asp-controller="Utilisateurs" asp-action="Register" class="access_link"><span>Account</span></a>
+
+        <div class="dropdown-menu">
+            <a asp-area="" asp-controller="Utilisateurs" asp-action="Login" class="btn btn-outline-primary  mx-2">Login</a>
+            <br>
+            <a asp-area="" asp-controller="Utilisateurs" asp-action="Register" class="btn btn-outline-success">Register</a>
+
+        
+        </div>
+
     }
-</ul>
+</div>
+

@@ -12,7 +12,7 @@ namespace ModelsLibrary.Models.Toys
 
         public string Nom { get; set; } = null!;
 
-        public int? Categorie { get; set; }
+        public int Categorie { get; set; }
 
         public string? Descriptions { get; set; }
 
@@ -20,20 +20,19 @@ namespace ModelsLibrary.Models.Toys
 
         public int AgeMax { get; set; }
 
-        public int? EtatId { get; set; }
+        public int EtatId { get; set; }
 
-        public bool? AcceptTroc { get; set; }
+        public bool AcceptTroc { get; set; }
 
-        public bool? AcceptAchat { get; set; }
+        public bool AcceptAchat { get; set; }
 
-        public int? Proprietaire { get; set; }
+        public int Proprietaire { get; set; }
 
         public decimal Prix { get; set; }
 
-        public bool? EstPublier { get; set; }
+        public bool EstPublier { get; set; }
 
-        public List<PhotoL>? listPhotos { get; set; }
-        public List<EtatJouet>? etatJouet { get; set; }
-        public List<CategorieJouet>? categorieJouet { get; set; }
+        public virtual List<PhotoL>? listPhotos { get; set; }
+
     }
 }

@@ -1,158 +1,203 @@
-﻿@model ModelsLibrary.Models.Toys.Toy
+﻿@using SiteWeb.Services.Interfaces;
+@inject ICategorieJouetService _categorieJouetService
+@inject IEtatJouetService _etatService
+@inject IPhotoService _photoService
 
+@model ModelsLibrary.Models.Toys.Toy
 @{
     ViewData["Title"] = "Details";
    // Layout = "~/Views/Shared/_HomePageLayout.cshtml";
 }
+@{
+	var categories = await _categorieJouetService.GetCategorieJouets();
+	var etats = await _etatService.GetEtatJouets();
+	string? categoriejouet = string.Empty;
+	categoriejouet = categories.Where(t => t.Id.Equals(Model.Categorie)).Select(t => t.Nom).FirstOrDefault();
+	string? etatjouet = string.Empty;
+	etatjouet = etats.Where(t => t.Id.Equals(Model.Categorie)).Select(t => t.Nom).FirstOrDefault();
+	List<PhotoL>? listPhotos = null;
+	listPhotos = await _photoService.GetPhotoByIdJouet(Model.Id);
 
-<h1>Details</h1>
 
-<div>
-    <h4>Toy</h4>
-    <hr />
-@*     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nom)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nom)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Categorie)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Categorie)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descriptions)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descriptions)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AgeMin)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AgeMin)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AgeMax)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AgeMax)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EtatId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EtatId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AcceptTroc)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AcceptTroc)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AcceptAchat)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AcceptAchat)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Proprietaire)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Proprietaire)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Prix)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Prix)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EstPublier)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EstPublier)
-        </dd>
-    </dl> *@
 
-    <div class="row">
-        <div class="col-md-6">
-            @if (Model.listPhotos != null && Model.listPhotos.Count > 0)
-            {
-                <img src="@Model.listPhotos[0].UrlP" class="img-fluid mb-3" alt="@Model.listPhotos[0].NomPhoto">
-                <div class="d-flex flex-row flex-wrap">
-                    @foreach (var photo in Model.listPhotos)
-                    {
-                        <img src="@photo.UrlP" class="img-thumbnail me-1 mb-1" width="100" height="100" alt="@photo.NomPhoto">
-                    }
-                </div>
-            }
-        </div>
-        <div class="col-md-6">
-            <h1>@Model.Nom</h1>
-            <p>@Model.Descriptions</p>
-            <dl class="row">
-                <dt class="col-sm-4">Catégorie</dt>
-                <dd class="col-sm-8">@Model.Categorie</dd>
-                <dt class="col-sm-4">Âge minimum</dt>
-                <dd class="col-sm-8">@Model.AgeMin</dd>
-                <dt class="col-sm-4">Âge maximum</dt>
-                <dd class="col-sm-8">@Model.AgeMax</dd>
-                <dt class="col-sm-4">État</dt>
-                <dd class="col-sm-8">@Model.EtatId</dd>
-                <dt class="col-sm-4">Prix</dt>
-                <dd class="col-sm-8">@Model.Prix</dd>
-            </dl>
-            @if (Model.AcceptTroc == true)
-            {
-                <button type="button" class="btn btn-primary me-2">Échanger</button>
-            }
-            @if (Model.AcceptAchat == true)
-            {
-                <button type="button" class="btn btn-success">Acheter</button>
-            }
-        </div> 
-    </div>
-
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    <script>
-        const mainImage = document.querySelector('.img-fluid');
-        const thumbnails = document.querySelectorAll('.img-thumbnail');
-
-        thumbnails.forEach(function (thumbnail) {
-            thumbnail.addEventListener('click', function () {
-                mainImage.src = this.src;
-                mainImage.alt = this.alt;
-                selectThumbnail(this);
-            });
-        });
-
-        function selectThumbnail(selectedThumbnail) {
-            thumbnails.forEach(function (thumbnail) {
-                if (thumbnail === selectedThumbnail) {
-                    thumbnail.classList.add('border-primary');
-                } else {
-                    thumbnail.classList.remove('border-primary');
-                }
-            });
-        }
-
-        selectThumbnail(thumbnails[0]);
-    </script>
 }
+<div class="container margin_30">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="all">
+				<div class="slider">
+					<div class="owl-carousel owl-theme main">
+						 @if (listPhotos is not null)
+						{
+							@foreach (var photo in listPhotos)
+							{
+								<div style="background-image: url(@photo.UrlP.Replace("\\","/"));" class="item-box"></div>
+							}
+						} 
+
+					</div>
+					<div class="left nonl"><i class="ti-angle-left"></i></div>
+					<div class="right"><i class="ti-angle-right"></i></div>
+				</div>
+				<div class="slider-two">
+					<div class="owl-carousel owl-theme thumbs">
+	
+			 			@if (listPhotos is not null)
+						{
+							int count = 0;
+							@foreach (var photo in listPhotos)
+							{
+								if (count == 0)
+								{
+
+									<div style="background-image: url(@photo.UrlP.Replace("\\","/"))" class="item active"></div>
+								}
+								<div style="background-image: url(@photo.UrlP.Replace("\\","/"))" class="item"></div>
+							}
+						} 
+					</div>
+					<div class="left-t nonl-t"></div>
+					<div class="right-t"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+
+			<div class="prod_info">
+				<h1>@Model.Nom</h1>
+
+				<p>
+					<strong>Age min: @Model.AgeMin</strong><br>
+					<strong>Age Max: @Model.AgeMax</strong><br>
+					<strong>Etat du jouet: @etatjouet</strong><br>
+					<strong>Categorie du jouet:  @categoriejouet</strong><br>
+					<strong>Description: </strong>
+					@Model.Descriptions
+				</p>
+				
+					<div class="price_main"> <span class="new_price">@Model.Prix.ToString().Split(",0")[0] Fcfa</span></div>
+				<br>
+
+				<div class="row">
+					@if (Model.AcceptAchat)
+					{
+						<div class="col-lg-5 col-md-6">
+							<a href="#0" class="btn_1">Acheter</a>
+						</div>
+					}
+					@if (Model.AcceptAchat)
+					{
+						<div class="col-lg-4 col-md-6">
+							<div class="btn_add_to_cart"><a href="#0" class="btn_1">Echanger</a></div>
+						</div>
+					}
+				</div>
+			</div>
+		@* 	<div class="product_actions">
+				<ul>
+					<li>
+						<a href="#"><i class="ti-heart"></i><span>Add to Wishlist</span></a>
+					</li>
+					<li>
+						<a href="#"><i class="ti-control-shuffle"></i><span>Add to Compare</span></a>
+					</li>
+				</ul>
+			</div> *@
+		</div>
+	</div>
+</div>
+
+<div class="container margin_30">
+	<h3 class="justify-content-center"> Commentaires </h3>
+		<div class="card-body">
+			<div class="row justify-content-between">
+				<div class="col-lg-6">
+					<div class="review_content">
+						<div class="clearfix add_bottom_10">
+							<span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><em>5.0/5.0</em></span>
+							<em>Published 54 minutes ago</em>
+						</div>
+						<h4>"Commpletely satisfied"</h4>
+						<p>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his.</p>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="review_content">
+						<div class="clearfix add_bottom_10">
+							<span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star empty"></i><i class="icon-star empty"></i><em>4.0/5.0</em></span>
+							<em>Published 1 day ago</em>
+						</div>
+						<h4>"Always the best"</h4>
+						<p>Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-between">
+				<div class="col-lg-6">
+					<div class="review_content">
+						<div class="clearfix add_bottom_10">
+							<span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star empty"></i><em>4.5/5.0</em></span>
+							<em>Published 3 days ago</em>
+						</div>
+						<h4>"Outstanding"</h4>
+						<p>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his.</p>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="review_content">
+						<div class="clearfix add_bottom_10">
+							<span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><em>5.0/5.0</em></span>
+							<em>Published 4 days ago</em>
+						</div>
+						<h4>"Excellent"</h4>
+						<p>Sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his.</p>
+					</div>
+				</div>
+			</div>
+			<p class="text-end"><a href="leave-review.html" class="btn_1">Leave a review</a></p>
+		</div>
+</div>
+
+@section Scripts{
+	<script src="~/AllaiaEcommerce/js/carousel_with_thumbs.js"></script>
+
+}
+
+
+@* 
+@if (listPhotos != null && listPhotos.Count > 0)
+{
+	<img src="@listPhotos[0].UrlP" class="img-fluid mb-3" alt="@listPhotos[0].NomPhoto">
+	<div class="d-flex flex-row flex-wrap">
+		@foreach (var photo in listPhotos)
+		{
+			<img src="@photo.UrlP" class="img-thumbnail me-1 mb-1" width="100" height="100" alt="@photo.NomPhoto">
+		}
+	</div>
+}
+@section Scripts {
+	<script>
+		const mainImage = document.querySelector('.img-fluid');
+		const thumbnails = document.querySelectorAll('.img-thumbnail');
+
+		thumbnails.forEach(function (thumbnail) {
+			thumbnail.addEventListener('click', function () {
+				mainImage.src = this.src;
+				mainImage.alt = this.alt;
+				selectThumbnail(this);
+			});
+		});
+
+		function selectThumbnail(selectedThumbnail) {
+			thumbnails.forEach(function (thumbnail) {
+				if (thumbnail === selectedThumbnail) {
+					thumbnail.classList.add('border-primary');
+				} else {
+					thumbnail.classList.remove('border-primary');
+				}
+			});
+		}
+
+		selectThumbnail(thumbnails[0]);
+	</script>
+} *@

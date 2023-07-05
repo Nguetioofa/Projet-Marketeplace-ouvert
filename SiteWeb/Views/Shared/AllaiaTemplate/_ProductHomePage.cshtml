@@ -1,0 +1,49 @@
+﻿@using SiteWeb.Services.Interfaces;
+@inject IJouetService _jouetService
+@inject IPhotoService _photoService
+
+
+<div class="container margin_60_35">
+    @{
+
+        var jouets = await _jouetService.GetJouets();
+        List<ToyBoxModel> toyBoxModels = new List<ToyBoxModel>();
+
+        if (jouets is not null)
+        {
+            foreach (var jouet in jouets)
+            {
+                var photo = (await _photoService.GetPhotoByIdJouet(jouet.Id)).Where(ph => ph.UrlP.Contains("400x400")).FirstOrDefault();
+                // if (photo is not null)
+                // {
+                //     photo.UrlP = photo.UrlP.Replace("600x600", "600x600");
+
+                // }
+
+                toyBoxModels.Add(new ToyBoxModel()
+                {
+                        Id = jouet.Id,
+                        Nom = jouet.Nom,
+                        Categorie = jouet.Categorie,
+                        Prix = jouet.Prix,
+                        Photo = photo,
+                        AcceptAchat = jouet.AcceptAchat,
+                        AcceptTroc = jouet.AcceptTroc,
+                });
+            }
+        }
+
+    }
+
+    <div class="main_title">
+        <h2>Top Selling</h2>
+        <span>Products</span>
+        <p>Cum doctus civibus efficiantur in imperdiet deterruisset</p>
+    </div>
+    <div class="row small-gutters">
+        @foreach (var toyBoxModel in toyBoxModels)
+        {
+            <partial name="AllaiaTemplate/Product/_ProductBox" model="toyBoxModel" />
+        }
+    </div>
+</div>

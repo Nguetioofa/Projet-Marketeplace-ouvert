@@ -19,11 +19,11 @@ public partial class Photo
 
     public DateTime DatePublication { get; set; }
 
-    public int? Messages { get; set; }
+    public int? Messages { get; set; } = null;
 
-    public int? Jouet { get; set; }
+    public int? Jouet { get; set; } = null;
 
-    public int? Profil { get; set; }
+    public int? Profil { get; set; } = null;
 
     public bool EstSupprimer { get; set; }
 

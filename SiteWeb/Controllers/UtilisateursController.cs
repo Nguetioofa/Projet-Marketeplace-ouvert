@@ -155,15 +155,12 @@ namespace SiteWeb.Controllers
 
                     var returnUrl = Request.Cookies["ReturnUrl"];
 
-
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         Response.Cookies.Delete("ReturnUrl");
                         return Redirect(returnUrl);
                     }
-
                         return RedirectToAction("Index", "Home");
-
 				}
                 else
                 {
@@ -171,7 +168,8 @@ namespace SiteWeb.Controllers
                 }
             }
 
-            return View(userAuthen);
+
+			return View(userAuthen);
         }
 
         [Authorize]
@@ -192,14 +190,11 @@ namespace SiteWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 var result = (await _utilisateurService.Register(userResisterDto));
 
                 if (result.iSucess)
-                {
-                   
+                {                   
                     return RedirectToAction( "Login");
-
                 }
                 else
                 {
