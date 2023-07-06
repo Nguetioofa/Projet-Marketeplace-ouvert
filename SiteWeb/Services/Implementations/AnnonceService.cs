@@ -19,51 +19,57 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<Annonce>>> GetAnnonces()
+        public async Task<List<AnnonceL>> GetAnnonces()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var annonces = await response.Content.ReadFromJsonAsync<List<Annonce>>();
+                var annonces = await response.Content.ReadFromJsonAsync<List<AnnonceL>>();
 
                 return annonces;
 
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
-            }
+				return null;
+			}
 
-        }
+		}
 
-        public async Task<ActionResult<Annonce>> GetAnnonce(int id)
+        public async Task<AnnonceL> GetAnnonce(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
-                var annonce = await response.Content.ReadFromJsonAsync<Annonce>();
+                var annonce = await response.Content.ReadFromJsonAsync<AnnonceL>();
 
                 return annonce;
 
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return null;
+                    //throw new Exception(response.ReasonPhrase);
             }
         }
 
-        public async Task<bool> UpdateAnnonce(Annonce annonce)
+        public async Task<bool> UpdateAnnonce(AnnonceL annonce)
         {
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), annonce);
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddAnnonce(Annonce annonce)
+        public async Task<AnnonceL> AddAnnonce(AnnonceL annonce)
         {
-            var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), annonce);
+			var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), annonce);
 
-            return response.IsSuccessStatusCode;
+			if (response.IsSuccessStatusCode)
+			{
+				var annonce1 = await response.Content.ReadFromJsonAsync<AnnonceL>();
+				return annonce1;
+			}
+			return null;
 
         }
         public async Task<bool> DeleteAnnonce(int id)

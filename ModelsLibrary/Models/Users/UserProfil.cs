@@ -11,7 +11,7 @@ namespace ModelsLibrary.Models.Users
 		public UtilisateurL? utilisateur { get; set; }
 		public virtual StatutUserL statutUserL { get; set; }
 		public virtual List<Jouet> jouetList { get; set;}
-		public virtual List<Annonce> annonceList { get; set; }
+		public virtual List<AnnonceL> annonceList { get; set; }
 		public virtual List<Echange> echangeList { get; set; }
 		public virtual List<Achat> achatList { get; set; }
 		///public virtual List<>

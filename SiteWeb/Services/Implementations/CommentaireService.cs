@@ -19,30 +19,30 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<Commentaire>>> GetCommentaires()
+        public async Task<List<CommentaireL>> GetCommentaires()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var commentaires = await response.Content.ReadFromJsonAsync<List<Commentaire>>();
+                var commentaires = await response.Content.ReadFromJsonAsync<List<CommentaireL>>();
 
                 return commentaires;
 
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
-            }
+				return null;
+			}
 
-        }
+		}
 
-        public async Task<ActionResult<Commentaire>> GetCommentaire(int id)
+        public async Task<ActionResult<CommentaireL>> GetCommentaire(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
-                var commentaire = await response.Content.ReadFromJsonAsync<Commentaire>();
+                var commentaire = await response.Content.ReadFromJsonAsync<CommentaireL>();
 
                 return commentaire;
 
@@ -53,13 +53,13 @@ namespace SiteWeb.Services.Implementations
             }
         }
 
-        public async Task<bool> UpdateCommentaire(Commentaire commentaire)
+        public async Task<bool> UpdateCommentaire(CommentaireL commentaire)
         {
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), commentaire);
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddCommentaire(Commentaire commentaire)
+        public async Task<bool> AddCommentaire(CommentaireL commentaire)
         {
             var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), commentaire);
 
@@ -72,5 +72,19 @@ namespace SiteWeb.Services.Implementations
             return response.IsSuccessStatusCode;
 
         }
-    }
+
+		public async Task<List<CommentaireL>> GetCommentaireByIdJouet(int id)
+		{
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetCommentaireByIdJouet/{id}");
+			if (response.IsSuccessStatusCode)
+			{
+				var Commentaires = await response.Content.ReadFromJsonAsync<List<CommentaireL>>();
+				return Commentaires;
+			}
+			else
+			{
+				return null;
+			}
+		}
+	}
 }

@@ -24,12 +24,15 @@ public partial class Photo
     public int? Jouet { get; set; } = null;
 
     public int? Profil { get; set; } = null;
+	public int? Annonce { get; set; } = null;
 
-    public bool EstSupprimer { get; set; }
+	public bool EstSupprimer { get; set; }
 
     public virtual Jouet? JouetNavigation { get; set; }
 
-    public virtual Message? MessagesNavigation { get; set; }
+	public virtual Annonce? AnnonceNavigation { get; set; }
+
+	public virtual Message? MessagesNavigation { get; set; }
 
     public virtual Utilisateur? ProfilNavigation { get; set; }
 }

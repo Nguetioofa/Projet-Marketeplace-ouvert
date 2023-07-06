@@ -541,7 +541,9 @@ public partial class EchangeJouetsContext : DbContext
                 .HasColumnName("format");
             entity.Property(e => e.Jouet).HasColumnName("jouet");
             entity.Property(e => e.Messages).HasColumnName("messages");
-            entity.Property(e => e.NomPhoto)
+            entity.Property(e => e.Annonce).HasColumnName("annonce");
+
+			entity.Property(e => e.NomPhoto)
                 .HasMaxLength(10)
                 .HasColumnName("nom_photo");
             entity.Property(e => e.Profil).HasColumnName("profil");
@@ -558,7 +560,11 @@ public partial class EchangeJouetsContext : DbContext
                 .HasForeignKey(d => d.Messages)
                 .HasConstraintName("FK__photos__messages__6EF57B66");
 
-            entity.HasOne(d => d.ProfilNavigation).WithMany(p => p.Photos)
+            entity.HasOne(d => d.AnnonceNavigation).WithMany(p => p.Photos)
+            .HasForeignKey(d => d.Annonce)
+            .HasConstraintName("FK__photos__messages__6WF57B49");
+
+			entity.HasOne(d => d.ProfilNavigation).WithMany(p => p.Photos)
                 .HasForeignKey(d => d.Profil)
                 .HasConstraintName("FK__photos__profil__70DDC3D8");
         });

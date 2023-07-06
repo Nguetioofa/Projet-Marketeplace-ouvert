@@ -4,10 +4,10 @@ namespace SiteWeb.Services.Interfaces
 {
     public interface IAnnonceService
     {
-        public Task<ActionResult<List<Annonce>>> GetAnnonces();
-        public Task<ActionResult<Annonce>> GetAnnonce(int id);
-        public Task<bool> UpdateAnnonce(Annonce annonce);
-        public Task<bool> AddAnnonce(Annonce annonce);
+        public Task<List<AnnonceL>> GetAnnonces();
+        public Task<AnnonceL> GetAnnonce(int id);
+        public Task<bool> UpdateAnnonce(AnnonceL annonce);
+        public Task<AnnonceL> AddAnnonce(AnnonceL annonce);
         public Task<bool> DeleteAnnonce(int id);
 
     }

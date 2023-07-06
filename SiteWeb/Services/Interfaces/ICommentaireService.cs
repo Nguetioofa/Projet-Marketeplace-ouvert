@@ -4,11 +4,13 @@ namespace SiteWeb.Services.Interfaces
 {
     public interface ICommentaireService
     {
-        public Task<ActionResult<List<Commentaire>>> GetCommentaires();
-        public Task<ActionResult<Commentaire>> GetCommentaire(int id);
-        public Task<bool> UpdateCommentaire(Commentaire commentaire);
-        public Task<bool> AddCommentaire(Commentaire commentaire);
+        public Task<List<CommentaireL>> GetCommentaires();
+        public Task<ActionResult<CommentaireL>> GetCommentaire(int id);
+        public Task<bool> UpdateCommentaire(CommentaireL commentaire);
+        public Task<bool> AddCommentaire(CommentaireL commentaire);
         public Task<bool> DeleteCommentaire(int id);
+		public Task<List<CommentaireL>> GetCommentaireByIdJouet(int id);
 
-    }
+
+	}
 }

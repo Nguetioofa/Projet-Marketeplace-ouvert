@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
 <html lang="fr-fr">
 
 <head>
@@ -28,6 +29,8 @@
 
 	<link href="~/AllaiaEcommerce/css/leave_review.css" rel="stylesheet">
 	<link href="~/AllaiaEcommerce/css/product_page.css" rel="stylesheet">
+	<link href="~/AllaiaEcommerce/css/listing.css" rel="stylesheet">
+
 
 	<link href="~/AllaiaEcommerce/css/custom.css" rel="stylesheet">
 </head>
@@ -64,8 +67,11 @@
 									<li>
 										<a href="/">Home</a>
 									</li>
-									<partial name="_AllaiaTemplate/MegaMenu" />
-									
+									<li>
+										<a href="/">Home</a>
+									</li>
+@* 									<partial name="AllaiaTemplate/_MegaMenu" />
+ *@									
 									<li class="submenu">
 										<a href="javascript:void(0);" class="show-submenu">Extra Pages</a>
 										<ul>
@@ -83,11 +89,20 @@
 										</ul>
 									</li>
 									<li>
-										<a href="blog.html">Blog</a>
+										<a href="#">Annonces</a>
 									</li>
-									<li>
-										<a href="#0">Buy Template</a>
-									</li>
+                                    @{
+                                        ClaimsPrincipal claimsPrincipal = Context.User;
+                                        var NameUser = User.FindFirst("NameLastName")?.Value;
+										int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
+									}
+									@if (User.Identity.IsAuthenticated)
+									{
+										<li>
+											<a href="#"> Messages</a>
+										</li>
+									}
+
 								</ul>
 							</div>
 							<!--/main-menu -->
@@ -266,9 +281,13 @@
 	<script src="~/AllaiaEcommerce/js/common_scripts.min.js"></script>
 	<script src="~/AllaiaEcommerce/js/main.js"></script>
 
-@* 	<!-- SPECIFIC SCRIPTS -->
+	<!-- SPECIFIC SCRIPTS -->
 	<script src="~/AllaiaEcommerce/js/carousel-home.js"></script>
-	<script src="~/AllaiaEcommerce/js/jquery.cookiebar.js"></script> *@
+
+	<!-- SPECIFIC SCRIPTS -->
+	<script src="~/AllaiaEcommerce/js/sticky_sidebar.min.js"></script>
+	<script src="~/AllaiaEcommerce/js/specific_listing.js"></script>
+@* 	<script src="~/AllaiaEcommerce/js/jquery.cookiebar.js"></script> *@
 @* 	<script>
 		$(document).ready(function () {
 			'use strict';

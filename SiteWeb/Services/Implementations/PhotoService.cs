@@ -108,7 +108,6 @@ namespace SiteWeb.Services.Implementations
 
         public async Task<List<PhotoL>> GetPhotoByIdJouet(int id)
         {
-            //var response = await _client.GetAsync($"http://localhost:5219/api/Photos/GetPhotoByIdJouet/{id}");
             var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetPhotoByIdJouet/{id}");
             if (response.IsSuccessStatusCode)
             {

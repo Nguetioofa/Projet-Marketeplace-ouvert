@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModelsLibrary.Models;
 
-public partial class Commentaire
+public partial class CommentaireL
 {
     public int Id { get; set; }
 
@@ -14,9 +14,7 @@ public partial class Commentaire
     public DateTime DateC { get; set; }
 
     public int? IdAuteur { get; set; }
-
-    public int? IdAnnonce { get; set; }
-
-
+	public int? IdJouet { get; set; }
+	public int? IdAnnonce { get; set; }
 
 }

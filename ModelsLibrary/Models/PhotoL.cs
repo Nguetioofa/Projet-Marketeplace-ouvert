@@ -27,5 +27,6 @@ public partial class PhotoL
 
     public int? Profil { get; set; }
 
+	public int? Annonce { get; set; }
 
 }
