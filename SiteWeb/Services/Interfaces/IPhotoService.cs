@@ -11,6 +11,9 @@ namespace SiteWeb.Services.Interfaces
         public Task<bool> AddPhotos(List<PhotoL> photos, List<IFormFile> images,int idjouet);
         public Task<bool> DeletePhoto(int id);
         public Task<List<PhotoL>> GetPhotoByIdJouet(int id);
+		public Task<List<PhotoL>> GetPhotoByIdAnnonce(int id);
+		public Task<List<PhotoL>> GetPhotoByIdProfil(int id);
+		public Task<List<PhotoL>> GetPhotoByIdMessage(int id);
 
-    }
+	}
 }

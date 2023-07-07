@@ -7,6 +7,7 @@ using SiteWeb.Services.Interfaces;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Security.Claims;
+using ModelsLibrary.Models.Annonces;
 
 namespace SiteWeb.Controllers
 {
@@ -15,12 +16,14 @@ namespace SiteWeb.Controllers
 		private readonly IAnnonceService _annonceService;
 		private readonly IWebHostEnvironment _webHostEnvironment;
 		private readonly IPhotoService _photoService;
+		private readonly IUtilisateurService _utilisateurService;
 		public AnnoncesController(IAnnonceService annonceService, IWebHostEnvironment webHostEnvironment,
-				IPhotoService photoService) 
+				IPhotoService photoService, IUtilisateurService utilisateurService) 
 		{
 			_annonceService = annonceService;
 			_webHostEnvironment = webHostEnvironment;
 			_photoService = photoService;
+			_utilisateurService = utilisateurService;
 		}
 
 		// GET: AnnoncesController
@@ -28,10 +31,45 @@ namespace SiteWeb.Controllers
 		public async Task<IActionResult> Index()
 		{
 			var listAnnonces = await _annonceService.GetAnnonces();
-			return View();
+
+			List<AnnoncesGridModel> toyBoxModels = new List<AnnoncesGridModel>();
+
+			if (listAnnonces is not null)
+			{
+				foreach (var annonce in listAnnonces)
+				{
+					var photo = (await _photoService.GetPhotoByIdAnnonce((int)annonce.Id)).Where(ph => ph.UrlP.Contains("400x400")).FirstOrDefault();
+					var utilisateur = (await _utilisateurService.GetUtilisateur((int)annonce.IdUtilisateur));
+                    if (utilisateur is null)
+                    {
+						ViewBag.ErrorMessage = "Une erreur s'est produit";
+						return View();
+                    }
+					//throw new Exception("Une erreur s'est produit");
+
+					toyBoxModels.Add(new AnnoncesGridModel()
+					{
+						Id = (int)annonce.Id,
+						IdUtilisateur = utilisateur.Id,
+						utilisateur = utilisateur,
+						Titre = annonce.Titre,
+						DescriptionAnnonce = annonce.DescriptionAnnonce,
+						Photo = photo,
+						DateAnnonce = annonce.DateAnnonce,
+					});
+				}
+				return View(toyBoxModels);
+
+			}
+            else
+            {
+				ViewBag.ErrorMessage = "Une erreur s'est produit";
+				return View();
+			}
 		}
 
 		// GET: AnnoncesController/Details/5
+		[HttpGet]
 		public ActionResult Details(int id)
 		{
 			return View();
@@ -57,6 +95,7 @@ namespace SiteWeb.Controllers
 					int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
 
 					annonce.IdUtilisateur = idUser;
+					annonce.Id = 0;
 					annonce.DateAnnonce = DateTime.UtcNow;
 
 					var annonceAdd = await _annonceService.AddAnnonce(annonce);
@@ -66,7 +105,7 @@ namespace SiteWeb.Controllers
 						annonce.IdUtilisateur = null;
 						return View(annonce);
 					}
-					int count = 0;
+					int count1 = 0;
 					bool isFrist = true;
 					if (images != null && images.Count > 0)
 					{
@@ -86,12 +125,12 @@ namespace SiteWeb.Controllers
 									NomPhoto = fileName,
 									DescriptionPhoto = "",
 									DatePublication = DateTime.UtcNow,
-									 = toy.Id
+									Annonce = annonce.Id
 								};
 								var year = DateTime.Now.Year.ToString();
 								var month = DateTime.Now.ToString("MMMM");
-								var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "Toys", year, month, "600x600", fileName);
-								var relatifPath = (Path.Combine("images", "Toys", year, month, "600x600", fileName)).Replace("\\", "/");
+								var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", year, month, "600x600", "Annonces", fileName);
+								var relatifPath = (Path.Combine("images",  year, month, "600x600","Annonces", fileName)).Replace("\\", "/");
 								var directoryPath = Path.GetDirectoryName(imagePath);
 
 								if (!Directory.Exists(directoryPath))
@@ -103,7 +142,7 @@ namespace SiteWeb.Controllers
 									await photo.CopyToAsync(memoryStream);
 									using (var image = new Bitmap(memoryStream))
 									{
-										var resizedImage = new Bitmap(image, new Size(600, 600));
+										var resizedImage = new Bitmap(image, new System.Drawing.Size(600, 600));
 
 										// Enregistrer l'image redimensionnée au format JPEG avec un niveau de qualité spécifié
 										var encoder = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == ImageFormat.Jpeg.Guid);
@@ -114,17 +153,17 @@ namespace SiteWeb.Controllers
 										photoL.Taille = (int)new FileInfo(imagePath).Length;
 										photoL.Format = photo.ContentType;
 										photoL.UrlP = $"/{relatifPath}";
-										photoL.Jouet = jouetAdd.Id;
+										photoL.Jouet = null;
 										photoL.Profil = null;
 										photoL.Messages = null;
+										photoL.Annonce = annonceAdd.Id;
 
 										if (isFrist)
 										{
-											// Créer une deuxième image redimensionnée en format 100x100 pixels
-											var thumbnailImage = new Bitmap(image, new Size(400, 400));
+											var thumbnailImage = new Bitmap(image, new System.Drawing.Size(400, 400));
 
 											// Enregistrer la deuxième image redimensionnée dans le dossier souhaité
-											var thumbnailPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "Toys", year, month, "400x400", fileName);
+											var thumbnailPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", year, month, "400x400", "Annonces", fileName);
 											var directorythumbnailPath = Path.GetDirectoryName(thumbnailPath);
 
 											if (!Directory.Exists(directorythumbnailPath))
@@ -137,25 +176,28 @@ namespace SiteWeb.Controllers
 											encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 75L);
 
 											thumbnailImage.Save(thumbnailPath, encoder, encoderParams);
+											var relatifthumbnailPath = (Path.Combine("images", year, month, "400x400", "Annonces", fileName)).Replace("\\", "/");
+
 											isFrist = false;
 											var photoL2 = new PhotoL
 											{
 												NomPhoto = fileName,
 												DescriptionPhoto = "",
 												DatePublication = DateTime.UtcNow,
-												Jouet = toy.Id
+												Annonce = annonceAdd.Id,
+												Taille = (int)new FileInfo(imagePath).Length,
+												Format = photo.ContentType,
+												UrlP = $"/{relatifthumbnailPath}",
+												Jouet = null,
+												Profil = null,
+												Messages = null
 											};
-											var relatifthumbnailPath = (Path.Combine("images", "Toys", year, month, "400x400", fileName)).Replace("\\", "/");
 
-											photoL2.Taille = (int)new FileInfo(imagePath).Length;
-											photoL2.Format = photo.ContentType;
-											photoL2.UrlP = $"/{relatifthumbnailPath}";
-											photoL2.Jouet = jouetAdd.Id;
-											photoL2.Profil = null;
-											photoL2.Messages = null;
-											if (!(await _photoService.AddPhoto(photoL2)))
+											var isSuccess1 = await _photoService.AddPhoto(photoL2);
+
+											if (!isSuccess1)
 											{
-												count++;
+												count1++;
 											}
 										}
 
@@ -165,20 +207,18 @@ namespace SiteWeb.Controllers
 								var isSuccess = await _photoService.AddPhoto(photoL);
 								if (!isSuccess)
 								{
-									count++;
+									count1++;
 								}
 							}
 						}
-						if (count > 0)
+						if (count1 > 0)
 						{
-							ViewBag.ErrorMessage = $"l'ajout de {count} photo a echouer";
+							ViewBag.ErrorMessage = $"l'ajout de {count1} photo a echouer";
 							return View(annonce);
 						}
 					}
 					return RedirectToAction(nameof(Index));
-
 				}
-
 				return RedirectToAction(nameof(Index));
 			}			
 			catch//(Exception ex)
@@ -188,46 +228,5 @@ namespace SiteWeb.Controllers
 			}
 		}
 
-		// GET: AnnoncesController/Edit/5
-		public ActionResult Edit(int id)
-		{
-			return View();
-		}
-
-		// POST: AnnoncesController/Edit/5
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public ActionResult Edit(int id, IFormCollection collection)
-		{
-			try
-			{
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
-		}
-
-		// GET: AnnoncesController/Delete/5
-		public ActionResult Delete(int id)
-		{
-			return View();
-		}
-
-		// POST: AnnoncesController/Delete/5
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public ActionResult Delete(int id, IFormCollection collection)
-		{
-			try
-			{
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
-		}
 	}
 }

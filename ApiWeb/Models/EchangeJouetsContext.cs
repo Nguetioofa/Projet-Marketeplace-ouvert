@@ -562,7 +562,7 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.AnnonceNavigation).WithMany(p => p.Photos)
             .HasForeignKey(d => d.Annonce)
-            .HasConstraintName("FK__photos__messages__6WF57B49");
+            .HasConstraintName("FK__photos__annonces__6WF57B49");
 
 			entity.HasOne(d => d.ProfilNavigation).WithMany(p => p.Photos)
                 .HasForeignKey(d => d.Profil)

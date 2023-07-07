@@ -1,10 +1,10 @@
-﻿@model IEnumerable<ToyBoxModel>
+﻿@using ModelsLibrary.Models.Annonces;
+@model List<AnnoncesGridModel>
 
 @{
-    ViewData["Title"] = "Index";
-    //Layout = "~/Views/Shared/_HomePageLayout.cshtml";
+	ViewData["Title"] = "Index";
+	//Layout = "~/Views/Shared/_HomePageLayout.cshtml";
 }
-
 <div class="top_banner version_2">
 	<div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0)" style="background-color: rgba(0, 0, 0, 0);">
 		<div class="container">
@@ -43,19 +43,17 @@
 	</div>
 </div>
 <div class="container margin_60_35">
-	<div class="row small-gutters">
+	<div class="row justify-content-center">
 		@if (ViewBag.ErrorMessage != null)
 		{
 			<script>alert("@ViewBag.ErrorMessage")</script>
 			<div class="alert alert-danger mx-auto">@ViewBag.ErrorMessage</div>
 		}
 		<div class="col-lg-8">
-			
-			@foreach (var jouet in Model)
+			@foreach (var annonce in Model)
 			{
-				<partial name="AllaiaTemplate/Product/_ProductBox" model="jouet" />
+				<partial name="AllaiaTemplate/Annonces/_AnnonceBoxList" model="annonce" />
 			}
 		</div>
 	</div>
 </div>
-

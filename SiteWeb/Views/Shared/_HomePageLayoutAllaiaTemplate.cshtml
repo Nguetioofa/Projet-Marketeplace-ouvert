@@ -67,9 +67,7 @@
 									<li>
 										<a href="/">Home</a>
 									</li>
-									<li>
-										<a href="/">Home</a>
-									</li>
+
 @* 									<partial name="AllaiaTemplate/_MegaMenu" />
  *@									
 									<li class="submenu">
@@ -89,7 +87,10 @@
 										</ul>
 									</li>
 									<li>
-										<a href="#">Annonces</a>
+										<a asp-controller="Jouets" asp-action="Index">Jouets</a>
+									</li>
+									<li>
+										<a asp-controller="Annonces" asp-action="Index">Annonces</a>
 									</li>
                                     @{
                                         ClaimsPrincipal claimsPrincipal = Context.User;

@@ -44,7 +44,7 @@ namespace SiteWeb.Services.Implementations
 
         }
 
-        public async Task<ActionResult<UtilisateurL>> GetUtilisateur(int id)
+        public async Task<UtilisateurL> GetUtilisateur(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
@@ -53,11 +53,12 @@ namespace SiteWeb.Services.Implementations
                 var Utilisateur = await response.Content.ReadFromJsonAsync<UtilisateurL>();
 
                 return Utilisateur;
-
+                
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return null;
+               // throw new Exception(response.ReasonPhrase);
             }
         }
 

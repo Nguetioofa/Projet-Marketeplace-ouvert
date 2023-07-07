@@ -35,36 +35,35 @@ namespace SiteWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var jouets = await _jouetService.GetJouets();
-            if (jouets is null)
-            {
-                return NotFound();
-            }
 
-            List<Toy> toys = new List<Toy>();
+			var jouets = await _jouetService.GetJouets();
+			List<ToyBoxModel> toyBoxModels = new List<ToyBoxModel>();
 
-            jouets.ForEach( jouet => 
-            {
-                toys.Add(new Toy()
-                {
-                    Id = jouet.Id,
-                    Nom = jouet.Nom,
-                    Categorie = jouet.Categorie,
-                    AgeMin = jouet.AgeMin,
-                    AgeMax = jouet.AgeMax,
-                    EtatId = jouet.EtatId,
-                    Descriptions = jouet.Descriptions,
-                    Proprietaire = jouet.Proprietaire,
-                    Prix = jouet.Prix,
-                    listPhotos =  _photoService.GetPhotoByIdJouet(jouet.Id).Result,
-                    AcceptAchat = jouet.AcceptAchat,
-                    AcceptTroc = jouet.AcceptTroc,
+			if (jouets is not null)
+			{
+				foreach (var jouet in jouets)
+				{
+					var photo = (await _photoService.GetPhotoByIdJouet(jouet.Id)).Where(ph => ph.UrlP.Contains("400x400")).FirstOrDefault();
+					// if (photo is not null)
+					// {
+					//     photo.UrlP = photo.UrlP.Replace("600x600", "600x600");
 
-                }) ;
+					// }
 
-            });
-            
-            return View(toys);
+					toyBoxModels.Add(new ToyBoxModel()
+					{
+						Id = jouet.Id,
+						Nom = jouet.Nom,
+						Categorie = jouet.Categorie,
+						Prix = jouet.Prix,
+						Photo = photo,
+						AcceptAchat = jouet.AcceptAchat,
+						AcceptTroc = jouet.AcceptTroc,
+					});
+				}
+			}
+
+			return View(toyBoxModels);
         }
 
         // GET: ToysController/Details/5
@@ -183,8 +182,8 @@ namespace SiteWeb.Controllers
 
 								var year = DateTime.Now.Year.ToString();
 								var month = DateTime.Now.ToString("MMMM");
-								var imagePath = Path.Combine(_environment.WebRootPath, "images", "Toys", year, month, "600x600", fileName);
-								var relatifPath = (Path.Combine("images", "Toys", year, month, "600x600", fileName)).Replace("\\", "/");
+								var imagePath = Path.Combine(_environment.WebRootPath, "images", year, month, "600x600", "Toys", fileName);
+								var relatifPath = (Path.Combine("images", year, month, "600x600", "Toys", fileName)).Replace("\\", "/");
 								var directoryPath = Path.GetDirectoryName(imagePath);
 
 								if (!Directory.Exists(directoryPath))
@@ -196,7 +195,7 @@ namespace SiteWeb.Controllers
 									await photo.CopyToAsync(memoryStream);
 									using (var image = new Bitmap(memoryStream))
 									{
-										var resizedImage = new Bitmap(image, new Size(600, 600));
+										var resizedImage = new Bitmap(image, new System.Drawing.Size(600, 600));
 
 										// Enregistrer l'image redimensionnée au format JPEG avec un niveau de qualité spécifié
 										var encoder = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == ImageFormat.Jpeg.Guid);
@@ -214,10 +213,10 @@ namespace SiteWeb.Controllers
 										if (isFrist)
 										{
 											// Créer une deuxième image redimensionnée en format 100x100 pixels
-											var thumbnailImage = new Bitmap(image, new Size(400, 400));
+											var thumbnailImage = new Bitmap(image, new System.Drawing.Size(400, 400));
 
 											// Enregistrer la deuxième image redimensionnée dans le dossier souhaité
-											var thumbnailPath = Path.Combine(_environment.WebRootPath, "images", "Toys", year, month, "400x400", fileName);
+											var thumbnailPath = Path.Combine(_environment.WebRootPath, "images", year, month, "400x400", "Toys", fileName);
 											var directorythumbnailPath = Path.GetDirectoryName(thumbnailPath);
 
 											if (!Directory.Exists(directorythumbnailPath))
@@ -238,7 +237,7 @@ namespace SiteWeb.Controllers
 												DatePublication = DateTime.UtcNow,
 												Jouet = toy.Id
 											};
-											var relatifthumbnailPath = (Path.Combine("images", "Toys", year, month, "400x400", fileName)).Replace("\\", "/");
+											var relatifthumbnailPath = (Path.Combine("images", year, month, "400x400", "Toys", fileName)).Replace("\\", "/");
 
 											photoL2.Taille = (int)new FileInfo(imagePath).Length;
 											photoL2.Format = photo.ContentType;

@@ -62,7 +62,7 @@ namespace SiteWeb.Services.Implementations
         }
         public async Task<AnnonceL> AddAnnonce(AnnonceL annonce)
         {
-			var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), annonce);
+			var response = await _client.PostAsJsonAsync($"{_configuration.ApiUrl}/{ControllerName}",annonce);
 
 			if (response.IsSuccessStatusCode)
 			{

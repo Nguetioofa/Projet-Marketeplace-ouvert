@@ -74,8 +74,76 @@ namespace ApiWeb.Controllers
             return Ok(photos);
         }
 
-        // PUT: api/Photos/5
-        [HttpPut]
+		// GET: api/GetPhotoByIdAnnonce/5
+		[HttpGet("GetPhotoByIdAnnonce/{id}")]
+		public async Task<ActionResult<IEnumerable<Photo>>> GetPhotoByIdAnnonce(int id)
+		{
+			if (_context.Photos == null)
+			{
+				return NotFound();
+			}
+
+
+			var photos = await _context.Annonces.Where(u => !u.EstSupprimer && u.Id == id)
+																.Select(u => u.Photos).FirstOrDefaultAsync();
+
+
+			if (photos == null)
+			{
+				return NotFound();
+			}
+
+			return Ok(photos);
+		}
+
+
+		// GET: api/GetPhotoByIdProfil/5
+		[HttpGet("GetPhotoByIdProfil/{id}")]
+		public async Task<ActionResult<IEnumerable<Photo>>> GetPhotoByIdProfil(int id)
+		{
+			if (_context.Photos == null)
+			{
+				return NotFound();
+			}
+
+
+			var photos = await _context.Utilisateurs.Where(u => !u.EstSupprimer && u.Id == id)
+																.Select(u => u.Photos).FirstOrDefaultAsync();
+
+
+			if (photos == null)
+			{
+				return NotFound();
+			}
+
+			return Ok(photos);
+		}
+
+
+		// GET: api/GetPhotoByIdProfil/5
+		[HttpGet("GetPhotoByIdMessage/{id}")]
+		public async Task<ActionResult<IEnumerable<Photo>>> GetPhotoByIdMessage(int id)
+		{
+			if (_context.Photos == null)
+			{
+				return NotFound();
+			}
+
+
+			var photos = await _context.Messages.Where(u => !u.EstSupprimer && u.Id == id)
+																.Select(u => u.Photos).FirstOrDefaultAsync();
+
+
+			if (photos == null)
+			{
+				return NotFound();
+			}
+
+			return Ok(photos);
+		}
+
+		// PUT: api/Photos/5
+		[HttpPut]
         public async Task<IActionResult> PutPhoto(Photo photo)
         {
 

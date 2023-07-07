@@ -31,7 +31,7 @@ namespace SiteWeb.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var result = await _utilisateurService.GetUtilisateur(id);
-            return View(result.Value);
+            return View(result);
         }
 
         public IActionResult Create()
@@ -55,7 +55,7 @@ namespace SiteWeb.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var result = await _utilisateurService.GetUtilisateur(id);
-            return View(result.Value);
+            return View(result);
         }
 
 		[Authorize(Policy = "ProfileAccessPolicy")]
@@ -84,7 +84,7 @@ namespace SiteWeb.Controllers
 		public async Task<IActionResult> Delete(int id)
         {
             var result = await _utilisateurService.GetUtilisateur(id);
-            return View(result.Value);
+            return View(result);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -210,7 +210,7 @@ namespace SiteWeb.Controllers
 		public async Task<IActionResult> Profil(int id)
 		{
             UserProfil userProfil = new UserProfil();
-            userProfil.utilisateur = (await _utilisateurService.GetUtilisateur(id)).Value;
+            userProfil.utilisateur = (await _utilisateurService.GetUtilisateur(id));
             return View(userProfil);
 		}
 

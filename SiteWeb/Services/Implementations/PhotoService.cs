@@ -119,5 +119,47 @@ namespace SiteWeb.Services.Implementations
                 return null;
             }
         }
-    }
+
+		public async Task<List<PhotoL>> GetPhotoByIdAnnonce(int id)
+		{
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetPhotoByIdAnnonce/{id}");
+			if (response.IsSuccessStatusCode)
+			{
+				var Photos = await response.Content.ReadFromJsonAsync<List<PhotoL>>();
+				return Photos;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		public async Task<List<PhotoL>> GetPhotoByIdProfil(int id)
+		{
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetPhotoByIdProfil/{id}");
+			if (response.IsSuccessStatusCode)
+			{
+				var Photos = await response.Content.ReadFromJsonAsync<List<PhotoL>>();
+				return Photos;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		public async Task<List<PhotoL>> GetPhotoByIdMessage(int id)
+		{
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetPhotoByIdMessage/{id}");
+			if (response.IsSuccessStatusCode)
+			{
+				var Photos = await response.Content.ReadFromJsonAsync<List<PhotoL>>();
+				return Photos;
+			}
+			else
+			{
+				return null;
+			}
+		}
+	}
 }

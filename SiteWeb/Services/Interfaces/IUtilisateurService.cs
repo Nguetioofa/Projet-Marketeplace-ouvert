@@ -7,7 +7,7 @@ namespace SiteWeb.Services.Interfaces
     public interface IUtilisateurService
     {
         Task<ActionResult<List<UtilisateurL>>> GetUtilisateurs();
-        Task<ActionResult<UtilisateurL>> GetUtilisateur(int id);
+        Task<UtilisateurL> GetUtilisateur(int id);
         Task<bool> UpdateUtilisateur(UtilisateurL Utilisateur);
         Task<bool> AddUtilisateur(UtilisateurL Utilisateur);
         Task<bool> DeleteUtilisateur(int id);
