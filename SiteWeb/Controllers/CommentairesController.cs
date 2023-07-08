@@ -40,41 +40,43 @@ namespace SiteWeb.Controllers
 		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([FromForm] string commentaire)
+		public async Task<IActionResult> Create(string typeCommentaire, int id,string commentaire)
 		{
             if (ModelState.IsValid)
             {
 				int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
+
 				var commantaire = new CommentaireL()
 				{
 					Contenu = commentaire,
 					DateC = DateTime.UtcNow,
 					IdAuteur = idUser,
-					IdAnnonce = null,
-					IdJouet = 35
 				};
-				await _commentaireService.AddCommentaire(commantaire);
-				return RedirectToAction("Details", "Jouets", routeValues: "35");
+				if (typeCommentaire.Equals("jouet"))
+				{
+					commantaire.IdJouet = id;
+					commantaire.IdAnnonce = null;
+				}
+				else if(typeCommentaire.Equals("annonce"))
+				{
+                    commantaire.IdAnnonce = id;
+					commantaire.IdJouet = null;
+				}
+				var nouveaucom = await _commentaireService.AddCommentaire(commantaire);
+				//return Ok(nouveaucom);
+				return Json(new
+				{
+					date = commantaire.DateC.ToString("dd/MM/yyyy"),
+					auteur = commantaire.IdAuteur,
+					contenu = commantaire.Contenu
+				});
 
 			}
-			return RedirectToAction("Details", "Jouets", routeValues: "35");
+			return NoContent();
 
 		}
 
-		// POST: CommentairesController/Create
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public ActionResult Create(IFormCollection collection)
-		{
-			try
-			{
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
-		}
+
 
 	}
 }

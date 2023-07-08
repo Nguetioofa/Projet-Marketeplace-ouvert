@@ -1,4 +1,5 @@
-﻿@model List<EchangeL>
+﻿@using ModelsLibrary.Models.Echanges
+@model List<EchangeL>
 
 @if ((await AuthorizationService.AuthorizeAsync(User, "ProfileAccessPolicy")).Succeeded)
 {

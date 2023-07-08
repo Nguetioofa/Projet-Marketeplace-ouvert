@@ -62,6 +62,6 @@ namespace ModelsLibrary.Models.Echanges
 
 		public virtual ModePayementL ModePayUtilisateur2Navigation { get; set; } = null!;
 
-		public virtual StatutsTransaction StatutNavigation { get; set; } = null!;
+		public virtual StatutsTransactionL StatutNavigation { get; set; } = null!;
 	}
 }

@@ -1,4 +1,5 @@
-﻿@model List<AchatL>
+﻿@using ModelsLibrary.Models.Achats
+@model List<AchatL>
 
 @if ((await AuthorizationService.AuthorizeAsync(User, "ProfileAccessPolicy")).Succeeded)
 {

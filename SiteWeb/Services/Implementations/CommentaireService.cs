@@ -4,6 +4,7 @@ using System.Text;
 using System.Net.Http.Json;
 using SiteWeb.Services.Interfaces;
 using SiteWeb.Data;
+using ModelsLibrary.Models.Toys;
 
 namespace SiteWeb.Services.Implementations
 {
@@ -59,13 +60,17 @@ namespace SiteWeb.Services.Implementations
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddCommentaire(CommentaireL commentaire)
+        public async Task<CommentaireL> AddCommentaire(CommentaireL commentaire)
         {
             var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), commentaire);
 
-            return response.IsSuccessStatusCode;
-
-        }
+			if (response.IsSuccessStatusCode)
+			{
+				CommentaireL? commentaireL = await response.Content.ReadFromJsonAsync<CommentaireL>();
+				return commentaireL;
+			}
+			return null;
+		}
         public async Task<bool> DeleteCommentaire(int id)
         {
             var response = await _client.DeleteAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));

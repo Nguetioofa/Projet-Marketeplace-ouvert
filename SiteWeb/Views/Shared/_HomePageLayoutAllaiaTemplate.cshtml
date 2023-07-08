@@ -34,8 +34,6 @@
 	<link href="~/AllaiaEcommerce/css/leave_review.css" rel="stylesheet">
 	<link href="~/AllaiaEcommerce/css/product_page.css" rel="stylesheet">
 	<link href="~/AllaiaEcommerce/css/listing.css" rel="stylesheet">
-
-
 	<link href="~/AllaiaEcommerce/css/custom.css" rel="stylesheet">
 </head>
 
@@ -240,28 +238,17 @@
 		<!--/footer-->
 	</div>
 	<!-- page -->
-	<div id="toTop"></div><!-- Back to top button -->
+	<div id="toTop"></div>
+	<!-- Back to top button -->
 	<!-- COMMON SCRIPTS -->
 	<script src="~/AllaiaEcommerce/js/common_scripts.min.js"></script>
 	<script src="~/AllaiaEcommerce/js/main.js"></script>
-
+@* 	<script src="~/lib/jquery//dist/jquery-3.7.0.min.js"></script>
+ *@
 	<!-- SPECIFIC SCRIPTS -->
 	<script src="~/AllaiaEcommerce/js/carousel-home.js"></script>
 
 	<!-- SPECIFIC SCRIPTS -->
-	<script src="~/AllaiaEcommerce/js/sticky_sidebar.min.js"></script>
-	<script src="~/AllaiaEcommerce/js/specific_listing.js"></script>
-	@* 	<script src="~/AllaiaEcommerce/js/jquery.cookiebar.js"></script> *@
-	@* 	<script>
-	$(document).ready(function () {
-	'use strict';
-	$.cookieBar({
-	fixed: true
-	});
-	});
-	</script> *@
-
-
 
 	@await RenderSectionAsync("Scripts", required: false)
 

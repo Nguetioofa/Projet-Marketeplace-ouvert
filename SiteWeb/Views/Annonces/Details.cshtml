@@ -105,12 +105,15 @@
 			<div class="col-lg-8">
 				<div class="write_review">
 					<h3>Ecrivez votre commentaire</h3>
-					<form method="post" asp-controller="Commentaires" asp-action="Create">
+					<form id="comment-form" method="post" asp-action="Create" asp-controller="Commentaires">
 
 						<div class="form-group">
 							<label>Commantaire</label>
-							<textarea name="commentaire" class="form-control" style="height: 180px;" placeholder="votre commentaire par rapport a ce jouet"></textarea>
+							<textarea name="commentaire" class="form-control" style="height: 180px;" placeholder="votre commentaire"></textarea>
 						</div>
+						@Html.HiddenFor(model => model.Id)
+						@Html.Hidden("TypeCommantaire", "annonce")
+
 						<button type="submit" class="btn_1">Commenter</button>
 					</form>
 				</div>
@@ -118,7 +121,50 @@
 		</div>
 	</div>
 }
+
 @section Scripts{
 	<script src="~/AllaiaEcommerce/js/carousel_with_thumbs.js"></script>
+	<!-- Inclure la bibliothèque jQuery -->
+	<!-- Inclure le code AJAX -->
+	<script>
+		$(document).ready(function () {
+			// Lorsque le formulaire est soumis
+			var form = $("#comment-form");
+			form.submit(function (event) {
+				// Empêcher le rechargement de la page
+				event.preventDefault();
+
+				// Récupérer les données du formulaire
+				var id = $("input[name='Id']").val();
+				var typeCommentaire = $("input[name='TypeCommantaire']").val();
+
+				var commentaire = $("textarea[name='commentaire']").val();
+				var token = $('input[name="__RequestVerificationToken"]').val();
+
+				// Envoyer une requête AJAX au serveur
+				$.ajax({
+					type: "POST",
+					url: "/Commentaires/Create",
+					data: { typeCommentaire: typeCommentaire, id: id, commentaire: commentaire, __RequestVerificationToken: token },
+					success: function (data) {
+						// Ajouter le nouveau commentaire à la liste
+						$(".card-body").append(
+							"<div class='review_content'>" +
+							"<div class='clearfix add_bottom_10'>" +
+							"<em>" + data.date + "</em>" +
+							"</div>" +
+							"<h4>" + data.auteur + "</h4>" +
+							"<p>" + data.contenu + "</p>" +
+							"</div>"
+						);
+
+						// Vider le champ de saisie du formulaire
+						$("textarea[name='commentaire']").val("");
+					}
+				});
+			});
+		});
+
+	</script>
 
 }
