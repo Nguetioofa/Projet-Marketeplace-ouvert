@@ -18,13 +18,13 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<Message>>> GetMessages()
+        public async Task<ActionResult<List<MessageL>>> GetMessages()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var Messages = JsonSerializer.Deserialize<List<Message>>(content);
+                var Messages = JsonSerializer.Deserialize<List<MessageL>>(content);
 
                 return Messages;
 
@@ -36,14 +36,14 @@ namespace SiteWeb.Services.Implementations
 
         }
 
-        public async Task<ActionResult<Message>> GetMessage(int id)
+        public async Task<ActionResult<MessageL>> GetMessage(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var Message = JsonSerializer.Deserialize<Message>(content);
+                var Message = JsonSerializer.Deserialize<MessageL>(content);
 
                 return Message;
 
@@ -54,7 +54,7 @@ namespace SiteWeb.Services.Implementations
             }
         }
 
-        public async Task<bool> UpdateMessage(Message Message)
+        public async Task<bool> UpdateMessage(MessageL Message)
         {
             var data = JsonSerializer.Serialize(Message);
             var content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -62,7 +62,7 @@ namespace SiteWeb.Services.Implementations
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddMessage(Message Message)
+        public async Task<bool> AddMessage(MessageL Message)
         {
             var data = JsonSerializer.Serialize(Message);
             var content = new StringContent(data, Encoding.UTF8, "application/json");

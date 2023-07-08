@@ -1,4 +1,8 @@
 ﻿@using System.Security.Claims;
+@using SiteWeb.Services.Interfaces;
+@inject ICategorieJouetService _categorieService
+
+
 <!DOCTYPE html>
 <html lang="fr-fr">
 
@@ -21,8 +25,8 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 	<link href="~/AllaiaEcommerce/css/bootstrap.css" rel="stylesheet">
-@* 	<link href="~/AllaiaEcommerce/css/bootstrap.custom.min.css" rel="stylesheet">
- *@
+	@* 	<link href="~/AllaiaEcommerce/css/bootstrap.custom.min.css" rel="stylesheet">
+	*@
 	<link href="~/AllaiaEcommerce/css/style.css" rel="stylesheet">
 
 	<link href="~/AllaiaEcommerce/css/home_1.css" rel="stylesheet">
@@ -68,8 +72,8 @@
 										<a href="/">Home</a>
 									</li>
 
-@* 									<partial name="AllaiaTemplate/_MegaMenu" />
- *@									
+									@* 									<partial name="AllaiaTemplate/_MegaMenu" />
+									*@
 									<li class="submenu">
 										<a href="javascript:void(0);" class="show-submenu">Extra Pages</a>
 										<ul>
@@ -92,9 +96,9 @@
 									<li>
 										<a asp-controller="Annonces" asp-action="Index">Annonces</a>
 									</li>
-                                    @{
-                                        ClaimsPrincipal claimsPrincipal = Context.User;
-                                        var NameUser = User.FindFirst("NameLastName")?.Value;
+									@{
+										ClaimsPrincipal claimsPrincipal = Context.User;
+										var NameUser = User.FindFirst("NameLastName")?.Value;
 										int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
 									}
 									@if (User.Identity.IsAuthenticated)
@@ -109,7 +113,7 @@
 							<!--/main-menu -->
 						</nav>
 						<div class="col-xl-3 col-lg-2 d-lg-flex align-items-center justify-content-end text-end">
-							<a class="phone_top" href="tel://9438843343"><strong><span>Need Help?</span>+94 423-23-221</strong></a>
+							<a class="phone_top" href="tel://690101320"><strong><span>Besoin d'aide?</span>+237 690 10 13 20</strong></a>
 						</div>
 					</div>
 					<!-- /row -->
@@ -119,6 +123,10 @@
 
 			<div class="main_nav Sticky">
 				<div class="container">
+
+					@{
+						var categories = await _categorieService.GetCategorieJouets();
+					}
 					<div class="row small-gutters">
 						<div class="col-xl-3 col-lg-3 col-md-3">
 							<nav class="categories">
@@ -136,62 +144,17 @@
 										</span>
 										<div id="menu">
 											<ul>
-												<li>
-													<span><a href="#0">Collections</a></span>
-													<ul>
-														<li><a href="listing-grid-1-full.html">Trending</a></li>
-														<li><a href="listing-grid-2-full.html">Life style</a></li>
-														<li><a href="listing-grid-3.html">Running</a></li>
-														<li><a href="listing-grid-4-sidebar-left.html">Training</a></li>
-														<li><a href="listing-grid-5-sidebar-right.html">View all Collections</a></li>
-													</ul>
-												</li>
-												<li>
-													<span><a href="#">Men</a></span>
-													<ul>
-														<li><a href="listing-grid-6-sidebar-left.html">Offers</a></li>
-														<li><a href="listing-grid-7-sidebar-right.html">Shoes</a></li>
-														<li><a href="listing-row-1-sidebar-left.html">Clothing</a></li>
-														<li><a href="listing-row-3-sidebar-left.html">Accessories</a></li>
-														<li><a href="listing-row-4-sidebar-extended.html">Equipment</a></li>
-													</ul>
-												</li>
-												<li>
-													<span><a href="#">Women</a></span>
-													<ul>
-														<li><a href="listing-grid-1-full.html">Best Sellers</a></li>
-														<li><a href="listing-grid-2-full.html">Clothing</a></li>
-														<li><a href="listing-grid-3.html">Accessories</a></li>
-														<li><a href="listing-grid-4-sidebar-left.html">Shoes</a></li>
-													</ul>
-												</li>
-												<li>
-													<span><a href="#">Boys</a></span>
-													<ul>
-														<li><a href="listing-grid-6-sidebar-left.html">Easy On Shoes</a></li>
-														<li><a href="listing-grid-7-sidebar-right.html">Clothing</a></li>
-														<li><a href="listing-row-3-sidebar-left.html">Must Have</a></li>
-														<li><a href="listing-row-4-sidebar-extended.html">All Boys</a></li>
-													</ul>
-												</li>
-												<li>
-													<span><a href="#">Girls</a></span>
-													<ul>
-														<li><a href="listing-grid-1-full.html">New Releases</a></li>
-														<li><a href="listing-grid-2-full.html">Clothing</a></li>
-														<li><a href="listing-grid-3.html">Sale</a></li>
-														<li><a href="listing-grid-4-sidebar-left.html">Best Sellers</a></li>
-													</ul>
-												</li>
-												<li>
-													<span><a href="#">Customize</a></span>
-													<ul>
-														<li><a href="listing-row-1-sidebar-left.html">For Men</a></li>
-														<li><a href="listing-row-2-sidebar-right.html">For Women</a></li>
-														<li><a href="listing-row-4-sidebar-extended.html">For Boys</a></li>
-														<li><a href="listing-grid-1-full.html">For Girls</a></li>
-													</ul>
-												</li>
+												@foreach (var categorie in categories)
+												{
+													<li>
+														<span>
+															<a asp-controller="Jouets" asp-action="Categorie" asp-route-name="@categorie.Nom">
+																@categorie.Nom
+															</a>
+														</span>
+													</li>
+												}
+
 											</ul>
 										</div>
 									</li>
@@ -273,7 +236,7 @@
 			@RenderBody()
 		</main>
 		<!-- /main -->
-		<partial name="AllaiaTemplate/_Footer" />
+		<partial name="AllaiaTemplate/_Footer" model="@categories" />
 		<!--/footer-->
 	</div>
 	<!-- page -->
@@ -288,14 +251,14 @@
 	<!-- SPECIFIC SCRIPTS -->
 	<script src="~/AllaiaEcommerce/js/sticky_sidebar.min.js"></script>
 	<script src="~/AllaiaEcommerce/js/specific_listing.js"></script>
-@* 	<script src="~/AllaiaEcommerce/js/jquery.cookiebar.js"></script> *@
-@* 	<script>
-		$(document).ready(function () {
-			'use strict';
-			$.cookieBar({
-				fixed: true
-			});
-		});
+	@* 	<script src="~/AllaiaEcommerce/js/jquery.cookiebar.js"></script> *@
+	@* 	<script>
+	$(document).ready(function () {
+	'use strict';
+	$.cookieBar({
+	fixed: true
+	});
+	});
 	</script> *@
 
 

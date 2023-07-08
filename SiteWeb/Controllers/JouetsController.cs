@@ -66,8 +66,37 @@ namespace SiteWeb.Controllers
 			return View(toyBoxModels);
         }
 
-        // GET: ToysController/Details/5
-        [HttpGet]
+
+		// GET: ToysController
+		[HttpGet]
+		public async Task<IActionResult> Categorie(string name)
+		{
+			var jouets = await _jouetService.GetJouetsByNameCategorie(name);
+			List<ToyBoxModel> toyBoxModels = new List<ToyBoxModel>();
+
+			if (jouets is not null)
+			{
+				foreach (var jouet in jouets)
+				{
+					var photo = (await _photoService.GetPhotoByIdJouet(jouet.Id)).Where(ph => ph.UrlP.Contains("400x400")).FirstOrDefault();
+				
+					toyBoxModels.Add(new ToyBoxModel()
+					{
+						Id = jouet.Id,
+						Nom = jouet.Nom,
+						Categorie = jouet.Categorie,
+						Prix = jouet.Prix,
+						Photo = photo,
+						AcceptAchat = jouet.AcceptAchat,
+						AcceptTroc = jouet.AcceptTroc,
+					});
+				}
+			}
+			return View(toyBoxModels);
+		}
+
+		// GET: ToysController/Details/5
+		[HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             if (id == 0)
@@ -117,7 +146,7 @@ namespace SiteWeb.Controllers
 				{
 					int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
 
-					var jouet = new Jouet()
+					var jouet = new JouetL()
 					{
 						Id = toy.Id,
 						Nom = toy.Nom,

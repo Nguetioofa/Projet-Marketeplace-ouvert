@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using ModelsLibrary.Models.Toys;
 using System.Security.Claims;
 
 namespace SiteWeb.Services.CustomAuthorization
 {
-    public class JouetOwnerAuthorizationHandler : AuthorizationHandler<OwnerRequirement, Jouet>
+    public class JouetOwnerAuthorizationHandler : AuthorizationHandler<OwnerRequirement, JouetL>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -14,7 +15,7 @@ namespace SiteWeb.Services.CustomAuthorization
             _httpContextAccessor = httpContextAccessor;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OwnerRequirement requirement, Jouet jouet)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OwnerRequirement requirement, JouetL jouet)
         {
             if (context.User == null || jouet == null)
             {

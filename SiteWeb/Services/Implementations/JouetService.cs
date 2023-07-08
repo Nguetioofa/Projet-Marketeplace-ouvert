@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text;
 using SiteWeb.Services.Interfaces;
 using SiteWeb.Data;
+using ModelsLibrary.Models.Toys;
 
 namespace SiteWeb.Services.Implementations
 {
@@ -18,12 +19,12 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<List<Jouet>> GetJouets()
+        public async Task<List<JouetL>> GetJouets()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var Jouets = await response.Content.ReadFromJsonAsync<List<Jouet>>();
+                var Jouets = await response.Content.ReadFromJsonAsync<List<JouetL>>();
 
                 return Jouets;
 
@@ -35,13 +36,13 @@ namespace SiteWeb.Services.Implementations
 
         }
 
-        public async Task<Jouet> GetJouet(int id)
+        public async Task<JouetL> GetJouet(int id)
         {
             var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/{id}");
 
             if (response.IsSuccessStatusCode)
             {
-                var jouet = await response.Content.ReadFromJsonAsync<Jouet>();
+                var jouet = await response.Content.ReadFromJsonAsync<JouetL>();
                 
                 return jouet;
             }
@@ -51,20 +52,20 @@ namespace SiteWeb.Services.Implementations
             }
         }
 
-        public async Task<bool> UpdateJouet(Jouet Jouet)
+        public async Task<bool> UpdateJouet(JouetL Jouet)
         {
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), Jouet);
 
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<Jouet> AddJouet(Jouet Jouet)
+        public async Task<JouetL> AddJouet(JouetL Jouet)
         {
             var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), Jouet);
 
             if (response.IsSuccessStatusCode)
             {
-               Jouet? jouet = await response.Content.ReadFromJsonAsync<Jouet>(); 
+               JouetL? jouet = await response.Content.ReadFromJsonAsync<JouetL>(); 
                 return jouet;
             }
             return null;
@@ -76,5 +77,33 @@ namespace SiteWeb.Services.Implementations
             return response.IsSuccessStatusCode;
 
         }
-    }
+
+		public async Task<List<JouetL>> GetJouetsByIdCategorie(int id)
+		{
+				var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetJouetsByIdCategorie/{id}");
+				if (response.IsSuccessStatusCode)
+				{
+					var Jouets = await response.Content.ReadFromJsonAsync<List<JouetL>>();
+					return Jouets;
+				}
+				else
+				{
+					return null;
+				}			
+		}
+
+		public async Task<List<JouetL>> GetJouetsByNameCategorie(string name)
+		{
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetJouetsByIdCategorie/{name}");
+			if (response.IsSuccessStatusCode)
+			{
+				var Jouets = await response.Content.ReadFromJsonAsync<List<JouetL>>();
+				return Jouets;
+			}
+			else
+			{
+				return null;
+			}
+		}
+	}
 }

@@ -18,13 +18,13 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<ModePayement>>> GetModePayements()
+        public async Task<ActionResult<List<ModePayementL>>> GetModePayements()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var ModePayements = JsonSerializer.Deserialize<List<ModePayement>>(content);
+                var ModePayements = JsonSerializer.Deserialize<List<ModePayementL>>(content);
 
                 return ModePayements;
 
@@ -36,14 +36,14 @@ namespace SiteWeb.Services.Implementations
 
         }
 
-        public async Task<ActionResult<ModePayement>> GetModePayement(int id)
+        public async Task<ActionResult<ModePayementL>> GetModePayement(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var ModePayement = JsonSerializer.Deserialize<ModePayement>(content);
+                var ModePayement = JsonSerializer.Deserialize<ModePayementL>(content);
 
                 return ModePayement;
 
@@ -54,7 +54,7 @@ namespace SiteWeb.Services.Implementations
             }
         }
 
-        public async Task<bool> UpdateModePayement(ModePayement ModePayement)
+        public async Task<bool> UpdateModePayement(ModePayementL ModePayement)
         {
             var data = JsonSerializer.Serialize(ModePayement);
             var content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -62,7 +62,7 @@ namespace SiteWeb.Services.Implementations
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddModePayement(ModePayement ModePayement)
+        public async Task<bool> AddModePayement(ModePayementL ModePayement)
         {
             var data = JsonSerializer.Serialize(ModePayement);
             var content = new StringContent(data, Encoding.UTF8, "application/json");

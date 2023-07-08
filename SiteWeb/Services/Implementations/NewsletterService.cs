@@ -18,13 +18,13 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<Newsletter>>> GetNewsletters()
+        public async Task<ActionResult<List<NewsletterL>>> GetNewsletters()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var Newsletters = JsonSerializer.Deserialize<List<Newsletter>>(content);
+                var Newsletters = JsonSerializer.Deserialize<List<NewsletterL>>(content);
 
                 return Newsletters;
 
@@ -36,14 +36,14 @@ namespace SiteWeb.Services.Implementations
 
         }
 
-        public async Task<ActionResult<Newsletter>> GetNewsletter(int id)
+        public async Task<ActionResult<NewsletterL>> GetNewsletter(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var Newsletter = JsonSerializer.Deserialize<Newsletter>(content);
+                var Newsletter = JsonSerializer.Deserialize<NewsletterL>(content);
 
                 return Newsletter;
 
@@ -54,7 +54,7 @@ namespace SiteWeb.Services.Implementations
             }
         }
 
-        public async Task<bool> UpdateNewsletter(Newsletter Newsletter)
+        public async Task<bool> UpdateNewsletter(NewsletterL Newsletter)
         {
             var data = JsonSerializer.Serialize(Newsletter);
             var content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -62,7 +62,7 @@ namespace SiteWeb.Services.Implementations
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddNewsletter(Newsletter Newsletter)
+        public async Task<bool> AddNewsletter(NewsletterL Newsletter)
         {
             var data = JsonSerializer.Serialize(Newsletter);
             var content = new StringContent(data, Encoding.UTF8, "application/json");

@@ -17,47 +17,47 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<List<EtatJouet>> GetEtatJouets()
+        public async Task<List<EtatJouetL>> GetEtatJouets()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var EtatJouets = await response.Content.ReadFromJsonAsync<List<EtatJouet>>();
+                var EtatJouets = await response.Content.ReadFromJsonAsync<List<EtatJouetL>>();
 
                 return EtatJouets;
 
             }
             else
             {
-                return new List<EtatJouet>();
+                return new List<EtatJouetL>();
             }
 
         }
 
-        public async Task<EtatJouet> GetEtatJouet(int id)
+        public async Task<EtatJouetL> GetEtatJouet(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
-                var etatJouet = await response.Content.ReadFromJsonAsync<EtatJouet>();
+                var etatJouet = await response.Content.ReadFromJsonAsync<EtatJouetL>();
 
                 return etatJouet;
 
             }
             else
             {
-                return new EtatJouet();
+                return new EtatJouetL();
             }
         }
 
-        public async Task<bool> UpdateEtatJouet(EtatJouet etatJouet)
+        public async Task<bool> UpdateEtatJouet(EtatJouetL etatJouet)
         {
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), etatJouet);
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddEtatJouet(EtatJouet etatJouet)
+        public async Task<bool> AddEtatJouet(EtatJouetL etatJouet)
         {
             var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), etatJouet);
 

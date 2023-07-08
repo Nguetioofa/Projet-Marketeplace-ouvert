@@ -19,45 +19,45 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<List<CategorieJouet>> GetCategorieJouets()
+        public async Task<List<CategorieJouetL>> GetCategorieJouets()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var categorieJouets = await response.Content.ReadFromJsonAsync<List<CategorieJouet>>();
+                var categorieJouets = await response.Content.ReadFromJsonAsync<List<CategorieJouetL>>();
                 return categorieJouets;
             }
             else
             {
-                return new List<CategorieJouet>();
+                return new List<CategorieJouetL>();
             }
 
         }
 
-        public async Task<CategorieJouet> GetCategorieJouet(int id)
+        public async Task<CategorieJouetL> GetCategorieJouet(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
-                var categorieJouet = await response.Content.ReadFromJsonAsync<CategorieJouet>();
+                var categorieJouet = await response.Content.ReadFromJsonAsync<CategorieJouetL>();
 
                 return categorieJouet;
 
             }
             else
             {
-                return new CategorieJouet();
+                return new CategorieJouetL();
             }
         }
 
-        public async Task<bool> UpdateCategorieJouet(CategorieJouet categorieJouet)
+        public async Task<bool> UpdateCategorieJouet(CategorieJouetL categorieJouet)
         {
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), categorieJouet);
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddCategorieJouet(CategorieJouet categorieJouet)
+        public async Task<bool> AddCategorieJouet(CategorieJouetL categorieJouet)
         {
             var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), categorieJouet);
 

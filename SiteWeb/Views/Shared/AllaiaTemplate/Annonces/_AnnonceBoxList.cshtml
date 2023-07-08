@@ -4,7 +4,7 @@
 <div class="row row_item">
 	<div class="col-sm-4">
 		<figure>
-			<a href="product-detail-1.html">
+			<a asp-action="Details" asp-controller="Annonces" asp-route-id="@Model.Id">
 				@if (Model.Photo is null)
 				{
 					<img class="img-fluid lazy" src="/AllaiaEcommerce/img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/6.jpg" alt="">
@@ -17,22 +17,44 @@
 		</figure>
 	</div>
 	<div class="col-sm-8">
-		<p>@Model.DateAnnonce</p>
-		<div class="price_box">
-			<span class="new_price">
-				<a asp-route-id="@Model.IdUtilisateur" asp-controller="Utilisateurs" asp-action="Profil"> 
+		<ul> 
+			<li>
+		<div  class="d-inline-block mb-2 text-primary">
+				<a asp-route-id="@Model.IdUtilisateur" asp-controller="Utilisateurs" asp-action="Profil">
 					@Model.utilisateur.Nom @Model.utilisateur.Prenom
 				</a>
-			</span>
 		</div>
-		<a href="product-detail-1.html">
+			</li>
+			<li>@Model.DateAnnonce</li>
+
+		</ul>
+		<a asp-action="Details" asp-controller="Annonces" asp-route-id="@Model.Id">
 			<h3>@Model.Titre</h3>
 		</a>
-		<p>@Model.DescriptionAnnonce</p>
+        <p>
+			@{
+				if (Model.DescriptionAnnonce.Length > 238)
+				{
+					@Model.DescriptionAnnonce.Take(237);
+					//@commantaire
+					<a asp-action="Details" asp-controller="Annonces" asp-route-id="@Model.Id" class="stretched-link">voir plus</a>               
+				}
+				else
+				{
+					 @Model.DescriptionAnnonce;
+				}
+			}
+                </p>
+		
 
 		<ul>
 			<li><a href="#0" class="btn_1">Contacter l'annonceur</a></li>
-			<li><a href="#0" class="btn_1">Commenter</a></li>
+			<li>
+				<a class="btn_1" asp-action="Details" asp-controller="Annonces" asp-route-id="@Model.Id">
+
+					Commenter
+				</a>
+			</li>
 		</ul>
 	</div>
 </div>

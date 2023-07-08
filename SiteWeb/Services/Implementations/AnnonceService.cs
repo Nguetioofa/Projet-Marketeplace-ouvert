@@ -4,6 +4,7 @@ using System.Text;
 using System.Net.Http.Json;
 using SiteWeb.Services.Interfaces;
 using SiteWeb.Data;
+using ModelsLibrary.Models.Annonces;
 
 namespace SiteWeb.Services.Implementations
 {

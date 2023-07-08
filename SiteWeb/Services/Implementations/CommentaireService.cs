@@ -86,5 +86,19 @@ namespace SiteWeb.Services.Implementations
 				return null;
 			}
 		}
+
+		public async Task<List<CommentaireL>> GetCommentaireByIdAnnonce(int id)
+		{
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetCommentaireByIdAnnonce/{id}");
+			if (response.IsSuccessStatusCode)
+			{
+				var Commentaires = await response.Content.ReadFromJsonAsync<List<CommentaireL>>();
+				return Commentaires;
+			}
+			else
+			{
+				return null;
+			}
+		}
 	}
 }

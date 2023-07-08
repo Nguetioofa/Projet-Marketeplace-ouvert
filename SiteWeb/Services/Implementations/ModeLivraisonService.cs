@@ -18,13 +18,13 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<ModeLivraison>>> GetModeLivraisons()
+        public async Task<ActionResult<List<ModeLivraisonL>>> GetModeLivraisons()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var ModeLivraisons = JsonSerializer.Deserialize<List<ModeLivraison>>(content);
+                var ModeLivraisons = JsonSerializer.Deserialize<List<ModeLivraisonL>>(content);
 
                 return ModeLivraisons;
 
@@ -36,14 +36,14 @@ namespace SiteWeb.Services.Implementations
 
         }
 
-        public async Task<ActionResult<ModeLivraison>> GetModeLivraison(int id)
+        public async Task<ActionResult<ModeLivraisonL>> GetModeLivraison(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var ModeLivraison = JsonSerializer.Deserialize<ModeLivraison>(content);
+                var ModeLivraison = JsonSerializer.Deserialize<ModeLivraisonL>(content);
 
                 return ModeLivraison;
 
@@ -54,7 +54,7 @@ namespace SiteWeb.Services.Implementations
             }
         }
 
-        public async Task<bool> UpdateModeLivraison(ModeLivraison ModeLivraison)
+        public async Task<bool> UpdateModeLivraison(ModeLivraisonL ModeLivraison)
         {
             var data = JsonSerializer.Serialize(ModeLivraison);
             var content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -62,7 +62,7 @@ namespace SiteWeb.Services.Implementations
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddModeLivraison(ModeLivraison ModeLivraison)
+        public async Task<bool> AddModeLivraison(ModeLivraisonL ModeLivraison)
         {
             var data = JsonSerializer.Serialize(ModeLivraison);
             var content = new StringContent(data, Encoding.UTF8, "application/json");

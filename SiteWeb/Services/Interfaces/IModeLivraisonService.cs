@@ -4,10 +4,10 @@ namespace SiteWeb.Services.Interfaces
 {
     public interface IModeLivraisonService
     {
-        public Task<ActionResult<List<ModeLivraison>>> GetModeLivraisons();
-        public Task<ActionResult<ModeLivraison>> GetModeLivraison(int id);
-        public Task<bool> UpdateModeLivraison(ModeLivraison ModeLivraison);
-        public Task<bool> AddModeLivraison(ModeLivraison ModeLivraison);
+        public Task<ActionResult<List<ModeLivraisonL>>> GetModeLivraisons();
+        public Task<ActionResult<ModeLivraisonL>> GetModeLivraison(int id);
+        public Task<bool> UpdateModeLivraison(ModeLivraisonL ModeLivraison);
+        public Task<bool> AddModeLivraison(ModeLivraisonL ModeLivraison);
         public Task<bool> DeleteModeLivraison(int id);
     }
 }

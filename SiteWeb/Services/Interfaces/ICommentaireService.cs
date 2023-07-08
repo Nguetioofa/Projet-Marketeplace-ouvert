@@ -10,6 +10,7 @@ namespace SiteWeb.Services.Interfaces
         public Task<bool> AddCommentaire(CommentaireL commentaire);
         public Task<bool> DeleteCommentaire(int id);
 		public Task<List<CommentaireL>> GetCommentaireByIdJouet(int id);
+		public Task<List<CommentaireL>> GetCommentaireByIdAnnonce(int id);
 
 
 	}

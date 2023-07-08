@@ -17,12 +17,12 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<Evaluation>>> GetEvaluations()
+        public async Task<ActionResult<List<EvaluationL>>> GetEvaluations()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var evaluations = await response.Content.ReadFromJsonAsync<List<Evaluation>>();
+                var evaluations = await response.Content.ReadFromJsonAsync<List<EvaluationL>>();
 
                 return evaluations;
 
@@ -34,13 +34,13 @@ namespace SiteWeb.Services.Implementations
 
         }
 
-        public async Task<ActionResult<Evaluation>> GetEvaluation(int id)
+        public async Task<ActionResult<EvaluationL>> GetEvaluation(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
-                var evaluation = await response.Content.ReadFromJsonAsync<Evaluation>();
+                var evaluation = await response.Content.ReadFromJsonAsync<EvaluationL>();
 
                 return evaluation;
 
@@ -51,14 +51,14 @@ namespace SiteWeb.Services.Implementations
             }
         }
 
-        public async Task<bool> UpdateEvaluation(Evaluation evaluation)
+        public async Task<bool> UpdateEvaluation(EvaluationL evaluation)
         {
 
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), evaluation);
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddEvaluation(Evaluation evaluation)
+        public async Task<bool> AddEvaluation(EvaluationL evaluation)
         {
 
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), evaluation);

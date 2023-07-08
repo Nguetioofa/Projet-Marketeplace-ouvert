@@ -4,6 +4,7 @@ using System.Text;
 using System.Net.Http.Json;
 using SiteWeb.Services.Interfaces;
 using SiteWeb.Data;
+using ModelsLibrary.Models.Echanges;
 
 namespace SiteWeb.Services.Implementations
 {
@@ -19,12 +20,12 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<Echange>>> GetEchanges()
+        public async Task<ActionResult<List<EchangeL>>> GetEchanges()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var echanges = await response.Content.ReadFromJsonAsync<List<Echange>>();
+                var echanges = await response.Content.ReadFromJsonAsync<List<EchangeL>>();
 
                 return echanges;
 
@@ -36,13 +37,13 @@ namespace SiteWeb.Services.Implementations
 
         }
 
-        public async Task<ActionResult<Echange>> GetEchange(int id)
+        public async Task<ActionResult<EchangeL>> GetEchange(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
-                var echange = await response.Content.ReadFromJsonAsync<Echange>();
+                var echange = await response.Content.ReadFromJsonAsync<EchangeL>();
 
                 return echange;
 
@@ -53,13 +54,13 @@ namespace SiteWeb.Services.Implementations
             }
         }
 
-        public async Task<bool> UpdateEchange(Echange echange)
+        public async Task<bool> UpdateEchange(EchangeL echange)
         {
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), echange);
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddEchange(Echange echange)
+        public async Task<bool> AddEchange(EchangeL echange)
         {
             var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), echange);
 

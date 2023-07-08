@@ -72,8 +72,28 @@ namespace ApiWeb.Controllers
 			return Ok(commentaires);
 		}
 
+		// GET: api/GetCommentaireByIdAnnonce/5
+		[HttpGet("GetCommentaireByIdAnnonce/{id}")]
+		public async Task<ActionResult<IEnumerable<Commentaire>>> GetCommentaireByIdAnnonce(int id)
+		{
+			if (_context.Commentaires == null)
+			{
+				return NotFound();
+			}
+
+			var commentaires = await _context.Annonces.Where(c => !c.EstSupprimer)
+													  .Where(c => c.Id == id)
+													  .Select(j => j.Commentaires).FirstOrDefaultAsync();
+
+			if (commentaires == null)
+			{
+				return NotFound();
+			}
+
+			return Ok(commentaires);
+		}
+
 		// PUT: api/Commentaires/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPut]
         public async Task<IActionResult> PutCommentaire(Commentaire commentaire)
         {

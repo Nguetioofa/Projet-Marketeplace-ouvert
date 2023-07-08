@@ -19,13 +19,13 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<FonctionUser>>> GetFonctionUsers()
+        public async Task<ActionResult<List<FonctionUserL>>> GetFonctionUsers()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var FonctionUsers = JsonSerializer.Deserialize<List<FonctionUser>>(content);
+                var FonctionUsers = JsonSerializer.Deserialize<List<FonctionUserL>>(content);
 
                 return FonctionUsers;
 
@@ -37,14 +37,14 @@ namespace SiteWeb.Services.Implementations
 
         }
 
-        public async Task<ActionResult<FonctionUser>> GetFonctionUser(int id)
+        public async Task<ActionResult<FonctionUserL>> GetFonctionUser(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var FonctionUser = JsonSerializer.Deserialize<FonctionUser>(content);
+                var FonctionUser = JsonSerializer.Deserialize<FonctionUserL>(content);
 
                 return FonctionUser;
 
@@ -55,7 +55,7 @@ namespace SiteWeb.Services.Implementations
             }
         }
 
-        public async Task<bool> UpdateFonctionUser(FonctionUser FonctionUser)
+        public async Task<bool> UpdateFonctionUser(FonctionUserL FonctionUser)
         {
             var data = JsonSerializer.Serialize(FonctionUser);
             var content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -63,7 +63,7 @@ namespace SiteWeb.Services.Implementations
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddFonctionUser(FonctionUser FonctionUser)
+        public async Task<bool> AddFonctionUser(FonctionUserL FonctionUser)
         {
             var data = JsonSerializer.Serialize(FonctionUser);
             var content = new StringContent(data, Encoding.UTF8, "application/json");

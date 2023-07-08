@@ -1,26 +1,14 @@
-﻿@using SiteWeb.Services.Interfaces;
-@inject ICategorieJouetService _categorieJouetService
-@inject IEtatJouetService _etatService
-@inject IPhotoService _photoService
+﻿@using SiteWeb.Services.Interfaces
 @inject ICommentaireService _commentaireService
+@model ModelsLibrary.Models.Annonces.AnnoncesDetailModel
 
-@model ModelsLibrary.Models.Toys.Toy
 @{
 	ViewData["Title"] = "Details";
 	// Layout = "~/Views/Shared/_HomePageLayout.cshtml";
 }
 @{
-	var categories = await _categorieJouetService.GetCategorieJouets();
-	var etats = await _etatService.GetEtatJouets();
-	string? categoriejouet = string.Empty;
-	categoriejouet = categories.Where(t => t.Id.Equals(Model.Categorie)).Select(t => t.Nom).FirstOrDefault();
-	string? etatjouet = string.Empty;
-	etatjouet = etats.Where(t => t.Id.Equals(Model.Categorie)).Select(t => t.Nom).FirstOrDefault();
-	List<PhotoL>? listPhotos = null;
-	listPhotos = await _photoService.GetPhotoByIdJouet(Model.Id);
 
-	List<CommentaireL>? listCommentaires = null;
-	listCommentaires = await _commentaireService.GetCommentaireByIdJouet(Model.Id);
+	List<CommentaireL>  listCommentaires = null; // await _commentaireService.GetCommentaireByIdAnnonce(Model.Id);
 
 }
 <div class="container margin_30">
@@ -29,9 +17,9 @@
 			<div class="all">
 				<div class="slider">
 					<div class="owl-carousel owl-theme main">
-						@if (listPhotos is not null)
+						@if (Model.listPhoto is not null)
 						{
-							@foreach (var photo in listPhotos)
+							@foreach (var photo in Model.listPhoto)
 							{
 								<div style="background-image: url(@photo.UrlP.Replace("\\","/"));" class="item-box"></div>
 							}
@@ -44,10 +32,10 @@
 				<div class="slider-two">
 					<div class="owl-carousel owl-theme thumbs">
 
-						@if (listPhotos is not null)
+						@if (Model.listPhoto is not null)
 						{
 							bool isFirst = true;
-							@foreach (var photo in listPhotos)
+							@foreach (var photo in Model.listPhoto)
 							{
 								if (isFirst)
 								{
@@ -66,34 +54,22 @@
 		<div class="col-md-6">
 
 			<div class="prod_info">
-				<h1>@Model.Nom</h1>
+				<h1>@Model.Titre</h1>
 
 				<p>
-					<strong>Age min: @Model.AgeMin</strong><br>
-					<strong>Age Max: @Model.AgeMax</strong><br>
-					<strong>Etat du jouet: @etatjouet</strong><br>
-					<strong>Categorie du jouet:  @categoriejouet</strong><br>
+					<strong>
+						Annonceur:
+						<a class="new_price" asp-controller="Utilisateurs" asp-action="Profil" asp-route-id="@Model.utilisateur.Id">
+							@Model.utilisateur.Nom @Model.utilisateur.Prenom
+						</a>
+					</strong>
+					<br>
+					<strong>Date de publication: @Model.DateAnnonce</strong><br>
 					<strong>Description: </strong>
-					@Model.Descriptions
+					@Model.DescriptionAnnonce
 				</p>
 
-				<div class="price_main"> <span class="new_price">@Model.Prix.ToString().Split(",0")[0] Fcfa</span></div>
 				<br>
-
-				<div class="row">
-					@if (Model.AcceptAchat)
-					{
-						<div class="col-lg-5 col-md-6">
-							<a href="#0" class="btn_1">Acheter</a>
-						</div>
-					}
-					@if (Model.AcceptAchat)
-					{
-						<div class="col-lg-4 col-md-6">
-							<div class="btn_add_to_cart"><a href="#0" class="btn_1">Echanger</a></div>
-						</div>
-					}
-				</div>
 			</div>
 		</div>
 	</div>

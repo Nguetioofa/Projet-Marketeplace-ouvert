@@ -21,12 +21,12 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<Abonnement>>> GetAbonnements()
+        public async Task<ActionResult<List<AbonnementL>>> GetAbonnements()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var abonnements = await response.Content.ReadFromJsonAsync<List<Abonnement>>();
+                var abonnements = await response.Content.ReadFromJsonAsync<List<AbonnementL>>();
 
                 return abonnements;
 
@@ -38,13 +38,13 @@ namespace SiteWeb.Services.Implementations
 
         }
 
-        public async Task<ActionResult<Abonnement>> GetAbonnement(int id)
+        public async Task<ActionResult<AbonnementL>> GetAbonnement(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
-                var abonnement = await response.Content.ReadFromJsonAsync<Abonnement>();
+                var abonnement = await response.Content.ReadFromJsonAsync<AbonnementL>();
 
                 return abonnement;
 
@@ -55,13 +55,13 @@ namespace SiteWeb.Services.Implementations
             }
         }
 
-        public async Task<bool> UpdateAbonnement(Abonnement abonnement)
+        public async Task<bool> UpdateAbonnement(AbonnementL abonnement)
         {
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), abonnement);
             return response.IsSuccessStatusCode;
 
         }
-        public async Task<bool> AddAbonnement(Abonnement abonnement)
+        public async Task<bool> AddAbonnement(AbonnementL abonnement)
         {
             var response = await _client.PostAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), abonnement);
 

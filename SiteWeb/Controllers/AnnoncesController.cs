@@ -11,14 +11,14 @@ using ModelsLibrary.Models.Annonces;
 
 namespace SiteWeb.Controllers
 {
-	public class AnnoncesController : Controller
+    public class AnnoncesController : Controller
 	{
 		private readonly IAnnonceService _annonceService;
 		private readonly IWebHostEnvironment _webHostEnvironment;
 		private readonly IPhotoService _photoService;
 		private readonly IUtilisateurService _utilisateurService;
 		public AnnoncesController(IAnnonceService annonceService, IWebHostEnvironment webHostEnvironment,
-				IPhotoService photoService, IUtilisateurService utilisateurService) 
+				IPhotoService photoService, IUtilisateurService utilisateurService)
 		{
 			_annonceService = annonceService;
 			_webHostEnvironment = webHostEnvironment;
@@ -32,47 +32,75 @@ namespace SiteWeb.Controllers
 		{
 			var listAnnonces = await _annonceService.GetAnnonces();
 
-			List<AnnoncesGridModel> toyBoxModels = new List<AnnoncesGridModel>();
+			List<AnnoncesGridModel> annoncesGridModel = new List<AnnoncesGridModel>();
 
-			if (listAnnonces is not null)
+			if (listAnnonces is null)
 			{
-				foreach (var annonce in listAnnonces)
+				return NotFound();
+			}
+			foreach (var annonce in listAnnonces)
+			{
+				var photo = (await _photoService.GetPhotoByIdAnnonce((int)annonce.Id)).Where(ph => !ph.UrlP.Contains("400x400")).FirstOrDefault();
+				var utilisateur = (await _utilisateurService.GetUtilisateur((int)annonce.IdUtilisateur));
+				if (utilisateur is null)
 				{
-					var photo = (await _photoService.GetPhotoByIdAnnonce((int)annonce.Id)).Where(ph => ph.UrlP.Contains("400x400")).FirstOrDefault();
-					var utilisateur = (await _utilisateurService.GetUtilisateur((int)annonce.IdUtilisateur));
-                    if (utilisateur is null)
-                    {
-						ViewBag.ErrorMessage = "Une erreur s'est produit";
-						return View();
-                    }
-					//throw new Exception("Une erreur s'est produit");
-
-					toyBoxModels.Add(new AnnoncesGridModel()
-					{
-						Id = (int)annonce.Id,
-						IdUtilisateur = utilisateur.Id,
-						utilisateur = utilisateur,
-						Titre = annonce.Titre,
-						DescriptionAnnonce = annonce.DescriptionAnnonce,
-						Photo = photo,
-						DateAnnonce = annonce.DateAnnonce,
-					});
+					return NotFound();
 				}
-				return View(toyBoxModels);
+				//throw new Exception("Une erreur s'est produit");
 
+				annoncesGridModel.Add(new AnnoncesGridModel()
+				{
+					Id = (int)annonce.Id,
+					IdUtilisateur = utilisateur.Id,
+					utilisateur = utilisateur,
+					Titre = annonce.Titre,
+					DescriptionAnnonce = annonce.DescriptionAnnonce,
+					Photo = photo,
+					DateAnnonce = annonce.DateAnnonce,
+				});
 			}
-            else
-            {
-				ViewBag.ErrorMessage = "Une erreur s'est produit";
-				return View();
-			}
+			return View(annoncesGridModel);
+
+
 		}
 
 		// GET: AnnoncesController/Details/5
 		[HttpGet]
-		public ActionResult Details(int id)
+		public async Task<IActionResult> Details(int id)
 		{
-			return View();
+			if (id == 0)
+				return NotFound();
+
+			var annonce = await _annonceService.GetAnnonce(id);
+
+
+			if (annonce is null)
+			{
+				return NotFound();
+
+			}
+			var photos = (await _photoService.GetPhotoByIdAnnonce((int)annonce.Id)).Where(ph => !ph.UrlP.Contains("400x400")).ToList();
+			var utilisateur = (await _utilisateurService.GetUtilisateur((int)annonce.IdUtilisateur));
+			if (utilisateur is null)
+			{
+				ViewBag.ErrorMessage = "Une erreur s'est produit";
+				return NotFound();
+			}
+
+			AnnoncesDetailModel annoncesDetailModel = new AnnoncesDetailModel()
+			{
+				Id = (int)annonce.Id,
+				IdUtilisateur = utilisateur.Id,
+				utilisateur = utilisateur,
+				Titre = annonce.Titre,
+				DescriptionAnnonce = annonce.DescriptionAnnonce,
+				listPhoto = photos,
+				DateAnnonce = annonce.DateAnnonce,
+			};
+
+			return View(annoncesDetailModel);
+
+
 		}
 
 		// GET: AnnoncesController/Create
@@ -90,8 +118,8 @@ namespace SiteWeb.Controllers
 		{
 			try
 			{
-                if (ModelState.IsValid)
-                {
+				if (ModelState.IsValid)
+				{
 					int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
 
 					annonce.IdUtilisateur = idUser;
@@ -130,7 +158,7 @@ namespace SiteWeb.Controllers
 								var year = DateTime.Now.Year.ToString();
 								var month = DateTime.Now.ToString("MMMM");
 								var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", year, month, "600x600", "Annonces", fileName);
-								var relatifPath = (Path.Combine("images",  year, month, "600x600","Annonces", fileName)).Replace("\\", "/");
+								var relatifPath = (Path.Combine("images", year, month, "600x600", "Annonces", fileName)).Replace("\\", "/");
 								var directoryPath = Path.GetDirectoryName(imagePath);
 
 								if (!Directory.Exists(directoryPath))
@@ -220,7 +248,7 @@ namespace SiteWeb.Controllers
 					return RedirectToAction(nameof(Index));
 				}
 				return RedirectToAction(nameof(Index));
-			}			
+			}
 			catch//(Exception ex)
 			{
 				ViewBag.ErrorMessage = $"Une erreur s'est produit";

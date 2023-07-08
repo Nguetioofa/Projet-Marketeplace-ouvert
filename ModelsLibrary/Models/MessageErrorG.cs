@@ -8,7 +8,7 @@ namespace ModelsLibrary.Models
 {
     public class MessageErrorG
     {
-        public string message { get; set; }
-        public int Codestatut { get; set; }
+        public string message { get; set; } = string.Empty;
+        public bool isSucces { get; set; } = false;
     }
 }

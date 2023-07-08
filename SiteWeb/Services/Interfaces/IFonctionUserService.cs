@@ -4,10 +4,10 @@ namespace SiteWeb.Services.Interfaces
 {
     public interface IFonctionUserService
     {
-        public Task<ActionResult<List<FonctionUser>>> GetFonctionUsers();
-        public Task<ActionResult<FonctionUser>> GetFonctionUser(int id);
-        public Task<bool> UpdateFonctionUser(FonctionUser FonctionUser);
-        public Task<bool> AddFonctionUser(FonctionUser FonctionUser);
+        public Task<ActionResult<List<FonctionUserL>>> GetFonctionUsers();
+        public Task<ActionResult<FonctionUserL>> GetFonctionUser(int id);
+        public Task<bool> UpdateFonctionUser(FonctionUserL FonctionUser);
+        public Task<bool> AddFonctionUser(FonctionUserL FonctionUser);
         public Task<bool> DeleteFonctionUser(int id);
     }
 }
