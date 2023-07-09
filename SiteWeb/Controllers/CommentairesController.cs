@@ -5,6 +5,7 @@ using ModelsLibrary.Models.Toys;
 using SiteWeb.Services.Implementations;
 using SiteWeb.Services.Interfaces;
 using System.Security.Claims;
+using ModelsLibrary.Models.Commentaires;
 
 namespace SiteWeb.Controllers
 {
@@ -12,9 +13,11 @@ namespace SiteWeb.Controllers
 	public class CommentairesController : Controller
 	{
 		private readonly ICommentaireService _commentaireService;
+		private readonly IUtilisateurService _utilisateurService;
 
-		public CommentairesController(ICommentaireService commentaireService)
+		public CommentairesController(IUtilisateurService utilisateurService, ICommentaireService commentaireService)
 		{
+			_utilisateurService = utilisateurService;
 			_commentaireService = commentaireService;
 		}
 		// GET: CommentairesController
@@ -63,11 +66,12 @@ namespace SiteWeb.Controllers
 					commantaire.IdJouet = null;
 				}
 				var nouveaucom = await _commentaireService.AddCommentaire(commantaire);
+				var username = await _utilisateurService.GetUtilisateur((int)commantaire.IdAuteur);
 				//return Ok(nouveaucom);
 				return Json(new
 				{
 					date = commantaire.DateC.ToString("dd/MM/yyyy"),
-					auteur = commantaire.IdAuteur,
+					auteur = username.Nom + " " + username.Prenom,
 					contenu = commantaire.Contenu
 				});
 

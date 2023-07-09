@@ -1,16 +1,14 @@
 ﻿@using SiteWeb.Services.Interfaces
+@using ModelsLibrary.Models.Commentaires
 @inject ICommentaireService _commentaireService
 @model ModelsLibrary.Models.Annonces.AnnoncesDetailModel
+
 
 @{
 	ViewData["Title"] = "Details";
 	// Layout = "~/Views/Shared/_HomePageLayout.cshtml";
 }
-@{
 
-	List<CommentaireL>  listCommentaires = null; // await _commentaireService.GetCommentaireByIdAnnonce(Model.Id);
-
-}
 <div class="container margin_30">
 	<div class="row">
 		<div class="col-md-6">
@@ -75,79 +73,42 @@
 	</div>
 </div>
 
-<div class="container margin_60_35">
-	<div class="row justify-content-center">
-		<div class="col-lg-8">
+@{
 
-			<h3 class="justify-content-center"> Commentaires </h3>
-			<div class="card-body">
-				@if (listCommentaires is not null)
-				{
-					@foreach (var commentaire in listCommentaires)
-					{
-						<div class="review_content">
-							<div class="clearfix add_bottom_10">
-								<em>@commentaire.DateC</em>
-							</div>
-							<h4>"@commentaire.IdAuteur"</h4>
-							<p>@commentaire.Contenu</p>
-						</div>
-					}
-				}
-			</div>
-		</div>
-	</div>
-</div>
-@if (User.Identity.IsAuthenticated)
-{
-	<div class="container margin_60_35">
-		<div class="row justify-content-center">
-			<div class="col-lg-8">
-				<div class="write_review">
-					<h3>Ecrivez votre commentaire</h3>
-					<form id="comment-form" method="post" asp-action="Create" asp-controller="Commentaires">
+	List<CommentaireL> listCommentaires = await _commentaireService.GetCommentaireByIdAnnonce(Model.Id);
 
-						<div class="form-group">
-							<label>Commantaire</label>
-							<textarea name="commentaire" class="form-control" style="height: 180px;" placeholder="votre commentaire"></textarea>
-						</div>
-						@Html.HiddenFor(model => model.Id)
-						@Html.Hidden("TypeCommantaire", "annonce")
-
-						<button type="submit" class="btn_1">Commenter</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
 }
 
+@{
+	ModelPatialCommentaire modelPatialCommentaire = new ModelPatialCommentaire()
+			{
+				Id = Model.Id,
+				TypeCommantaire = "annonce",
+				listCommentaires = listCommentaires
+			};
+
+	<partial name="_Commentaires" model="modelPatialCommentaire" />
+
+}
 @section Scripts{
 	<script src="~/AllaiaEcommerce/js/carousel_with_thumbs.js"></script>
-	<!-- Inclure la bibliothèque jQuery -->
-	<!-- Inclure le code AJAX -->
 	<script>
 		$(document).ready(function () {
-			// Lorsque le formulaire est soumis
 			var form = $("#comment-form");
 			form.submit(function (event) {
-				// Empêcher le rechargement de la page
 				event.preventDefault();
 
-				// Récupérer les données du formulaire
 				var id = $("input[name='Id']").val();
 				var typeCommentaire = $("input[name='TypeCommantaire']").val();
 
 				var commentaire = $("textarea[name='commentaire']").val();
 				var token = $('input[name="__RequestVerificationToken"]').val();
 
-				// Envoyer une requête AJAX au serveur
 				$.ajax({
 					type: "POST",
 					url: "/Commentaires/Create",
 					data: { typeCommentaire: typeCommentaire, id: id, commentaire: commentaire, __RequestVerificationToken: token },
 					success: function (data) {
-						// Ajouter le nouveau commentaire à la liste
 						$(".card-body").append(
 							"<div class='review_content'>" +
 							"<div class='clearfix add_bottom_10'>" +
@@ -158,7 +119,6 @@
 							"</div>"
 						);
 
-						// Vider le champ de saisie du formulaire
 						$("textarea[name='commentaire']").val("");
 					}
 				});
@@ -166,5 +126,4 @@
 		});
 
 	</script>
-
 }

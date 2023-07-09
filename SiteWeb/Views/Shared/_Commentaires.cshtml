@@ -1,0 +1,50 @@
+﻿@using ModelsLibrary.Models.Commentaires
+@model ModelPatialCommentaire
+
+<div class="container margin_60_35">
+	<div class="row justify-content-center">
+		<div class="col-lg-8">
+
+			<h3 class="justify-content-center"> Commentaires </h3>
+			<div class="card-body">
+				@if (Model.listCommentaires is not null)
+				{
+					@foreach (var commentaire in Model.listCommentaires)
+					{
+						<div class="review_content">
+							<div class="clearfix add_bottom_10">
+								<em>@commentaire.DateC</em>
+							</div>
+							<h4>"@commentaire.IdAuteur"</h4>
+							<p>@commentaire.Contenu</p>
+						</div>
+					}
+				}
+			</div>
+		</div>
+	</div>
+</div>
+@if (User.Identity.IsAuthenticated)
+{
+	<div class="container margin_60_35">
+		<div class="row justify-content-center">
+			<div class="col-lg-8">
+				<div class="write_review">
+					<h3>Ecrivez votre commentaire</h3>
+					<form id="comment-form" method="post" asp-action="Create" asp-controller="Commentaires">
+
+						<div class="form-group">
+							<label>Commantaire</label>
+							<textarea name="commentaire" class="form-control" style="height: 180px;" placeholder="votre commentaire"></textarea>
+						</div>
+						@Html.HiddenFor(model => model.Id)
+						@Html.HiddenFor(model => model.TypeCommantaire)
+
+						<button type="submit" class="btn_1">Commenter</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
