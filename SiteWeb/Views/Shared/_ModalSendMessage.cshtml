@@ -1,0 +1,59 @@
+﻿<!-- Button trigger modal -->
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Ouvrir le modal
+</button>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="message" value="Je suis intéressé par cet article">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="sendBtn">Envoyer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .modal-backdrop {
+        z-index: 1040000000 !important;
+    }
+
+    .modal {
+        z-index: 1040000000 !important;
+    }
+
+    .modal-dialog {
+        border: 1px solid black;
+        margin: auto;
+    }
+
+</style>
+<script>
+    $(document).ready(function () {
+        $('#sendBtn').click(function () {
+            var message = $('#message').val();
+            $.ajax({
+                url: '/Messages/Create',
+                type: 'POST',
+                data: {
+                    message: message,
+                    __RequestVerificationToken: $('input[name=__RequestVerificationToken]').val()
+                },
+                success: function (data) {
+                    // handle success
+                },
+                error: function () {
+                    // handle error
+                }
+            });
+        });
+    });
+</script>

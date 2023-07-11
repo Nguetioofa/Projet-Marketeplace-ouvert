@@ -35,9 +35,9 @@
 			@{
 				if (Model.DescriptionAnnonce.Length > 238)
 				{
-					@Model.DescriptionAnnonce.Take(237);
-					//@commantaire
-					<a asp-action="Details" asp-controller="Annonces" asp-route-id="@Model.Id" class="stretched-link">voir plus</a>               
+					@Model.DescriptionAnnonce.Substring(0, 237);
+
+					<a asp-action="Details" asp-controller="Annonces" asp-route-id="@Model.Id" class="stretched-link text-primary"> ...voir plus</a>
 				}
 				else
 				{
@@ -48,7 +48,11 @@
 		
 
 		<ul>
-			<li><a href="#0" class="btn_1">Contacter l'annonceur</a></li>
+			<li>
+				<a class="btn_1" asp-route-id="@Model.IdUtilisateur" asp-controller="Utilisateurs" asp-action="Profil">
+					Contacter
+				</a>
+			</li>
 			<li>
 				<a class="btn_1" asp-action="Details" asp-controller="Annonces" asp-route-id="@Model.Id">
 
@@ -58,3 +62,4 @@
 		</ul>
 	</div>
 </div>
+

@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ModelsLibrary.Models.Users;
 using SiteWeb.Services.Interfaces;
 using System.Security.Claims;
 
 namespace SiteWeb.Controllers
 {
+	[Authorize]
+	//[ValidateAntiForgeryToken]
 	public class MessagesController : Controller
 	{
 		private readonly IMessageService _messageService;
@@ -15,8 +19,18 @@ namespace SiteWeb.Controllers
 		// GET: MessagesController
 		public async Task<IActionResult> Index()
 		{
-            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
+            //var v = await _messageService.GetMessageByConversation(1,3);
+            //         int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
+            //var teef = await _messageService.AddMessage(new MessageL() { 
+            //	Contenu = "mouf",
+            //	IdExpediteur = 4,
+            //	IdDestinataire = 3,
+            //	Id = 0,
+            //	DateLecture = DateTime.Now,
+            //	DateM = DateTime.Now
 
+            //	});
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
             var listconversations = await _messageService.GetAllConversationByIdUtilisateur(idUser);
 			return View(listconversations);
 		}
@@ -27,8 +41,9 @@ namespace SiteWeb.Controllers
 			return View();
 		}
 
-		// GET: MessagesController/Create
-		public ActionResult Create()
+        [ValidateAntiForgeryToken]
+        // GET: MessagesController/Create
+        public ActionResult Create()
 		{
 			return View();
 		}
@@ -36,17 +51,35 @@ namespace SiteWeb.Controllers
 		// POST: MessagesController/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(int idjouet,int idUser,string message,string nature)
 		{
-			try
+            if (ModelState.IsValid)
+            {
+                int exp = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
+
+                var corpmessage = $"<a asp-controller=\"{nature}\" asp-action=\"Details\" asp-route-id=\"{idjouet}\"> {message} </a>";
+                if (string.IsNullOrWhiteSpace(nature))
+                {
+					corpmessage = nature;
+                }
+                MessageL messageL = new MessageL() { 
+									Contenu = corpmessage,
+									IdExpediteur = exp,
+									IdDestinataire = idUser,
+									Id = 0,
+									DateM = DateTime.Now,
+				};
+				var reussit = await _messageService.AddMessage(messageL);
+                return Json(new
+                {
+                    date = reussit
+                });
+            }
+			else
 			{
-				return RedirectToAction(nameof(Index));
+				return NoContent();
 			}
-			catch
-			{
-				return View();
-			}
-		}
+        }
 
 		// GET: MessagesController/Edit/5
 		public ActionResult Edit(int id)

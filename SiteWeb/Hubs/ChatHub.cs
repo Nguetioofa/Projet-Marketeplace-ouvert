@@ -16,6 +16,7 @@ namespace SiteWeb.Hubs
 		{
 			var message = new MessageL
 			{
+				Id = 0,
 				Contenu = contenu,
 				DateM = DateTime.Now,
 				IdExpediteur = idExpediteur,

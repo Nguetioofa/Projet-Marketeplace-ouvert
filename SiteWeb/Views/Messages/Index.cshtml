@@ -101,101 +101,19 @@
         }
 </style>
 
-    <script src="~/js/signalr/dist/browser/signalr.js"></script>
-@*     <script src="~/js/chat.js"></script>
+@*    
  *@
+         <script src="~/js/signalr/dist/browser/signalr.js"></script>
+
     <script>
         //////////////////////////////////////////////////////////////////////
+                  const contactList = document.getElementById('contact-list');
 
-        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-      
-        connection.start().catch(function (err) {
-    return console.error(err.toString());
-});
+                  var idUser = parseInt(@idUser);
 
+          var contactId = 0;
 
-        // Récupérer les éléments HTML
-        const contactList = document.getElementById('contact-list');
-        const messageList = document.getElementById('message-list');
-        const messageForm = document.getElementById('message-form');
-                var idUser = @idUser;
-        var contactId = 0;
-        contactList.addEventListener('click', (event) => {
-            contactId  = event.target.getAttribute('data-id');
-            const contactName = event.target.textContent.trim();
-            const conversationTitle = document.querySelector('.card-header');
-            conversationTitle.textContent = `Conversation avec ${contactName}`;
-
-             loadMessages(idUser,contactId);
-            for (const contactItem of contactList.children) {
-                if (contactItem === event.target) {
-                    contactItem.classList.add('active');
-                } else {
-                    contactItem.classList.remove('active');
-                }
-            }
-        });
-        messageForm.addEventListener('click', (event) => {
-            event.preventDefault();
-
-            const messageInput = document.getElementById("messageInput");
-            const messageText = messageInput.value.trim();
-                                   @* const contactId = event.target.getAttribute('data-id');
-                const idUser = @idUser;*@
-             sendMessage(messageText);
-            messageInput.value = '';
-        });
-
-        async function loadMessages(idUser1, idUser2) {
-
-            try {
-                const messages = await connection.invoke("GetConversationMessages", idUser1, idUser2);
-                let messageListContent = '';
-                for (const message of messages) {
-                    const dateString = message.dateM.toISOString().slice(0, 19).replace('T', ' ');
-                    const messageClass = message.idExpediteur === idUser1 ? 'sent' : 'received';
-                    messageListContent += `
-                        <li>
-                            <div class="message ${messageClass}">
-                                <small>${dateString}</small><br>
-                                ${message.contenu}
-                            </div>
-                        </li>
-                    `;
-                }
-                messageList.innerHTML = messageListContent;
-            } catch (err) {
-                showNotification('Erreur lors du chargement des messages', 'error');
-            }
-        }
-
-        async function sendMessage(messageText) {
-            try {
-                  //await  connection.invoke("SendMessage", idExpediteur, idDestinataire, contenu);
-
-               // var messages = document.getElementById("messageInput").value;
-                await connection.invoke("SendMessage", idUser, contactId, messageText);
-                const currentDate = new Date();
-                const dateString = currentDate.toISOString().slice(0, 19).replace('T', ' ');
-                const message = `
-                    <li> <div class="message sent"> <small>${dateString}</small><br> ${messageText}</div></li>`;
-                messageList.insertAdjacentHTML('beforeend', message);
-
-                showNotification('Message envoyé avec succès');
-            } catch (err) {
-                showNotification('Erreur lors de l\'envoi du message', 'error');
-            }
-        }
-
-        function showNotification(message, type = 'success') {
-            console.log("dsfsdf");
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 3000);
-        }
-
+         
     </script>
+         <script src="~/js/chat.js"></script>
+

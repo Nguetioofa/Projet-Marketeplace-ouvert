@@ -6,18 +6,18 @@ namespace ModelsLibrary.Models;
 
 public partial class MessageL
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
 
-    public string Contenu { get; set; } = null!;
+    public string? Contenu { get; set; } = null!;
 
     [DataType(DataType.DateTime)]
-    public DateTime DateM { get; set; }
+    public DateTime? DateM { get; set; }
 
     public int? IdExpediteur { get; set; }
 
     public int? IdDestinataire { get; set; }
 
-    public bool Lu { get; set; }
+    public bool Lu { get; set; } = false;
 
     [DataType(DataType.DateTime)]
     public DateTime? DateLecture { get; set; }
