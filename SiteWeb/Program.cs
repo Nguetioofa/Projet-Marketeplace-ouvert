@@ -2,6 +2,7 @@ using SiteWeb.Services;
 using SiteWeb.Routes;
 using System.Configuration;
 using SiteWeb.Services.Middlewares;
+using SiteWeb.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddControllersWithViews();
 //});
 
 builder.AddMyServices();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -23,6 +25,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -35,6 +38,7 @@ app.UseMiddleware<RedirectToLoginMiddleware>();
 app.UseAuthorization();
 
 app.ConfigureRoutes();
+app.MapHub<ChatHub>("/chatHub");
 
 //app.UseTokenMiddleware();
 

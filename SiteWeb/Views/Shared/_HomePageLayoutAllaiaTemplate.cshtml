@@ -102,7 +102,7 @@
 									@if (User.Identity.IsAuthenticated)
 									{
 										<li>
-											<a href="#"> Messages</a>
+											<a asp-controller="Messages" asp-action="Index"> Messages</a>
 										</li>
 									}
 
@@ -251,7 +251,7 @@
 	<!-- SPECIFIC SCRIPTS -->
 
 	@await RenderSectionAsync("Scripts", required: false)
-	@await RenderSectionAsync("ScriptsCommentaires", required: false)
-
+@* 	@await RenderSectionAsync("ScriptsCommentaires", required: false)
+ *@
 </body>
 </html>

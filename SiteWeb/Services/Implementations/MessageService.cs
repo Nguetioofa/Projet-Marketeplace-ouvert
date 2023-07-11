@@ -3,6 +3,8 @@ using System.Text.Json;
 using System.Text;
 using SiteWeb.Services.Interfaces;
 using SiteWeb.Data;
+using ModelsLibrary.Models.Toys;
+using ModelsLibrary.Models.Users;
 
 namespace SiteWeb.Services.Implementations
 {
@@ -77,5 +79,47 @@ namespace SiteWeb.Services.Implementations
             return response.IsSuccessStatusCode;
 
         }
-    }
+
+		public async Task<List<MessageL>> GetMessageByIdUtilisateur(int id)
+		{
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetMessageByIdUtilisateur/{id}");
+			if (response.IsSuccessStatusCode)
+			{
+				var messages = await response.Content.ReadFromJsonAsync<List<MessageL>>();
+				return messages;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		public async Task<List<MessageL>> GetMessageByConversation(int idUser1, int idUser2)
+		{
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetMessageByConversation/{idUser2}/{idUser1}");
+			if (response.IsSuccessStatusCode)
+			{
+				var messages = await response.Content.ReadFromJsonAsync<List<MessageL>>();
+				return messages;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		public async Task<List<UserIdName>> GetAllConversationByIdUtilisateur(int id)
+		{
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetAllConversationByIdUtilisateur/{id}");
+			if (response.IsSuccessStatusCode)
+			{
+				var userIdNames = await response.Content.ReadFromJsonAsync<List<UserIdName>>();
+				return userIdNames;
+			}
+			else
+			{
+				return null;
+			}
+		}
+	}
 }

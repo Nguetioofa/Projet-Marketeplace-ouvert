@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiWeb.Models;
+using NuGet.Packaging;
+using ModelsLibrary.Models.Users;
 
 namespace ApiWeb.Controllers
 {
@@ -31,27 +33,97 @@ namespace ApiWeb.Controllers
             return await _context.Messages.Where(ab => !ab.EstSupprimer).ToListAsync();
         }
 
-        // GET: api/Messages/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetMessage(int id)
+		// GET: api/Messages/5
+		[HttpGet("{id}")]
+		public async Task<ActionResult<Message>> GetMessage(int id)
+		{
+			if (_context.Messages == null)
+			{
+				return NotFound();
+			}
+			var message = await _context.Messages.Where(c => !c.EstSupprimer)
+														 .Where(ca => ca.Id == id).FirstOrDefaultAsync();
+
+			if (message == null)
+			{
+				return NotFound();
+			}
+
+			return message;
+		}
+
+		// GET: api/GetMessageByIdUtilisateur/5
+		[HttpGet("GetMessageByIdUtilisateur/{id}")]
+        public async Task<ActionResult<IEnumerable<Message>>> GetMessageByIdUtilisateur(int id)
         {
           if (_context.Messages == null)
           {
               return NotFound();
           }
-            var message = await _context.Messages.Where(c => !c.EstSupprimer)
-                                                         .Where(ca => ca.Id == id).FirstOrDefaultAsync();
+            var messages = await _context.Messages.Where(c => !c.EstSupprimer)
+                                                         .Where(ms=> ms.IdDestinataire == id || ms.IdExpediteur == id)
+                                                         .ToListAsync();
 
-            if (message == null)
+            if (messages is null)
             {
                 return NotFound();
             }
 
-            return message;
+            return Ok(messages);
         }
 
-        // PUT: api/Messages/5
-        [HttpPut]
+
+		// GET: api/GetAllConversationByIdUtilisateur/5
+		[HttpGet("GetAllConversationByIdUtilisateur/{id}")]
+		public async Task<ActionResult<IEnumerable<UserIdName>>> GetAllConversationByIdUtilisateur(int id)
+		{
+			if (_context.Messages == null)
+			{
+				return NotFound();
+			}
+            var idusers1 = await _context.Messages.Where(c => !c.EstSupprimer)
+                                                         .Where(ms => ms.IdDestinataire == id || ms.IdExpediteur == id)
+														 .OrderBy(m => m.DateM)
+														 .Select(d => new UserIdName() { Id = d.IdDestinataireNavigation.Id,Email = d.IdDestinataireNavigation.Email,Name = d.IdDestinataireNavigation.Nom + " " + d.IdDestinataireNavigation.Prenom })
+                                                         .Where(o=> o.Id != id)
+														 .ToListAsync();
+
+			 idusers1.AddRange(await _context.Messages.Where(c => !c.EstSupprimer)
+											 .Where(ms => ms.IdDestinataire == id || ms.IdExpediteur == id)
+											 .OrderBy(m => m.DateM)
+											 .Select(d => new UserIdName() { Id = d.IdExpediteurNavigation.Id, Email = d.IdExpediteurNavigation.Email, Name = d.IdExpediteurNavigation.Nom + " " + d.IdExpediteurNavigation.Prenom })
+											 .Where(o => o.Id != id)
+											 .ToListAsync());
+
+			if (idusers1 is null)
+			{
+				return NotFound();
+			}
+
+			return Ok(idusers1.DistinctBy(p => p.Id));
+		}
+
+		// GET: api/GetMessageByIdUtilisateur/5
+		[HttpGet("GetMessageByConversation/{idUser1}/{idUser2}")]
+		public async Task<ActionResult<IEnumerable<Message>>> GetMessageByConversation(int idUser1,int idUser2)
+		{
+			if (_context.Messages == null)
+			{
+				return NotFound();
+			}
+			var messages = await _context.Messages.Where(c => !c.EstSupprimer)
+														 .Where(ms => (ms.IdDestinataire == idUser1 && ms.IdExpediteur == idUser2) || (ms.IdDestinataire == idUser2 && ms.IdExpediteur == idUser1))
+														 .ToListAsync();
+
+			if (messages is null)
+			{
+				return NotFound();
+			}
+
+			return Ok(messages);
+		}
+		// PUT: api/Messages/5
+		[HttpPut]
         public async Task<IActionResult> PutMessage(Message message)
         {
             //if (id != message.Id)

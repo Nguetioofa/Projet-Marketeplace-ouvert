@@ -1,0 +1,201 @@
+﻿@model List<UserIdName>
+@{
+    ViewData["Title"] = "Index";
+    //Layout = "~/Views/Shared/_HomePageLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-center" style="display: flex; justify-content: center;">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Contacts</div>
+                <ul class="list-group list-group-flush" id="contact-list">
+                    @if (Model is not null)
+                    {
+                        @foreach (var item in Model)
+                        {
+            <li class="list-group-item" data-id="@item.Id">@item.Name</li>
+                        }
+                    }
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header" >Conversation avec John Doe</div>
+                <div class="card-body" id="message-list-container">
+                    <ul id="message-list">
+                        <!-- Liste des messages à afficher -->
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <form id="message-form">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Votre message..." id="messageInput" />
+                            <div class="input-group-append">
+
+                                <input class="btn btn-primary" id="sendButton" type="button" value="Envoyer" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+
+
+<!-- CSS -->
+<style>
+    /* Styles pour les messages */
+    .message {
+        margin: 10px;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .received {
+        background-color: #f1f0f0;
+    }
+
+    .sent {
+        background-color: #007bff;
+        color: #fff;
+        align-self: flex-end;
+    }
+
+    /* Styles pour les notifications */
+    .notification {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: #fff;
+    }
+
+        .notification.success {
+            background-color: #28a745;
+        }
+
+        .notification.error {
+            background-color: #dc3545;
+        }
+
+    #contact-list .active {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    #message-list-container {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+        @{
+            int idUser = Convert.ToInt32(User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value);
+        }
+</style>
+
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+@*     <script src="~/js/chat.js"></script>
+ *@
+    <script>
+        //////////////////////////////////////////////////////////////////////
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+      
+        connection.start().catch(function (err) {
+    return console.error(err.toString());
+});
+
+
+        // Récupérer les éléments HTML
+        const contactList = document.getElementById('contact-list');
+        const messageList = document.getElementById('message-list');
+        const messageForm = document.getElementById('message-form');
+                var idUser = @idUser;
+        var contactId = 0;
+        contactList.addEventListener('click', (event) => {
+            contactId  = event.target.getAttribute('data-id');
+            const contactName = event.target.textContent.trim();
+            const conversationTitle = document.querySelector('.card-header');
+            conversationTitle.textContent = `Conversation avec ${contactName}`;
+
+             loadMessages(idUser,contactId);
+            for (const contactItem of contactList.children) {
+                if (contactItem === event.target) {
+                    contactItem.classList.add('active');
+                } else {
+                    contactItem.classList.remove('active');
+                }
+            }
+        });
+        messageForm.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const messageInput = document.getElementById("messageInput");
+            const messageText = messageInput.value.trim();
+                                   @* const contactId = event.target.getAttribute('data-id');
+                const idUser = @idUser;*@
+             sendMessage(messageText);
+            messageInput.value = '';
+        });
+
+        async function loadMessages(idUser1, idUser2) {
+
+            try {
+                const messages = await connection.invoke("GetConversationMessages", idUser1, idUser2);
+                let messageListContent = '';
+                for (const message of messages) {
+                    const dateString = message.dateM.toISOString().slice(0, 19).replace('T', ' ');
+                    const messageClass = message.idExpediteur === idUser1 ? 'sent' : 'received';
+                    messageListContent += `
+                        <li>
+                            <div class="message ${messageClass}">
+                                <small>${dateString}</small><br>
+                                ${message.contenu}
+                            </div>
+                        </li>
+                    `;
+                }
+                messageList.innerHTML = messageListContent;
+            } catch (err) {
+                showNotification('Erreur lors du chargement des messages', 'error');
+            }
+        }
+
+        async function sendMessage(messageText) {
+            try {
+                  //await  connection.invoke("SendMessage", idExpediteur, idDestinataire, contenu);
+
+               // var messages = document.getElementById("messageInput").value;
+                await connection.invoke("SendMessage", idUser, contactId, messageText);
+                const currentDate = new Date();
+                const dateString = currentDate.toISOString().slice(0, 19).replace('T', ' ');
+                const message = `
+                    <li> <div class="message sent"> <small>${dateString}</small><br> ${messageText}</div></li>`;
+                messageList.insertAdjacentHTML('beforeend', message);
+
+                showNotification('Message envoyé avec succès');
+            } catch (err) {
+                showNotification('Erreur lors de l\'envoi du message', 'error');
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            console.log("dsfsdf");
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 3000);
+        }
+
+    </script>
