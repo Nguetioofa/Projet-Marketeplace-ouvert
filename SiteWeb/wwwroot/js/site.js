@@ -14,14 +14,20 @@
 			url: "/Commentaires/Create",
 			data: { typeCommentaire: typeCommentaire, id: id, commentaire: commentaire, __RequestVerificationToken: token },
 			success: function (data) {
-				$(".card-body").append(
-					"<div class='review_content'>" +
-					"<div class='clearfix add_bottom_10'>" +
-					"<em>" + data.date + "</em>" +
+				$(".commatireliste").append(
+					"<li>" +
+					"<div class='avatar'>" +
+					"<a href='#'>" +
+					"<img src='/AllaiaEcommerce/img/avatar1.jpg' alt=''>" +
+					"</a>" +
 					"</div>" +
-					"<h4>" + data.auteur + "</h4>" +
+					"<div class='comment_right clearfix'>" +
+					"<div class='comment_info'>" +
+					"Par <a href='#'>" + data.auteur + "</a><span>|</span>" + data.date + "<span>|</span><a href='#'><i class='icon-reply'></i></a>" +
+					"</div>" +
 					"<p>" + data.contenu + "</p>" +
-					"</div>"
+					"</div>" +
+					"</li>"
 				);
 
 				$("textarea[name='commentaire']").val("");

@@ -1,0 +1,23 @@
+﻿@model MessageL
+
+<div class="container margin_30">
+
+	<div class="row justify-content-center">
+
+		<div class="col-xl-6 col-lg-6 col-md-8">
+
+			<form method="post" asp-controller="Message" asp-action="SendMessage">
+				@Html.Hidden("dsfdf","sdfds")
+				<div class="form-group">
+					<label for="Descriptions" class="form-label">Message</label>
+					<input placeholder="Ecrivez votre message" class="form-control" name="message" />
+					<span asp-validation-for="Contenu" class="text-danger"></span>
+
+				</div>
+
+				<button type="submit" class="btn_1">Ajouter</button>
+			</form>
+
+		</div>
+	</div>
+</div>

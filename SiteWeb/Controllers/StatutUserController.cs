@@ -5,7 +5,9 @@ using SiteWeb.Services.Interfaces;
 
 namespace SiteWeb.Controllers
 {
-    public class StatutUserController : Controller
+
+	[Authorize(Policy = "AdministrateurSeulement")]
+	public class StatutUserController : Controller
     {
         private readonly IStatutUserService _statutUserService;
 
@@ -14,9 +16,7 @@ namespace SiteWeb.Controllers
             _statutUserService = statutUserService;
         }
 
-        [Authorize/*(Policy = "AdministrateurSeulement")*/]
-      //  [Authorize]
-        public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -26,8 +26,7 @@ namespace SiteWeb.Controllers
             return RedirectToAction("Index", "Home");
 
         }
-
-        [Authorize(Policy = "AdministrateurSeulement")]
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var result = await _statutUserService.GetStatutUser(id);
@@ -40,7 +39,7 @@ namespace SiteWeb.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+		[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(StatutUserL statutUser)
         {
             if (ModelState.IsValid)
@@ -51,7 +50,6 @@ namespace SiteWeb.Controllers
             return View(statutUser);
         }
 
-        [Authorize(Policy = "AdministrateurSeulement")]
         public async Task<IActionResult> Edit(int id)
         {
             var result = await _statutUserService.GetStatutUser(id);
@@ -59,7 +57,7 @@ namespace SiteWeb.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+		[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, StatutUserL statutUser)
         {
             if (id != statutUser.Id)

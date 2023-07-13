@@ -4,7 +4,7 @@
     //Layout = "~/Views/Shared/_HomePageLayout.cshtml";
 }
 
-<div class="container">
+<div class="container margin_60_35">
     <div class="row justify-content-center" style="display: flex; justify-content: center;">
         <div class="col-md-4">
             <div class="card">
@@ -14,7 +14,7 @@
                     {
                         @foreach (var item in Model)
                         {
-            <li class="list-group-item" data-id="@item.Id">@item.Name</li>
+                            <li class="list-group-item" data-id="@item.Id">@item.Name</li>
                         }
                     }
 
@@ -23,10 +23,9 @@
         </div>
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header" >Conversation avec John Doe</div>
+                <div class="card-header" >Conversation</div>
                 <div class="card-body" id="message-list-container">
                     <ul id="message-list">
-                        <!-- Liste des messages à afficher -->
                     </ul>
                 </div>
                 <div class="card-footer">
@@ -45,12 +44,8 @@
     </div>
 </div>
 
-<!-- JavaScript -->
 
-
-<!-- CSS -->
 <style>
-    /* Styles pour les messages */
     .message {
         margin: 10px;
         padding: 10px;
@@ -67,7 +62,6 @@
         align-self: flex-end;
     }
 
-    /* Styles pour les notifications */
     .notification {
         position: fixed;
         bottom: 20px;

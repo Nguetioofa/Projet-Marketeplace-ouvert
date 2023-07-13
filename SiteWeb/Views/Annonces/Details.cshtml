@@ -29,7 +29,7 @@
                         @if (Model.listPhoto is not null)
                         {
                             bool isFirst = true;
-                            @for (int i=1;  i == Model.listPhoto.Count(); i++)
+                            @for (int i = 1;  i <= Model.listPhoto.Count(); i++)
                             {
                                 if (isFirst)
                                 {
@@ -83,7 +83,12 @@
             </div>
             <div class="col-md-6 text-secondary px-2 py-4">
                 <h3 class="fw-normal">Description</h3>
-                <p class="fw-normal">@Model.DescriptionAnnonce</p>
+                <p class="fw-normal">
+                    <h3>
+                        @Model.DescriptionAnnonce
+                    </h3>
+                    
+                    </p>
                 
             </div>
         </div>

@@ -107,13 +107,10 @@ namespace SiteWeb.Controllers
 				return NotFound();
 
 			var annonce = await _annonceService.GetAnnonce(id);
-
-
 			if (annonce is null)
-			{
 				return NotFound();
 
-			}
+
 			var photos = (await _photoService.GetPhotoByIdAnnonce((int)annonce.Id)).Where(ph => !ph.UrlP.Contains("400x400")).ToList();
 			var utilisateur = (await _utilisateurService.GetUtilisateur((int)annonce.IdUtilisateur));
 			if (utilisateur is null)

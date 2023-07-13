@@ -19,17 +19,6 @@ namespace SiteWeb.Controllers
 		// GET: MessagesController
 		public async Task<IActionResult> Index()
 		{
-            //var v = await _messageService.GetMessageByConversation(1,3);
-            //         int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
-            //var teef = await _messageService.AddMessage(new MessageL() { 
-            //	Contenu = "mouf",
-            //	IdExpediteur = 4,
-            //	IdDestinataire = 3,
-            //	Id = 0,
-            //	DateLecture = DateTime.Now,
-            //	DateM = DateTime.Now
-
-            //	});
             int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
             var listconversations = await _messageService.GetAllConversationByIdUtilisateur(idUser);
 			return View(listconversations);
@@ -85,6 +74,39 @@ namespace SiteWeb.Controllers
 				return NoContent();
 			}
         }
+
+
+		// POST: MessagesController/Create
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> EnvoyerMessage(int idUser, string message)
+		{
+			if (!string.IsNullOrWhiteSpace(message))
+			{
+				int exp = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
+
+				MessageL messageL = new MessageL()
+				{
+					Contenu = message,
+					IdExpediteur = exp,
+					IdDestinataire = idUser,
+					Id = 0,
+					DateM = DateTime.Now,
+				};
+				var isReussit = await _messageService.AddMessage(messageL);
+				return Json(new
+				{
+					reussit = isReussit,
+				});
+			}
+			else
+			{
+				return Json(new
+				{
+					reussit = false,
+				});
+			}
+		}
 
 		// GET: MessagesController/Edit/5
 		public ActionResult Edit(int id)

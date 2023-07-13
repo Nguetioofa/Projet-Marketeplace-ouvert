@@ -119,5 +119,19 @@ namespace SiteWeb.Services.Implementations
 				return null;
 			}
 		}
+
+		public async Task<List<JouetL>> GetJouetsByName(string name)
+		{
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetJouetsByName/{name}");
+			if (response.IsSuccessStatusCode)
+			{
+				var Jouets = await response.Content.ReadFromJsonAsync<List<JouetL>>();
+				return Jouets;
+			}
+			else
+			{
+				return null;
+			}
+		}
 	}
 }

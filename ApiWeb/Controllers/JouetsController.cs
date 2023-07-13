@@ -55,13 +55,35 @@ namespace ApiWeb.Controllers
 			}
             var idCat = _context.CategorieJouets.Where(c => !c.EstSupprimer && c.Nom==name)
                                                              .Select(c=>c.Id).FirstOrDefault();
-            if (idCat == null)
+            if (idCat == 0)
                 return NotFound();
 
             var jouets = await _context.Jouets.Where(ab => !ab.EstSupprimer && ab.Categorie == idCat)
                                         .ToListAsync();
-                                            
-            return Ok(jouets);
+
+			if (jouets is null)
+				return NotFound();
+
+			return Ok(jouets);
+		}
+
+		// GET: api/Jouets
+		[HttpGet("GetJouetsByName/{name}")]
+		public async Task<ActionResult<IEnumerable<Jouet>>> GetJouetsByName(string name)
+		{
+			if (_context.Jouets == null)
+			{
+				return NotFound();
+			}
+
+			var jouets = await _context.Jouets.Where(ab => !ab.EstSupprimer && 
+                                                        ab.Nom.Contains(name))
+										                .ToListAsync();
+
+			if (jouets is null)
+				return NotFound();
+
+			return Ok(jouets);
 		}
 
 		// GET: api/Jouets/5

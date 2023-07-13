@@ -7,8 +7,8 @@ namespace ModelsLibrary.Models;
 public partial class MessageL
 {
     public int? Id { get; set; }
-
-    public string? Contenu { get; set; } = null!;
+    [Required(ErrorMessage ="vous ne pouvez pas envoye un message vide")]
+    public string Contenu { get; set; } = null!;
 
     [DataType(DataType.DateTime)]
     public DateTime? DateM { get; set; }

@@ -1,26 +1,41 @@
 ﻿@using ModelsLibrary.Models.Commentaires
+@using SiteWeb.Services.Interfaces;
 @model ModelPatialCommentaire
+@inject IUtilisateurService _utilisateurService
 
 <div class="container margin_60_35">
 	<div class="row justify-content-center">
 		<div class="col-lg-8">
+			<div id="comments">
+				<h5>Commentaires</h5>
+				<ul class="commatireliste">
+					
 
-			<h3 class="justify-content-center"> Commentaires </h3>
-			<div class="card-body">
-				@if (Model.listCommentaires is not null)
-				{
-					@foreach (var commentaire in Model.listCommentaires)
-					{
-						<div class="review_content">
-							<div class="clearfix add_bottom_10">
-								<em>@commentaire.DateC</em>
-							</div>
-							<h4>"@commentaire.IdAuteur"</h4>
-							<p>@commentaire.Contenu</p>
-						</div>
-					}
-				}
+						@if (Model.listCommentaires is not null)
+						{
+							@foreach (var commentaire in Model.listCommentaires)
+							{
+								var user = await _utilisateurService.GetUtilisateur((int)commentaire.IdAuteur);
+							<li>
+								<div class="avatar">
+									 <a asp-action="Profil" asp-controller="Utilisateurs" asp-route-id="@commentaire.IdAuteur">
+										<img src="/AllaiaEcommerce/img/avatar1.jpg" alt="">
+									</a>
+								</div>
+								<div class="comment_right clearfix">
+									<div class="comment_info">
+										Par <a asp-action="Profil" asp-controller="Utilisateurs" asp-route-id="@commentaire.IdAuteur">@user.Nom @user.Prenom</a><span>|</span>@commentaire.DateC<span>|</span><a href="#"><i class="icon-reply"></i></a>
+									</div>
+									<p>
+										@commentaire.Contenu
+									</p>
+                                </div>
+                            </li>
+							}
+						}
+				</ul>
 			</div>
+			
 		</div>
 	</div>
 </div>

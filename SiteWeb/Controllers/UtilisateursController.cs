@@ -21,6 +21,7 @@ namespace SiteWeb.Controllers
             _utilisateurService = utilisateurService;
         }
 
+        [HttpGet]
 		[Authorize]
 		public async Task<IActionResult> Index()
         {

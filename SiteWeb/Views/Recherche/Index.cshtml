@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ToyBoxModel>
+
+@{
+    ViewData["Title"] = "Index";
+    //Layout = "~/Views/Shared/_HomePageLayout.cshtml";
+}
+
+<div class="top_banner version_2">
+
+	<img src="/AllaiaEcommerce/img/banners/bannerJouets.jpg" class="img-fluid" alt="">
+</div>
+<!-- /top_banner -->
+<div id="stick_here"></div>
+<div class="toolbox elemento_stick">
+	<div class="container">
+		<ul class="clearfix">
+			<li>
+				<div class="sort_select">
+					<select name="sort" id="sort">
+						<option value="date" selected="selected">Sort by newness</option>
+						<option value="rating">Sort by average rating</option>
+						<option value="price">Sort by price: low to high</option>
+						<option value="price-desc">Sort by price: high to</option>
+					</select>
+				</div>
+			</li>
+			<li>
+				<a href="#0"><i class="ti-view-grid"></i></a>
+				<a href="listing-row-1-sidebar-left.html"><i class="ti-view-list"></i></a>
+			</li>
+			<li>
+				<a href="#0" class="open_filters">
+					<i class="ti-filter"></i><span>Filters</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="container margin_60_35">
+	<div class="row small-gutters">
+		@if (ViewBag.ErrorMessage != null)
+		{
+			<script>alert("@ViewBag.ErrorMessage")</script>
+			<div class="alert alert-danger mx-auto">@ViewBag.ErrorMessage</div>
+		}
+		<div class="col-lg-8">
+			
+			@foreach (var jouet in Model)
+			{
+				<partial name="AllaiaTemplate/Product/_ProductBox" model="jouet" />
+			}
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script src="~/AllaiaEcommerce/js/sticky_sidebar.min.js"></script>
+	<script src="~/AllaiaEcommerce/js/specific_listing.js"></script>
+}
