@@ -83,7 +83,7 @@ $(document).ready(function () {
 
 
 	$('#annoncesTab').click(function () {
-		$('#listeAnnonces').empty();
+		$('#listeAnnonce').empty();
 
 		var id = $("input[name='Id']").val();
 
@@ -139,7 +139,7 @@ $(document).ready(function () {
 					html += '</div>';
 				}
 				// Ajoutez le HTML généré à la page
-				$('#listeAnnonces').html(html);
+				$('#listeAnnonce').html(html);
 			}
 		});
 

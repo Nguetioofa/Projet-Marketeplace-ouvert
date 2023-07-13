@@ -52,7 +52,16 @@
 						</div>
 @*  						 					@Html.HiddenFor(model => model.utilisateur.Id)
  *@
-						<input type="hidden" name="Id" value="@Model.utilisateur.Id" />
+ @try
+						{
+							<input type="hidden" name="Id" value="@Model.utilisateur.Id" />
+
+						}
+						catch (Exception ex)
+						{
+
+							Console.WriteLine(ex.Message);
+						}
 
 						<div class="profile-info">
 							<h5 class="mb-20 h5 text-blue">Profil</h5>
@@ -104,12 +113,12 @@
 
 								</ul>
 								<div class="tab-content">
-									<div class="tab-pane fade show active" id="jouets" role="tabpanel">
+									<div class="tab-pane fade show" id="jouets" role="tabpanel">
 										@* liste jouets*@
 
 										@if ((await AuthorizationService.AuthorizeAsync(User, "ProfileAccessPolicy")).Succeeded)
 										{
-											<a asp-action="Create" asp-controller="Jouets" class="btn_1 float-right" style="margin-top:10px;"> Ajouter </a>
+											<a asp-action="Create" asp-controller="Jouets" class="btn_1" style="margin-top:10px;"> Ajouter </a>
 										}
 										<div class="container margin_30" id="listejouets"> </div>
 									</div>
@@ -118,17 +127,17 @@
 
 										@if ((await AuthorizationService.AuthorizeAsync(User, "ProfileAccessPolicy")).Succeeded)
 										{
-											<a asp-action="Create" asp-controller="Annonces" class="btn_1 float-right" style="margin-top:10px;"> Ajouter </a>
+											<a asp-action="Create" asp-controller="Annonces" class="btn_1" style="margin-top:10px;"> Ajouter </a>
 										}
-										<div class="container margin_30" id="listeAnnonces"> </div>
+										 <div class="container margin_30" id="listeAnnonce"> </div> 
 
 									</div>
 									<div class="tab-pane fade" id="echange" role="tabpanel">
-										<partial name="_EchangeList" />
-									</div>
+@* 										<partial name="_EchangeList" />
+ *@									</div>
 									<div class="tab-pane fade" id="achat" role="tabpanel">
-										<partial name="_AchatList" />
-									</div>
+@* 										<partial name="_AchatList" />
+ *@									</div>
 									<div class="tab-pane fade height-100-p" id="editer">
 										@* 									<partial name="_EditerProfil" />
 										*@
@@ -144,4 +153,4 @@
 </div>
 
 	<script src="~/DeskapAdmin/vendors/scripts/core.js"></script>
-	<script src="~/js/profil.js"></script>
+ 	<script src="~/js/profil.js"></script> 
