@@ -19,20 +19,21 @@ public partial class Photo
 
     public DateTime DatePublication { get; set; }
 
-    public int? Messages { get; set; } = null;
+    public int? Messages { get; set; }
 
-    public int? Jouet { get; set; } = null;
+    public int? Jouet { get; set; }
 
-    public int? Profil { get; set; } = null;
-	public int? Annonce { get; set; } = null;
+    public int? Profil { get; set; }
 
-	public bool EstSupprimer { get; set; }
+    public int? Annonce { get; set; }
+
+    public bool EstSupprimer { get; set; }
+
+    public virtual Annonce? AnnonceNavigation { get; set; }
 
     public virtual Jouet? JouetNavigation { get; set; }
 
-	public virtual Annonce? AnnonceNavigation { get; set; }
-
-	public virtual Message? MessagesNavigation { get; set; }
+    public virtual Message? MessagesNavigation { get; set; }
 
     public virtual Utilisateur? ProfilNavigation { get; set; }
 }

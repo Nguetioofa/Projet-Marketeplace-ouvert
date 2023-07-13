@@ -18,7 +18,8 @@ public partial class Annonce
     public bool EstSupprimer { get; set; }
 
     public virtual ICollection<Commentaire> Commentaires { get; } = new List<Commentaire>();
-	public virtual ICollection<Photo> Photos { get; } = new List<Photo>();
 
-	public virtual Utilisateur? IdUtilisateurNavigation { get; set; }
+    public virtual Utilisateur? IdUtilisateurNavigation { get; set; }
+
+    public virtual ICollection<Photo> Photos { get; } = new List<Photo>();
 }

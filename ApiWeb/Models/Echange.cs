@@ -7,15 +7,15 @@ public partial class Echange
 {
     public int Id { get; set; }
 
-    public string Reference { get; set; } = null!;
+    public string? Reference { get; set; }
 
-    public DateTime DateInit { get; set; }
+    public DateTime? DateInit { get; set; }
 
     public DateTime? DateConfirmation { get; set; }
 
     public DateTime? DateTransfert { get; set; }
 
-    public int Statut { get; set; }
+    public int? Statut { get; set; }
 
     public string? RaisonAnnulation { get; set; }
 
@@ -27,13 +27,13 @@ public partial class Echange
 
     public decimal? PrixUtilisateur2 { get; set; }
 
-    public int ModeLivraison1 { get; set; }
+    public int? ModeLivraison1 { get; set; }
 
-    public int ModeLivraison2 { get; set; }
+    public int? ModeLivraison2 { get; set; }
 
-    public int ModePayUtilisateur1 { get; set; }
+    public int? ModePayUtilisateur1 { get; set; }
 
-    public int ModePayUtilisateur2 { get; set; }
+    public int? ModePayUtilisateur2 { get; set; }
 
     public int? Jouet1 { get; set; }
 
@@ -49,13 +49,13 @@ public partial class Echange
 
     public virtual Jouet? Jouet2Navigation { get; set; }
 
-    public virtual ModeLivraison ModeLivraison1Navigation { get; set; } = null!;
+    public virtual ModeLivraison? ModeLivraison1Navigation { get; set; }
 
-    public virtual ModeLivraison ModeLivraison2Navigation { get; set; } = null!;
+    public virtual ModeLivraison? ModeLivraison2Navigation { get; set; }
 
-    public virtual ModePayement ModePayUtilisateur1Navigation { get; set; } = null!;
+    public virtual ModePayement? ModePayUtilisateur1Navigation { get; set; }
 
-    public virtual ModePayement ModePayUtilisateur2Navigation { get; set; } = null!;
+    public virtual ModePayement? ModePayUtilisateur2Navigation { get; set; }
 
-    public virtual StatutsTransaction StatutNavigation { get; set; } = null!;
+    public virtual StatutsTransaction? StatutNavigation { get; set; }
 }

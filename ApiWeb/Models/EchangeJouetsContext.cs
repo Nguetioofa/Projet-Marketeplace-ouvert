@@ -86,11 +86,11 @@ public partial class EchangeJouetsContext : DbContext
 
         modelBuilder.Entity<Achat>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__achat__3213E83F996AC094");
+            entity.HasKey(e => e.Id).HasName("PK__achat__3213E83FB6359ED1");
 
             entity.ToTable("achat");
 
-            entity.HasIndex(e => e.Reference, "UQ__achat__FD90DA99E60DC756").IsUnique();
+            entity.HasIndex(e => e.Reference, "UQ__achat__FD90DA99B5F96282").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Acheteur).HasColumnName("acheteur");
@@ -106,8 +106,12 @@ public partial class EchangeJouetsContext : DbContext
                 .HasColumnName("date_transfert");
             entity.Property(e => e.EstSupprimer).HasColumnName("est_supprimer");
             entity.Property(e => e.Jouet).HasColumnName("jouet");
-            entity.Property(e => e.ModeLivraison).HasColumnName("mode_livraison");
-            entity.Property(e => e.ModePay).HasColumnName("mode_pay");
+            entity.Property(e => e.ModeLivraison)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("mode_livraison");
+            entity.Property(e => e.ModePay)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("mode_pay");
             entity.Property(e => e.Prix)
                 .HasColumnType("money")
                 .HasColumnName("prix");
@@ -124,30 +128,27 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.AcheteurNavigation).WithMany(p => p.AchatAcheteurNavigations)
                 .HasForeignKey(d => d.Acheteur)
-                .HasConstraintName("FK__achat__acheteur__76969D2E");
+                .HasConstraintName("FK__achat__acheteur__05A3D694");
 
             entity.HasOne(d => d.JouetNavigation).WithMany(p => p.Achats)
                 .HasForeignKey(d => d.Jouet)
-                .HasConstraintName("FK__achat__jouet__787EE5A0");
+                .HasConstraintName("FK__achat__jouet__0697FACD");
 
             entity.HasOne(d => d.ModeLivraisonNavigation).WithMany(p => p.Achats)
                 .HasForeignKey(d => d.ModeLivraison)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__achat__mode_livr__797309D9");
+                .HasConstraintName("FK__achat__mode_livr__078C1F06");
 
             entity.HasOne(d => d.ModePayNavigation).WithMany(p => p.Achats)
                 .HasForeignKey(d => d.ModePay)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__achat__mode_pay__7A672E12");
+                .HasConstraintName("FK__achat__mode_pay__0880433F");
 
             entity.HasOne(d => d.StatutNavigation).WithMany(p => p.Achats)
                 .HasForeignKey(d => d.Statut)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__achat__statut__7B5B524B");
+                .HasConstraintName("FK__achat__statut__09746778");
 
             entity.HasOne(d => d.VendeurNavigation).WithMany(p => p.AchatVendeurNavigations)
                 .HasForeignKey(d => d.Vendeur)
-                .HasConstraintName("FK__achat__vendeur__778AC167");
+                .HasConstraintName("FK__achat__vendeur__0A688BB1");
         });
 
         modelBuilder.Entity<Annonce>(entity =>
@@ -228,11 +229,11 @@ public partial class EchangeJouetsContext : DbContext
 
         modelBuilder.Entity<Echange>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__echange__3213E83F038B5F48");
+            entity.HasKey(e => e.Id).HasName("PK__echange__3213E83F783879FE");
 
             entity.ToTable("echange");
 
-            entity.HasIndex(e => e.Reference, "UQ__echange__FD90DA999BBE9A9B").IsUnique();
+            entity.HasIndex(e => e.Reference, "UQ__echange__FD90DA99200D6766").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.DateConfirmation)
@@ -280,44 +281,39 @@ public partial class EchangeJouetsContext : DbContext
 
             entity.HasOne(d => d.IdUtilisateur1Navigation).WithMany(p => p.EchangeIdUtilisateur1Navigations)
                 .HasForeignKey(d => d.IdUtilisateur1)
-                .HasConstraintName("FK__echange__id_Util__03F0984C");
+                .HasConstraintName("FK__echange__id_Util__69FBBC1F");
 
             entity.HasOne(d => d.IdUtilisateur2Navigation).WithMany(p => p.EchangeIdUtilisateur2Navigations)
                 .HasForeignKey(d => d.IdUtilisateur2)
-                .HasConstraintName("FK__echange__id_Util__04E4BC85");
+                .HasConstraintName("FK__echange__id_Util__6AEFE058");
 
             entity.HasOne(d => d.Jouet1Navigation).WithMany(p => p.EchangeJouet1Navigations)
                 .HasForeignKey(d => d.Jouet1)
-                .HasConstraintName("FK__echange__jouet1__0D7A0286");
+                .HasConstraintName("FK__echange__jouet1__6BE40491");
 
             entity.HasOne(d => d.Jouet2Navigation).WithMany(p => p.EchangeJouet2Navigations)
                 .HasForeignKey(d => d.Jouet2)
-                .HasConstraintName("FK__echange__jouet2__0E6E26BF");
+                .HasConstraintName("FK__echange__jouet2__6CD828CA");
 
             entity.HasOne(d => d.ModeLivraison1Navigation).WithMany(p => p.EchangeModeLivraison1Navigations)
                 .HasForeignKey(d => d.ModeLivraison1)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__echange__mode_li__05D8E0BE");
+                .HasConstraintName("FK__echange__mode_li__6DCC4D03");
 
             entity.HasOne(d => d.ModeLivraison2Navigation).WithMany(p => p.EchangeModeLivraison2Navigations)
                 .HasForeignKey(d => d.ModeLivraison2)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__echange__mode_li__07C12930");
+                .HasConstraintName("FK__echange__mode_li__6EC0713C");
 
             entity.HasOne(d => d.ModePayUtilisateur1Navigation).WithMany(p => p.EchangeModePayUtilisateur1Navigations)
                 .HasForeignKey(d => d.ModePayUtilisateur1)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__echange__mode_pa__09A971A2");
+                .HasConstraintName("FK__echange__mode_pa__6FB49575");
 
             entity.HasOne(d => d.ModePayUtilisateur2Navigation).WithMany(p => p.EchangeModePayUtilisateur2Navigations)
                 .HasForeignKey(d => d.ModePayUtilisateur2)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__echange__mode_pa__0B91BA14");
+                .HasConstraintName("FK__echange__mode_pa__70A8B9AE");
 
             entity.HasOne(d => d.StatutNavigation).WithMany(p => p.Echanges)
                 .HasForeignKey(d => d.Statut)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__echange__statut__02084FDA");
+                .HasConstraintName("FK__echange__statut__719CDDE7");
         });
 
         modelBuilder.Entity<EtatJouet>(entity =>
@@ -523,50 +519,43 @@ public partial class EchangeJouetsContext : DbContext
 
         modelBuilder.Entity<Photo>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__photos__3213E83F036A0BB1");
+            entity.HasKey(e => e.Id).HasName("PK__photos__3213E83FCDFFB61A");
 
             entity.ToTable("photos");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Annonce).HasColumnName("annonce");
             entity.Property(e => e.DatePublication)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("date_publication");
-            entity.Property(e => e.DescriptionPhoto)
-                .HasMaxLength(10)
-                .HasColumnName("description_photo");
+            entity.Property(e => e.DescriptionPhoto).HasColumnName("description_photo");
             entity.Property(e => e.EstSupprimer).HasColumnName("est_supprimer");
             entity.Property(e => e.Format)
-                .HasMaxLength(10)
+                .HasMaxLength(100)
                 .HasColumnName("format");
             entity.Property(e => e.Jouet).HasColumnName("jouet");
             entity.Property(e => e.Messages).HasColumnName("messages");
-            entity.Property(e => e.Annonce).HasColumnName("annonce");
-
-			entity.Property(e => e.NomPhoto)
-                .HasMaxLength(10)
-                .HasColumnName("nom_photo");
+            entity.Property(e => e.NomPhoto).HasColumnName("nom_photo");
             entity.Property(e => e.Profil).HasColumnName("profil");
             entity.Property(e => e.Taille).HasColumnName("taille");
-            entity.Property(e => e.UrlP)
-                .HasMaxLength(255)
-                .HasColumnName("url_p");
+            entity.Property(e => e.UrlP).HasColumnName("url_p");
+
+            entity.HasOne(d => d.AnnonceNavigation).WithMany(p => p.Photos)
+                .HasForeignKey(d => d.Annonce)
+                .HasConstraintName("FK__photos__annonce__47A6A41B");
 
             entity.HasOne(d => d.JouetNavigation).WithMany(p => p.Photos)
                 .HasForeignKey(d => d.Jouet)
-                .HasConstraintName("FK__photos__jouet__6FE99F9F");
+                .HasConstraintName("FK__photos__jouet__44CA3770");
 
             entity.HasOne(d => d.MessagesNavigation).WithMany(p => p.Photos)
                 .HasForeignKey(d => d.Messages)
-                .HasConstraintName("FK__photos__messages__6EF57B66");
+                .HasConstraintName("FK__photos__messages__45BE5BA9");
 
-            entity.HasOne(d => d.AnnonceNavigation).WithMany(p => p.Photos)
-            .HasForeignKey(d => d.Annonce)
-            .HasConstraintName("FK__photos__annonces__6WF57B49");
-
-			entity.HasOne(d => d.ProfilNavigation).WithMany(p => p.Photos)
+            entity.HasOne(d => d.ProfilNavigation).WithMany(p => p.Photos)
                 .HasForeignKey(d => d.Profil)
-                .HasConstraintName("FK__photos__profil__70DDC3D8");
+                .HasConstraintName("FK__photos__profil__46B27FE2");
         });
 
         modelBuilder.Entity<Role>(entity =>

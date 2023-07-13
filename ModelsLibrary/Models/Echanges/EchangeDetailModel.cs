@@ -54,14 +54,6 @@ namespace ModelsLibrary.Models.Echanges
 
 		public virtual JouetL? jouet2 { get; set; }
 
-		public virtual ModeLivraisonL ModeLivraison1Navigation { get; set; } = null!;
 
-		public virtual ModeLivraisonL ModeLivraison2Navigation { get; set; } = null!;
-
-		public virtual ModePayementL ModePayUtilisateur1Navigation { get; set; } = null!;
-
-		public virtual ModePayementL ModePayUtilisateur2Navigation { get; set; } = null!;
-
-		public virtual StatutsTransactionL StatutNavigation { get; set; } = null!;
 	}
 }
