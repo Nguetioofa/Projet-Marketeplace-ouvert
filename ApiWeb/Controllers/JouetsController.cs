@@ -104,7 +104,7 @@ namespace ApiWeb.Controllers
         }
 
         // GET: api/Jouets/JouetByIdUser/5
-        [HttpGet("GetJoutsByIdUtilisateur{id}")]
+        [HttpGet("GetJoutsByIdUtilisateur/{id}")]
         public async Task<ActionResult<IEnumerable<Jouet>>> GetJouetsByJouetByIdUser(int id)
         {
             if (_context.Jouets == null)

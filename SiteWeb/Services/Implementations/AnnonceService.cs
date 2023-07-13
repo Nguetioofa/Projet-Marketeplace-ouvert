@@ -55,7 +55,25 @@ namespace SiteWeb.Services.Implementations
             }
         }
 
-        public async Task<bool> UpdateAnnonce(AnnonceL annonce)
+		public async Task<List<AnnonceL>> GetAnnonceByIdUtilisateur(int id)
+		{
+			var response = await _client.GetAsync(string.Format("{0}/{1}/GetAnnonceByIdUtilisateur/{2}", _configuration.ApiUrl, ControllerName, id));
+
+			if (response.IsSuccessStatusCode)
+			{
+				var annonces = await response.Content.ReadFromJsonAsync<List<AnnonceL>>();
+
+				return annonces;
+
+			}
+			else
+			{
+				return null;
+				//throw new Exception(response.ReasonPhrase);
+			}
+		}
+
+		public async Task<bool> UpdateAnnonce(AnnonceL annonce)
         {
             var response = await _client.PutAsJsonAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName), annonce);
             return response.IsSuccessStatusCode;
@@ -78,6 +96,24 @@ namespace SiteWeb.Services.Implementations
             var response = await _client.DeleteAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
             return response.IsSuccessStatusCode;
 
+        }
+
+        public async Task<List<AnnonceL>> LastAnnonces(int nombre)
+        {
+            var response = await _client.GetAsync(string.Format("{0}/{1}/LastAnnonces/{2}", _configuration.ApiUrl, ControllerName, nombre));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var annonces = await response.Content.ReadFromJsonAsync<List<AnnonceL>>();
+
+                return annonces;
+
+            }
+            else
+            {
+                return null;
+                //throw new Exception(response.ReasonPhrase);
+            }
         }
     }
 }

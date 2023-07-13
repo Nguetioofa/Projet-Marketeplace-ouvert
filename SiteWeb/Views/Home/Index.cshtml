@@ -17,17 +17,19 @@
 <partial name="AllaiaTemplate/_Banner" />
 
 <!-- /featured -->
+@await Component.InvokeAsync("ProductBloc", new{name = "Poupées et peluches"})
 
-<partial name="AllaiaTemplate/_ProductBlocSlide" />
-
+@* <partial name="AllaiaTemplate/_ProductBlocSlide" />
+ *@
 <!-- /container -->
 
-<partial name="AllaiaTemplate/_Partner" />
-
+@* <partial name="AllaiaTemplate/_Partner" />
+ *@
 <!-- /bg_gray -->
 
-<partial name="AllaiaTemplate/_Blog" />
-
+@* <partial name="AllaiaTemplate/_Blog" />
+ *@
+@await Component.InvokeAsync("DernieresAnnonces")
 <!-- /container -->
 
 @* <div class="text-center">

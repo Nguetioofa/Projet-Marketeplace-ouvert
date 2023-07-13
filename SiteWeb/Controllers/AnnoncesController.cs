@@ -64,6 +64,41 @@ namespace SiteWeb.Controllers
 
 		}
 
+		// GET: AnnoncesController
+		[HttpGet]
+		public async Task<IActionResult> AnnoncesUtilisateur(int id)
+		{
+			var listAnnonces = await _annonceService.GetAnnonceByIdUtilisateur(id);
+
+			List<AnnoncesGridModel> annoncesGridModel = new List<AnnoncesGridModel>();
+
+			if (listAnnonces is null)
+			{
+				return BadRequest();
+			}
+			foreach (var annonce in listAnnonces)
+			{
+				var photo = (await _photoService.GetPhotoByIdAnnonce((int)annonce.Id)).Where(ph => !ph.UrlP.Contains("400x400")).FirstOrDefault();
+				var utilisateur = (await _utilisateurService.GetUtilisateur((int)annonce.IdUtilisateur));
+				if (utilisateur is null)
+				{
+					return BadRequest();
+				}
+				annoncesGridModel.Add(new AnnoncesGridModel()
+				{
+					Id = (int)annonce.Id,
+					IdUtilisateur = utilisateur.Id,
+					utilisateur = utilisateur,
+					Titre = annonce.Titre,
+					DescriptionAnnonce = annonce.DescriptionAnnonce,
+					Photo = photo,
+					DateAnnonce = annonce.DateAnnonce,
+				});
+			}
+			return Ok(annoncesGridModel);
+
+		}
+
 		// GET: AnnoncesController/Details/5
 		[HttpGet]
 		public async Task<IActionResult> Details(int id)

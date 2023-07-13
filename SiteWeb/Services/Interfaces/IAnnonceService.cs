@@ -10,6 +10,8 @@ namespace SiteWeb.Services.Interfaces
         public Task<bool> UpdateAnnonce(AnnonceL annonce);
         public Task<AnnonceL> AddAnnonce(AnnonceL annonce);
         public Task<bool> DeleteAnnonce(int id);
+		public Task<List<AnnonceL>> GetAnnonceByIdUtilisateur(int id);
+        public Task<List<AnnonceL>> LastAnnonces(int id);
 
     }
 }

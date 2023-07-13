@@ -56,24 +56,29 @@ namespace SiteWeb.Controllers
             if (ModelState.IsValid)
             {
                 int exp = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
+				var corpmessage = string.Empty;
 
-                var corpmessage = $"<a asp-controller=\"{nature}\" asp-action=\"Details\" asp-route-id=\"{idjouet}\"> {message} </a>";
-                if (string.IsNullOrWhiteSpace(nature))
+				if (!string.IsNullOrWhiteSpace(nature))
                 {
+					corpmessage = $"<a asp-controller=\"{nature}\" asp-action=\"Details\" asp-route-id=\"{idjouet}\"> {message} </a>";
+				}
+				else
+				{
 					corpmessage = nature;
-                }
-                MessageL messageL = new MessageL() { 
+				}
+
+				MessageL messageL = new MessageL() { 
 									Contenu = corpmessage,
 									IdExpediteur = exp,
 									IdDestinataire = idUser,
 									Id = 0,
 									DateM = DateTime.Now,
 				};
-				var reussit = await _messageService.AddMessage(messageL);
+				var isReussit = await _messageService.AddMessage(messageL);
                 return Json(new
                 {
-                    date = reussit
-                });
+                    date = isReussit
+				});
             }
 			else
 			{

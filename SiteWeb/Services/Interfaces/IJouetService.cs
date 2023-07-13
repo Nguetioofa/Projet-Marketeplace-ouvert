@@ -8,6 +8,7 @@ namespace SiteWeb.Services.Interfaces
         public Task<List<JouetL>> GetJouets();
 		public Task<List<JouetL>> GetJouetsByIdCategorie(int id);
 		public Task<List<JouetL>> GetJouetsByNameCategorie(string name);
+		public Task<List<JouetL>> GetJoutsByIdUtilisateur(int id);
 
 		public Task<JouetL> GetJouet(int id);
         public Task<bool> UpdateJouet(JouetL Jouet);

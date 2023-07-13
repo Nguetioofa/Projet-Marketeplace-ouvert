@@ -31,6 +31,19 @@ namespace ApiWeb.Controllers
             return Ok(await _context.Annonces.Where(ab => !ab.EstSupprimer).ToListAsync());
         }
 
+        // GET: api/Annonces
+        [HttpGet("LastAnnonces/{nombre}")]
+        public async Task<ActionResult<IEnumerable<Annonce>>> LastAnnonces(int nombre)
+        {
+            if (_context.Annonces == null)
+            {
+                return NotFound();
+            }
+            return Ok(await _context.Annonces.Where(ab => !ab.EstSupprimer)
+                                    .OrderByDescending(a =>a.DateAnnonce)
+                                    .Take(nombre).ToListAsync());
+        }
+
         // GET: api/Annonces/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Annonce>> GetAnnonce(int id)
@@ -50,9 +63,29 @@ namespace ApiWeb.Controllers
             return Ok(annonce);
         }
 
-        // PUT: api/Annonces/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut]
+		// GET: api/Annonces/5
+		[HttpGet("GetAnnonceByIdUtilisateur/{id}")]
+		public async Task<ActionResult<Annonce>> GetAnnonceByIdUtilisateur(int id)
+		{
+			if (_context.Annonces == null)
+			{
+				return NotFound();
+			}
+			var annonces = await _context.Annonces.Where(c => !c.EstSupprimer)
+														.Where(ca => ca.IdUtilisateur == id)
+                                                        .ToListAsync();
+
+			if (annonces == null)
+			{
+				return NotFound();
+			}
+
+			return Ok(annonces);
+		}
+
+		// PUT: api/Annonces/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut]
         public async Task<IActionResult> PutAnnonce(Annonce annonce)
         {
             //if (id != annonce.Id)

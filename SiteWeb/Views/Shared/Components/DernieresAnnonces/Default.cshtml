@@ -1,0 +1,55 @@
+﻿@using ModelsLibrary.Models.Annonces
+@model List<AnnoncesGridModel>
+
+@if (Model.Count == 0)
+{
+    <p>Aucune annonce disponible.</p>
+}
+else
+{
+
+	<div class="container margin_60_35">
+		<div class="main_title">
+			<h2>derniers annonces</h2>
+			<span>Blog</span>
+			<p>Ici vous trouverez les derniers annonces des utilisateurs</p>
+		</div>
+		<div class="row">
+			@foreach (var annonce in Model)
+			{
+				<div class="col-lg-6">
+					<a class="box_news" asp-action="Details" asp-controller="Annonces" asp-route-id="@annonce.Id">
+						<figure>
+							@if (annonce.Photo is null)
+							{
+								<img class="img-fluid lazy" src="/AllaiaEcommerce/img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/6.jpg" alt="" width="400" height="266">
+							}
+							else
+							{
+								<img class="img-fluid lazy" src="@annonce.Photo.UrlP" alt="@annonce.Photo.NomPhoto" width="400" height="266">
+							}
+							<figcaption><strong>@Convert.ToDateTime(annonce.DateAnnonce).ToString("dd")</strong><strong>@Convert.ToDateTime(annonce.DateAnnonce).ToString("MMM")</strong></figcaption>
+						</figure>
+						<ul>
+							<li>par @annonce.utilisateur.Nom @annonce.utilisateur.Prenom</li>
+							<li>@annonce.DateAnnonce</li>
+						</ul>
+						<h4>@annonce.Titre</h4>
+						<p>
+							@if (annonce.DescriptionAnnonce.Length > 237)
+							{
+								@annonce.DescriptionAnnonce.Substring(237)
+							}
+							else
+							{
+								@annonce.DescriptionAnnonce
+							}
+						</p>
+					</a>
+				</div>
+			}
+
+		</div>
+	</div>
+
+}

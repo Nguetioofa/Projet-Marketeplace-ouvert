@@ -94,7 +94,21 @@ namespace SiteWeb.Services.Implementations
 
 		public async Task<List<JouetL>> GetJouetsByNameCategorie(string name)
 		{
-			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetJouetsByIdCategorie/{name}");
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetJouetsByNameCategorie/{name}");
+			if (response.IsSuccessStatusCode)
+			{
+				var Jouets = await response.Content.ReadFromJsonAsync<List<JouetL>>();
+				return Jouets;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		public async Task<List<JouetL>> GetJoutsByIdUtilisateur(int id)
+		{
+			var response = await _client.GetAsync($"{_configuration.ApiUrl}/{ControllerName}/GetJoutsByIdUtilisateur/{id}");
 			if (response.IsSuccessStatusCode)
 			{
 				var Jouets = await response.Content.ReadFromJsonAsync<List<JouetL>>();

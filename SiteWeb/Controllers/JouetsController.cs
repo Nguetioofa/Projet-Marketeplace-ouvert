@@ -31,6 +31,7 @@ namespace SiteWeb.Controllers
             _etatService = etatJouetService;
         }
 
+
         // GET: ToysController
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -356,5 +357,35 @@ namespace SiteWeb.Controllers
                 return View();
             }
         }
-    }
+
+		// GET: ToysController
+		[HttpGet]
+		public async Task<IActionResult> GetJouetProfil(int id)
+		{
+			var jouets = await _jouetService.GetJoutsByIdUtilisateur(id);
+			List<ToyBoxModel> toyBoxModels = new List<ToyBoxModel>();
+
+			if (jouets is not null)
+			{
+				foreach (var jouet in jouets)
+				{
+					var photo = (await _photoService.GetPhotoByIdJouet(jouet.Id)).Where(ph => ph.UrlP.Contains("400x400")).FirstOrDefault();
+
+					toyBoxModels.Add(new ToyBoxModel()
+					{
+						Id = jouet.Id,
+						Nom = jouet.Nom,
+						Categorie = jouet.Categorie,
+						Prix = jouet.Prix,
+						Photo = photo,
+						AcceptAchat = jouet.AcceptAchat,
+						AcceptTroc = jouet.AcceptTroc,
+					});
+				}
+			}
+			
+			return Ok(toyBoxModels);
+		}
+	}
 }
+
