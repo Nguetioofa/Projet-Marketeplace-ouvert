@@ -1,5 +1,49 @@
-﻿
+﻿@using SiteWeb.Services.Interfaces
+@using System.Security.Claims;
+@inject IJouetService _jouetService
+@inject IPhotoService _photoService
+@model int
+
+@{
+
+	var jouets = await _jouetService.GetJoutsByIdUtilisateur(Model);
+    List<ToyBoxModel> toyBoxModels = new List<ToyBoxModel>();
+
+	if (jouets is not null)
+	{
+		foreach (var jouet in jouets)
+		{
+			var photo = (await _photoService.GetPhotoByIdJouet(jouet.Id)).Where(ph => ph.UrlP.Contains("400x400")).FirstOrDefault();
 
 
+			toyBoxModels.Add(new ToyBoxModel()
+					{
+						Id = jouet.Id,
+						Nom = jouet.Nom,
+						Categorie = jouet.Categorie,
+						Prix = jouet.Prix,
+						Photo = photo,
+						AcceptAchat = jouet.AcceptAchat,
+						AcceptTroc = jouet.AcceptTroc,
+			});
+		}
 
+		<div class="row small-gutters">
+			@if (ViewBag.ErrorMessage != null)
+			{
+				<script>alert("@ViewBag.ErrorMessage")</script>
+				<div class="alert alert-danger mx-auto">@ViewBag.ErrorMessage</div>
+			}
 
+			@foreach (var toy in toyBoxModels)
+			{
+				<partial name="AllaiaTemplate/Product/_ProductBox" model="toy" />
+			}
+		</div>
+	}
+}
+
+@section Scripts{
+	<script src="~/AllaiaEcommerce/js/carousel_with_thumbs.js"></script>
+	<script src="~/js/site.js"> </script>
+}

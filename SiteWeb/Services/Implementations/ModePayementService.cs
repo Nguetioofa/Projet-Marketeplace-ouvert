@@ -18,39 +18,36 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<ModePayementL>>> GetModePayements()
+        public async Task<List<ModePayementL>> GetModePayements()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var ModePayements = JsonSerializer.Deserialize<List<ModePayementL>>(content);
+
+                List<ModePayementL>? ModePayements = await response.Content.ReadFromJsonAsync<List<ModePayementL>>();
 
                 return ModePayements;
 
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return new List<ModePayementL>();
             }
 
         }
 
-        public async Task<ActionResult<ModePayementL>> GetModePayement(int id)
+        public async Task<ModePayementL> GetModePayement(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var ModePayement = JsonSerializer.Deserialize<ModePayementL>(content);
-
+                var ModePayement = await response.Content.ReadFromJsonAsync<ModePayementL>();
                 return ModePayement;
-
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return new ModePayementL();
             }
         }
 

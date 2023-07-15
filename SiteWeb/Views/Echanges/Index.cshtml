@@ -1,0 +1,140 @@
+﻿@using ModelsLibrary.Models.Echanges;
+@using SiteWeb.Services.Interfaces;
+@using System.Security.Claims;
+@inject IJouetService _jouetService
+@inject IModePayementService _modePayementService
+@inject IModeLivraisonService _modeLivraisonService
+@inject IEchangeService _echangeService
+@inject IUtilisateurService _utilisateurService
+@inject IJouetService _jouetService
+@inject IStatutsTransactionService _statutsTransactionService
+
+
+@{
+    int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
+    var modepay = await _modePayementService.GetModePayements();
+    var modelivre = await _modeLivraisonService.GetModeLivraisons();
+    var echanges = await _echangeService.GetEchangesByIdUser(idUser);
+}
+<div class="container margin_60_35">
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger mx-auto">@ViewBag.ErrorMessage</div>
+        }
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col"> iD</th>
+                    <th scope="col">vendeur</th>
+                    <th scope="col">acheteur</th>
+                    <th scope="col">Jouet vendeur</th>
+                    <th scope="col">Jouet acheteur</th>
+                    <th scope="col">Prix acheteur</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">livraison acheteur</th>
+                    <th scope="col">Pay acheteur</th>
+                    <th scope="col">date</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var echange in echanges)
+                {
+                    <tr>
+                        <th scope="row">@echange.Id</th>
+                        <td>
+                            @{
+                                var vendeur = await _utilisateurService.GetUtilisateur((int)echange.IdUtilisateur1);
+                            }
+                            <a asp-action="Profil" asp-controller="Jouets" asp-route-id="@vendeur.Id">
+                                @vendeur.Nom @vendeur.Prenom
+
+                            </a>
+                        </td>
+                        <td>
+                            @{
+                                var achateur = await _utilisateurService.GetUtilisateur((int)echange.IdUtilisateur2);
+                            }
+                            <a asp-action="Profil" asp-controller="Jouets" asp-route-id="@achateur.Id">
+                                @achateur.Nom @achateur.Prenom
+
+                            </a>
+                        </td>
+                        <td>
+                            @{
+                                var jouetVendeur = await _jouetService.GetJouet((int)echange.Jouet1);
+                            }
+                            <a asp-action="Details" asp-controller="Jouets" asp-route-id="@jouetVendeur.Id">
+                                @jouetVendeur.Nom
+
+                            </a>
+                        </td>
+                        <td>
+                            @{
+                                var jouetAcheteur = await _jouetService.GetJouet((int)echange.Jouet2);
+                            }
+                            <a asp-action="Details" asp-controller="Jouets" asp-route-id="@jouetAcheteur.Id">
+                                @jouetAcheteur.Nom
+
+                            </a>
+                        </td>
+                        <td>
+                            @echange.PrixUtilisateur2.ToString().Replace(",0000","")
+                        </td>
+                        <td>
+                            @{
+                                var statut = await _statutsTransactionService.GetStatutsTransaction((int)echange.Statut);
+                            }
+                            @statut.Nom
+                        </td>
+                        <td>
+                            @{
+                                var livraison = await _modeLivraisonService.GetModeLivraison((int)echange.ModeLivraison2);
+                            }
+                            @livraison.Nom
+                        </td>
+                        <td>
+                            @{
+                                var paiement = await _modePayementService.GetModePayement((int)echange.ModePayUtilisateur2);
+                            }
+                            @paiement.Nom
+                        </td>
+                        <td>
+
+                            @echange.DateInit
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Changer le statut
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><h6 class="dropdown-header">Changer le statut</h6></li>
+                                    <li><a class="dropdown-item" asp-action="ModifiedStatut" asp-controller="Echanges" asp-route-idechange="@echange.Id" asp-route-idstatut="3">annulée</a></li>
+
+                                    @if (idUser == echange.IdUtilisateur1)
+                                    {
+                                        <li><a class="dropdown-item" asp-action="ModifiedStatut" asp-controller="Echanges" asp-route-idechange="@echange.Id" asp-route-idstatut="2">validée</a></li>
+                                        <li><a class="dropdown-item" asp-action="ModifiedStatut" asp-controller="Echanges" asp-route-idechange="@echange.Id" asp-route-idstatut="4">remboursée</a></li>
+                                        <li><a class="dropdown-item" asp-action="ModifiedStatut" asp-controller="Echanges" asp-route-idechange="@echange.Id" asp-route-idstatut="5">expédiée</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a class="dropdown-item" asp-action="ModifiedStatut" asp-controller="Echanges" asp-route-idechange="@echange.Id" asp-route-idstatut="6">reçue</a></li>
+                                        <li><a class="dropdown-item" asp-action="ModifiedStatut" asp-controller="Echanges" asp-route-idechange="@echange.Id" asp-route-idstatut="7">payée</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+</div>
+
+
+
+

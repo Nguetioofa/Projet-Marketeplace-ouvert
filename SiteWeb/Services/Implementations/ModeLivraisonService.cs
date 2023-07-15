@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text;
 using SiteWeb.Services.Interfaces;
 using SiteWeb.Data;
+using ModelsLibrary.Models.Toys;
 
 namespace SiteWeb.Services.Implementations
 {
@@ -18,39 +19,36 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<ModeLivraisonL>>> GetModeLivraisons()
+        public async Task<List<ModeLivraisonL>> GetModeLivraisons()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var ModeLivraisons = JsonSerializer.Deserialize<List<ModeLivraisonL>>(content);
+                var ModeLivraisons = await response.Content.ReadFromJsonAsync<List<ModeLivraisonL>>();
 
                 return ModeLivraisons;
 
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return new List<ModeLivraisonL>();
             }
 
         }
 
-        public async Task<ActionResult<ModeLivraisonL>> GetModeLivraison(int id)
+        public async Task<ModeLivraisonL> GetModeLivraison(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
 
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var ModeLivraison = JsonSerializer.Deserialize<ModeLivraisonL>(content);
+                var ModeLivraison = await response.Content.ReadFromJsonAsync<ModeLivraisonL>();
 
                 return ModeLivraison;
-
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return new ModeLivraisonL();
             }
         }
 

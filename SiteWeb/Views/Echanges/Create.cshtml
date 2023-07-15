@@ -1,0 +1,52 @@
+﻿@using SiteWeb.Services.Interfaces;
+@using System.Security.Claims;
+@model ModelsLibrary.Models.Echanges.EchangeL
+@inject IJouetService _jouetService
+@inject IModePayementService _modePayementService
+@inject IModeLivraisonService _modeLivraisonService
+@{
+    int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.Name)?.Value);
+    var jouetuser2 = await _jouetService.GetJoutsByIdUtilisateur(idUser);
+    var modepay = await _modePayementService.GetModePayements();
+    var modelivre = await _modeLivraisonService.GetModeLivraisons();
+}
+<div class="container margin_60_35">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="write_review">
+                <h1>Échange de jouets</h1>
+                <form asp-action="Create" asp-controller="Echanges" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger mx-auto">@ViewBag.ErrorMessage</div>
+                    }
+                    <div class="form-group">
+                        <label asp-for="PrixUtilisateur2" class="form-label">Prix</label>
+                        <input asp-for="PrixUtilisateur2" type="number" class="form-control" id="Prix" />
+                        <span asp-validation-for="PrixUtilisateur2" class="text-danger"></span>
+                    </div>
+                    <input type="hidden" asp-for="IdUtilisateur1" value="@ViewBag.iduser1">
+                    <input type="hidden" asp-for="Jouet1" value="@ViewBag.idjouet1">
+                    <div class="form-group">
+
+                        <label asp-for="Jouet2" class="form-label">Jouet a echanger*</label>
+                        <select asp-for="Jouet2" asp-items="@jouetuser2.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Nom })" class="form-control form-select"></select>
+                        <span asp-validation-for="Jouet2" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ModePayUtilisateur2" class="form-label">Mode de payment</label>
+                        <select asp-for="ModePayUtilisateur2" asp-items="@modepay.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Nom })" class="form-control form-select"></select>
+                        <span asp-validation-for="ModePayUtilisateur1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ModeLivraison2" class="form-label">Catégorie</label>
+                        <select asp-for="ModeLivraison2" asp-items="@modelivre.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Nom })" class="form-control form-select"></select>
+                        <span asp-validation-for="ModeLivraison2" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn_1">Échanger</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

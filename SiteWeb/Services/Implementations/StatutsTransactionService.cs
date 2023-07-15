@@ -18,39 +18,34 @@ namespace SiteWeb.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<ActionResult<List<StatutsTransactionL>>> GetStatutsTransactions()
+        public async Task<List<StatutsTransactionL>> GetStatutsTransactions()
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}", _configuration.ApiUrl, ControllerName));
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var StatutsTransactions = JsonSerializer.Deserialize<List<StatutsTransactionL>>(content);
+                 var StatutsTransactions = await response.Content.ReadFromJsonAsync<List<StatutsTransactionL>>();
 
                 return StatutsTransactions;
 
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                return new List<StatutsTransactionL>();
             }
 
         }
 
-        public async Task<ActionResult<StatutsTransactionL>> GetStatutsTransaction(int id)
+        public async Task<StatutsTransactionL> GetStatutsTransaction(int id)
         {
             var response = await _client.GetAsync(string.Format("{0}/{1}/{2}", _configuration.ApiUrl, ControllerName, id));
-
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var StatutsTransaction = JsonSerializer.Deserialize<StatutsTransactionL>(content);
-
+                var StatutsTransaction = await response.Content.ReadFromJsonAsync<StatutsTransactionL>();
                 return StatutsTransaction;
-
             }
             else
             {
-                throw new Exception(response.ReasonPhrase);
+                 return new StatutsTransactionL();
             }
         }
 

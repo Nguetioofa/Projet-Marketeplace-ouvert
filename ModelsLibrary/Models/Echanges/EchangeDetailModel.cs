@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace ModelsLibrary.Models.Echanges
 {
-    internal class EchangeDetailModel
+    public class EchangeDetailModel
 	{
 		public int Id { get; set; }
 
-		public string Reference { get; set; } = null!;
+		public string? Reference { get; set; }
 
-		public DateTime DateInit { get; set; }
+		public DateTime? DateInit { get; set; }
 
 		public DateTime? DateConfirmation { get; set; }
 
 		public DateTime? DateTransfert { get; set; }
 
-		public int Statut { get; set; }
+		public int? Statut { get; set; }
 
 		public string? RaisonAnnulation { get; set; }
 
@@ -32,19 +32,17 @@ namespace ModelsLibrary.Models.Echanges
 
 		public decimal? PrixUtilisateur2 { get; set; }
 
-		public int ModeLivraison1 { get; set; }
+		public int? ModeLivraison1 { get; set; }
 
-		public int ModeLivraison2 { get; set; }
+		public int? ModeLivraison2 { get; set; }
 
-		public int ModePayUtilisateur1 { get; set; }
+		public int? ModePayUtilisateur1 { get; set; }
 
-		public int ModePayUtilisateur2 { get; set; }
+		public int? ModePayUtilisateur2 { get; set; }
 
 		public int? Jouet1 { get; set; }
 
 		public int? Jouet2 { get; set; }
-
-		public bool EstSupprimer { get; set; }
 
 		public virtual UtilisateurL? utilisateur1 { get; set; }
 
@@ -53,7 +51,5 @@ namespace ModelsLibrary.Models.Echanges
 		public virtual JouetL? jouet1 { get; set; }
 
 		public virtual JouetL? jouet2 { get; set; }
-
-
 	}
 }

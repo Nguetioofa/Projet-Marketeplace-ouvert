@@ -1,0 +1,125 @@
+﻿@model IEnumerable<ModelsLibrary.Models.Echanges.EchangeDetailModel>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateInit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateConfirmation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateTransfert)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Statut)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RaisonAnnulation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdUtilisateur1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdUtilisateur2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrixUtilisateur1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrixUtilisateur2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModeLivraison1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModeLivraison2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModePayUtilisateur1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModePayUtilisateur2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Jouet1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Jouet2)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateInit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateConfirmation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTransfert)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Statut)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaisonAnnulation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdUtilisateur1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdUtilisateur2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrixUtilisateur1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrixUtilisateur2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModeLivraison1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModeLivraison2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModePayUtilisateur1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModePayUtilisateur2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Jouet1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Jouet2)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

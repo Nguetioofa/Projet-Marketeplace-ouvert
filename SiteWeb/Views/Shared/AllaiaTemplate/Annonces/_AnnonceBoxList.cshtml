@@ -27,15 +27,15 @@
 			</li>
 			<li>@Model.DateAnnonce</li>
 		</ul>
-		<a asp-action="Details" asp-controller="Annonces" asp-route-id="@Model.Id">
+ 		<a asp-action="Details" asp-controller="Annonces" asp-route-id="@Model.Id">
 			<h3>@Model.Titre</h3>
-		</a>
+		</a> 
         <p>
 			@{
 				if (Model.DescriptionAnnonce.Length > 238)
 				{
 					@Model.DescriptionAnnonce.Substring(0, 237);
-					<a asp-action="Details" asp-controller="Annonces" asp-route-id="@Model.Id" class="stretched-link text-primary"> ...voir plus</a>
+					 <a asp-action="Details" asp-controller="Annonces" asp-route-id="@Model.Id" > ...voir plus</a>
 				}
 				else
 				{

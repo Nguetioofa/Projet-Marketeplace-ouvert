@@ -52,7 +52,7 @@
 						</div>
 @*  						 					@Html.HiddenFor(model => model.utilisateur.Id)
  *@
- @try
+						@try
 						{
 							<input type="hidden" name="Id" value="@Model.utilisateur.Id" />
 
@@ -85,19 +85,18 @@
 							<div class="tab height-100-p">
 								<ul class="nav nav-tabs customtab" role="tablist">
 									<li class="nav-item">
-										<a class="nav-link active"
+										<a class="nav-link"
 										   data-toggle="tab" href="#jouets" role="tab" id="jouetsTab">Jouets</a>
 									</li>
 									<li class="nav-item">
 										<a class="nav-link"
-										   data-toggle="tab"
-										   href="#annonce"
-										   role="tab" id="annoncesTab">Annonces</a>
+										   data-toggle="tab" href="#annonces" role="tab" id="annoncesTab">Annonces</a>
+
 									</li>
 									@if ((await AuthorizationService.AuthorizeAsync(User, "ProfileAccessPolicy")).Succeeded)
 									{
-										<li class="nav-item">
-											<a class="nav-link" data-toggle="tab"
+									@* 	<li class="nav-item">
+											<a class="nav-link active" data-toggle="tab"
 											   href="#echange"
 											   role="tab">Echanges</a>
 										</li>
@@ -108,40 +107,52 @@
 										<li class="nav-item">
 											<a class="nav-link" data-toggle="tab"
 											   href="#editer" role="tab">Editer le profil</a>
-										</li>
+										</li> *@
 									}
 
 								</ul>
+								@{
+									int idProfil = Model.utilisateur.Id;
+								}
+
 								<div class="tab-content">
-									<div class="tab-pane fade show" id="jouets" role="tabpanel">
+									<div class="tab-pane" id="jouets" role="tabpanel">
 										@* liste jouets*@
 
 										@if ((await AuthorizationService.AuthorizeAsync(User, "ProfileAccessPolicy")).Succeeded)
 										{
-											<a asp-action="Create" asp-controller="Jouets" class="btn_1" style="margin-top:10px;"> Ajouter </a>
+											<a asp-action="Create" asp-controller="Jouets" class="btn_1" style="margin:10px;"> Ajouter </a>
 										}
-										<div class="container margin_30" id="listejouets"> </div>
+@* 										<div class="container margin_30" id="listejouets"> </div>
+										*@					
+										<div style="margin:10px;">
+											<partial name="_jouetsList" model="idProfil" />
+										</div>
+
 									</div>
-									<div class="tab-pane fade show" id="annonce" role="tabpanel">
+									<div class="tab-pane" id="annonces" role="tabpanel">
 										@* liste annonces*@
 
 										@if ((await AuthorizationService.AuthorizeAsync(User, "ProfileAccessPolicy")).Succeeded)
 										{
-											<a asp-action="Create" asp-controller="Annonces" class="btn_1" style="margin-top:10px;"> Ajouter </a>
+											<a asp-action="Create" asp-controller="Annonces" class="btn_1" style="margin:10px;"> Ajouter </a>
 										}
-										 <div class="container margin_30" id="listeAnnonce"> </div> 
+										 @* <div class="container margin_30" id="listeAnnonce"> </div> *@
+										<div style="margin:10px;">
+											<partial name="_AnnoncesList" model="idProfil" />
 
+										 </div>
 									</div>
-									<div class="tab-pane fade" id="echange" role="tabpanel">
-@* 										<partial name="_EchangeList" />
- *@									</div>
+@* 									<div class="tab-pane fade " id="echange" role="tabpanel">
+  										<partial name="_EchangeList" />
+  									</div>
 									<div class="tab-pane fade" id="achat" role="tabpanel">
-@* 										<partial name="_AchatList" />
- *@									</div>
+ 										<partial name="_AchatList" />
+ 									</div>
 									<div class="tab-pane fade height-100-p" id="editer">
-										@* 									<partial name="_EditerProfil" />
-										*@
-									</div>
+										 									<partial name="_EditerProfil" />
+										
+									</div> *@
 								</div>
 							</div>
 						</div>
@@ -153,4 +164,4 @@
 </div>
 
 	<script src="~/DeskapAdmin/vendors/scripts/core.js"></script>
- 	<script src="~/js/profil.js"></script> 
+@*  	<script src="~/js/profil.js"></script>  *@

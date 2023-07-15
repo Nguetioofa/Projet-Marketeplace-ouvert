@@ -88,7 +88,7 @@ namespace SiteWeb.Services.Implementations
 				}
 				else
 				{
-					return null;
+					return new();
 				}			
 		}
 

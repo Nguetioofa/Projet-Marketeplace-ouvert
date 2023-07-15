@@ -50,6 +50,25 @@ namespace ApiWeb.Controllers
             return echange;
         }
 
+        // GET: api/Echanges/5
+        [HttpGet("GetEchangesByIdUser/{id}")]
+        public async Task<ActionResult<IEnumerable<Echange>>> GetEchangesByIdUser(int id)
+        {
+            if (_context.Echanges == null)
+            {
+                return NotFound();
+            }
+            var echange = await _context.Echanges.Where(c => !c.EstSupprimer)
+                                                     .Where(ca => ca.IdUtilisateur1 == id || ca.IdUtilisateur2 == id).ToListAsync();
+
+            if (echange == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(echange);
+        }
+
         // PUT: api/Echanges/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
@@ -72,6 +91,39 @@ namespace ApiWeb.Controllers
             catch (DbUpdateConcurrencyException)
             {
                     throw;  
+            }
+
+            return NoContent();
+        }
+
+        // PUT: api/Echanges/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("ChangeStatutTransaction/{idechange}/{idstatut}")]
+        public async Task<IActionResult> ChangeStatutTransaction(int idechange,int idstatut)
+        {
+            //if (id != echange.Id)
+            //{
+            //    return BadRequest();
+            //}
+
+            var echange = _context.Echanges.Where(e=>!e.EstSupprimer)
+                                                            .Where(e=>e.Id == idechange)
+                                                            .FirstOrDefault();
+
+            if (echange is null)
+            {
+                return NotFound();
+            }
+            echange.Statut = idstatut;
+            _context.Entry(echange).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
             }
 
             return NoContent();

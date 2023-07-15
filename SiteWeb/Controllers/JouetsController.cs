@@ -36,7 +36,6 @@ namespace SiteWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-
 			var jouets = await _jouetService.GetJouets();
 			List<ToyBoxModel> toyBoxModels = new List<ToyBoxModel>();
 
