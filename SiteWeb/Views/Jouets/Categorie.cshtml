@@ -49,13 +49,11 @@
 			<script>alert("@ViewBag.ErrorMessage")</script>
 			<div class="alert alert-danger mx-auto">@ViewBag.ErrorMessage</div>
 		}
-		<div class="col-lg-8">
 
 			@foreach (var jouet in Model)
 			{
 				<partial name="AllaiaTemplate/Product/_ProductBox" model="jouet" />
 			}
-		</div>
 	</div>
 </div>
 

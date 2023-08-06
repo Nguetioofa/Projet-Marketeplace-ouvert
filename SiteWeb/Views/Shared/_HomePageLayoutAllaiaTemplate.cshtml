@@ -100,7 +100,7 @@
 							<!--/main-menu -->
 						</nav>
 						<div class="col-xl-3 col-lg-2 d-lg-flex align-items-center justify-content-end text-end">
-							<a class="phone_top" href="tel://690101320"><strong><span>Besoin d'aide?</span>+237 690 10 13 20</strong></a>
+							<a class="phone_top" href="tel://690767575"><strong><span>Besoin d'aide?</span>+237 690 76 75 75</strong></a>
 						</div>
 					</div>
 					<!-- /row -->
@@ -217,8 +217,13 @@
 					<!-- /row -->
 				</div>
 				<div class="search_mob_wp">
-					<input type="text" class="form-control" placeholder="Search over 10.000 products">
+					
+					<form asp-action="Index" asp-controller="Recherche" method="get">
+
+						<input type="text" name="name" class="form-control" placeholder="recherche">
 					<input type="submit" class="btn_1 full-width" value="Search">
+						</form>
+
 				</div>
 				<!-- /search_mobile -->
 			</div>

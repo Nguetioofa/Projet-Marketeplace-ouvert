@@ -30,7 +30,7 @@ namespace SiteWeb.Controllers
 			return View();
 		}
 
-        [HttpPost]
+        [HttpGet]
         // GET: EchangesController/Create
         public ActionResult Create(int iduser1, int idjouet1)
 		{

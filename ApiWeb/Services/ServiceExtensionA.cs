@@ -15,7 +15,7 @@ namespace ApiWeb.Services
 
             builder.Services.AddDbContext<EchangeJouetsContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("OnlineConnection"));
             });
             // configure DI for application services
             builder.Services.AddScoped<IUserService, UserService>();

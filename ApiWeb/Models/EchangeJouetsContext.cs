@@ -54,7 +54,7 @@ public partial class EchangeJouetsContext : DbContext
     public virtual DbSet<Utilisateur> Utilisateurs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=DefaultConnection");
+        => optionsBuilder.UseSqlServer("Name=OnlineConnection");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

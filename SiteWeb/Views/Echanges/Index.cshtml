@@ -46,7 +46,7 @@
                             @{
                                 var vendeur = await _utilisateurService.GetUtilisateur((int)echange.IdUtilisateur1);
                             }
-                            <a asp-action="Profil" asp-controller="Jouets" asp-route-id="@vendeur.Id">
+                            <a asp-action="Profil" asp-controller="Utilisateurs" asp-route-id="@vendeur.Id">
                                 @vendeur.Nom @vendeur.Prenom
 
                             </a>
@@ -55,7 +55,7 @@
                             @{
                                 var achateur = await _utilisateurService.GetUtilisateur((int)echange.IdUtilisateur2);
                             }
-                            <a asp-action="Profil" asp-controller="Jouets" asp-route-id="@achateur.Id">
+                        <a asp-action="Profil" asp-controller="Utilisateurs" asp-route-id="@achateur.Id">
                                 @achateur.Nom @achateur.Prenom
 
                             </a>
